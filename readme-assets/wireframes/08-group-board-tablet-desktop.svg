@@ -1,0 +1,524 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="2060" viewBox="0 0 1420 2060" role="img" aria-labelledby="t d" xmlns:c2pa="http://c2pa.org/manifest"><metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYTpmZjkwZWI3NS02ZjdmLTQwNGItYjEzZC1kMDZjZDlhYTFiMjEAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaCyprcBoqXAtXPLVQlIqro4AAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDpkYTlkMjI5OC1mZmIxLTQxZjQtYjU5Yy1jZTU4YmY5Y2JmMzhscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNoudRwTmpgW4zDexli5GU3zwAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggdWuzAMbGZaQ8hLCxodwYjqZBpTkAEgG1FJPz8Qs/AKikZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaEVVrVil3fTwLQFY5TZhqScAAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRNAAAAAAAAAAAAAAAAAGRoYXNoWCDGKFPPyJFxGYhLQDISGC3ovtFxXvngHbYm7bwarRJrRmRuYW1lbmp1bWJmIG1hbmlmZXN0amV4Y2x1c2lvbnOBomVzdGFydBi7Zmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOmZmOTBlYjc1LTZmN2YtNDA0Yi1iMTNkLWQwNmNkOWFhMWIyMS9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOjUzMDQ3ZDcyLTM3ZjItNDMxNy05M2Q2LWQxN2JiYWVkZDY5NXJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCB1a7MAxsZlpDyEsLGh3BiOpkGlOQASAbUUk/PxCz8AqKJjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFggpAGv/dWc21gZlUMHTg9J5X6Y/e0aL9gmEkE20zZb4s2iY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFggRtyn5j0tcCehG2ipZQ3e44MQJYBpDtnA9vFNUl9hw2l0Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQJesWOqQQRdxaIH+UxMdIz9UDBdDgxw9yEVv8ZX+5P5QjQ+iY7ako9vIal5O0mOvCBVQ9TnkULvzYDkVTiWLjd8=</c2pa:manifest></metadata>
+<title id="t">Wireframe 8: group board on a tablet and a desktop</title>
+<desc id="d">Greyscale wireframes of the LiftOff Comp group board on a landscape tablet (1024 px) and a desktop (1366 px): the next-lifter panel and the tracked lifter in a left column, the lifter table next to it, and on the desktop the Clean and Jerk list beside the Snatch list. Two cut-outs show the row menu as a popover and refused weights as messages under the row.</desc>
+<style>text{font-family:"Segoe UI","Helvetica Neue",Helvetica,Arial,"DejaVu Sans",sans-serif;fill:#222}</style>
+<rect x="0" y="0" width="1420" height="2060" rx="0" fill="#fafafa" stroke="none" stroke-width="0"/>
+<text x="40" y="34" style="font-size:20px;font-weight:700">Wireframe 8 · Group board · tablet (1024 px) and desktop (1366 px)</text>
+<text x="40" y="56" style="fill:#666;font-size:12px">Same components and states as the phone wireframes. Greyscale layout only: colours, fonts and icons are placeholders. Frames are drawn at 90 % size. Names and numbers are made up.</text>
+<text x="40" y="100" style="font-size:15px;font-weight:700">Tablet, landscape (1024 × 768)</text>
+<g transform="translate(40,116) scale(0.9)">
+<rect x="0" y="0" width="1024" height="768" rx="16" fill="#fff" stroke="#222" stroke-width="2.5"/>
+<rect x="1.25" y="1.25" width="1021.5" height="54" rx="14" fill="#ececec" stroke="none" stroke-width="0"/>
+<rect x="1.25" y="30" width="1021.5" height="26" rx="0" fill="#ececec" stroke="none" stroke-width="0"/>
+<line x1="0" y1="56" x2="1024" y2="56" stroke="#bdbdbd" stroke-width="1"/>
+<g transform="translate(32,28) scale(0.9)"><path d="M0,-14 C9,-6 9,6 5,12 L-5,12 C-9,6 -9,-6 0,-14Z" fill="#fff" stroke="#222" stroke-width="1.8"/><circle cx="0" cy="-3" r="3" fill="none" stroke="#222" stroke-width="1.6"/><path d="M-5,6 L-11,13 L-5,12Z M5,6 L11,13 L5,12Z" fill="#222"/><path d="M-3,14 L0,21 L3,14Z" fill="#e8741a"/></g>
+<text x="52" y="33" style="font-size:15px;font-weight:700">LiftOff Comp</text>
+<text x="200" y="33" style="font-size:13.5px;font-weight:700">Competitions</text>
+<line x1="200" y1="40" x2="291.2" y2="40" stroke="#e8741a" stroke-width="3"/>
+<text x="319.2" y="33" style="font-size:13.5px;font-weight:400">Lifters</text>
+<text x="400.4" y="33" style="font-size:13.5px;font-weight:400">Members</text>
+<text x="834" y="33" style="fill:#444;font-size:12.5px">SK Atlas</text>
+<circle cx="916" cy="28" r="9" fill="#fff" stroke="#222" stroke-width="1.8"/><path d="M916,19 A9,9 0 0 1 916,37Z" fill="#222"/>
+<rect x="944" y="12" width="60" height="32" rx="16" fill="#fff" stroke="#555" stroke-width="1.3"/>
+<text x="960" y="33" style="font-size:12px;font-weight:700">AS ▾</text>
+<text x="24" y="84" style="fill:#555;font-size:12px">‹ Spring Open 2026</text>
+<text x="24" y="118" style="font-size:26px;font-weight:700">Group F</text>
+<rect x="130" y="98" width="97" height="26" rx="13" fill="#222" stroke="none" stroke-width="0"/>
+<text x="178.5" y="115.5" text-anchor="middle" style="fill:#fff;font-size:12px;font-weight:700">SNATCH</text>
+<text x="246" y="117" style="fill:#666;font-size:12px">18 Oct 2026 · 7 lifters</text>
+<rect x="840" y="98" width="160" height="28" rx="14" fill="#fff" stroke="#555" stroke-width="1.2"/>
+<text x="920" y="116.5" text-anchor="middle" style="font-size:11.5px">↻  Updated 12 s ago</text>
+<rect x="24" y="150" width="360" height="322" rx="12" fill="#f4f4f4" stroke="#222" stroke-width="2"/>
+<text x="40" y="176" style="fill:#c25e0a;font-size:11px;font-weight:700">NEXT UP</text>
+<text x="368" y="176" text-anchor="end" style="font-size:12px">Snatch · attempt 2 of 3</text>
+<text x="40" y="208" style="font-size:26px;font-weight:700">Anna Berg</text>
+<text x="40" y="228" style="fill:#666;font-size:12px">SK Atlas · lot 3 · 64.2 kg</text>
+<text x="38" y="296" style="font-size:66px;font-weight:700">73</text>
+<text x="120" y="296" style="fill:#555;font-size:20px">kg</text>
+<line x1="184" y1="274" x2="368" y2="274" stroke="#555" stroke-width="7"/>
+<rect x="184" y="267" width="10" height="14" rx="0" fill="#eee" stroke="#555" stroke-width="1.2"/>
+<rect x="220" y="243.0" width="14" height="62" rx="2" fill="#bdbdbd" stroke="#555" stroke-width="1.2"/>
+<rect x="235" y="257.0" width="9" height="34" rx="2" fill="#cfcfcf" stroke="#555" stroke-width="1.2"/>
+<rect x="245" y="261.0" width="7" height="26" rx="2" fill="#bdbdbd" stroke="#555" stroke-width="1.2"/>
+<rect x="254" y="267" width="10" height="14" rx="2" fill="#8a8a8a" stroke="#555" stroke-width="1.2"/>
+<text x="276" y="314" text-anchor="middle" style="fill:#666;font-size:10.5px">29 kg per side on a 15 kg bar</text>
+<rect x="40" y="326" width="104" height="58" rx="10" fill="#fff" stroke="#222" stroke-width="2"/>
+<g fill="none" stroke="#222" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"><line x1="74" y1="334" x2="74" y2="360"/><path d="M74,334 L100,340 L74,349Z" fill="#fff"/></g>
+<text x="92" y="377" text-anchor="middle" style="fill:#222;font-size:10.5px;font-weight:700">LEFT</text>
+<rect x="152" y="326" width="104" height="58" rx="10" fill="#d9534f" stroke="#7a1a17" stroke-width="2"/>
+<g fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"><line x1="186" y1="334" x2="186" y2="360"/><path d="M186,334 L212,340 L186,349Z" fill="none"/></g>
+<text x="204" y="377" text-anchor="middle" style="fill:#fff;font-size:10.5px;font-weight:700">CENTRE</text>
+<text x="236" y="354" text-anchor="middle" style="fill:#fff;font-size:20px;font-weight:700">✗</text>
+<rect x="264" y="326" width="104" height="58" rx="10" fill="#fff" stroke="#222" stroke-width="2"/>
+<g fill="none" stroke="#222" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"><line x1="298" y1="334" x2="298" y2="360"/><path d="M298,334 L324,340 L298,349Z" fill="#fff"/></g>
+<text x="316" y="377" text-anchor="middle" style="fill:#222;font-size:10.5px;font-weight:700">RIGHT</text>
+<text x="204.0" y="404" text-anchor="middle" style="fill:#2f7a2f;font-size:13px;font-weight:700">✓  2 of 3 white: good lift</text>
+<rect x="40" y="416" width="328" height="44" rx="10" fill="#222" stroke="none" stroke-width="0"/>
+<text x="204.0" y="445" text-anchor="middle" style="fill:#fff;font-size:16px;font-weight:700">Enter result</text>
+<rect x="24" y="484" width="360" height="118" rx="12" fill="#fff3e3" stroke="#e8741a" stroke-width="2"/>
+<g transform="translate(48,508) scale(0.6)"><path d="M0,-14 C9,-6 9,6 5,12 L-5,12 C-9,6 -9,-6 0,-14Z" fill="#fff" stroke="#222" stroke-width="1.8"/><circle cx="0" cy="-3" r="3" fill="none" stroke="#222" stroke-width="1.6"/><path d="M-5,6 L-11,13 L-5,12Z M5,6 L11,13 L5,12Z" fill="#222"/><path d="M-3,14 L0,21 L3,14Z" fill="#e8741a"/></g>
+<text x="68" y="513" style="font-size:13px;font-weight:700">ME · Niclas Hugdahl</text>
+<text x="40" y="566" style="font-size:44px;font-weight:700">T–4</text>
+<text x="142" y="550" style="font-size:13px">4 lifts before my turn</text>
+<text x="142" y="570" style="font-size:13px;font-weight:700">~5–6 min · around 14:32</text>
+<line x1="40" y1="582" x2="368" y2="582" stroke="#e8c9a0" stroke-width="1"/>
+<text x="40" y="596" style="fill:#555;font-size:11.5px">Karl Nyberg · T–2 · ~3 min</text>
+<text x="408" y="156" style="font-size:19px;font-weight:700">Snatch</text>
+<text x="1000" y="156" text-anchor="end" style="fill:#666;font-size:12px">5 still to lift</text>
+<rect x="408" y="166" width="592" height="24" rx="4" fill="#ececec" stroke="none" stroke-width="0"/>
+<text x="422" y="182" style="fill:#666;font-size:11px;font-weight:700">#</text>
+<text x="448" y="182" style="fill:#666;font-size:11px;font-weight:700">Lifter</text>
+<text x="812" y="182" text-anchor="end" style="fill:#666;font-size:11px;font-weight:700">BW</text>
+<text x="854" y="182" text-anchor="middle" style="fill:#666;font-size:11px;font-weight:700">1</text>
+<text x="908" y="182" text-anchor="middle" style="fill:#666;font-size:11px;font-weight:700">2</text>
+<text x="962" y="182" text-anchor="middle" style="fill:#666;font-size:11px;font-weight:700">3</text>
+<rect x="408" y="194" width="592" height="52" rx="0" fill="#fff3e3" stroke="none" stroke-width="0"/>
+<rect x="408" y="194" width="5" height="52" rx="0" fill="#e8741a" stroke="none" stroke-width="0"/>
+<text x="422" y="225" style="fill:#777;font-size:11px">3</text>
+<text x="448" y="216" style="fill:#222;font-size:14px;font-weight:700">Anna Berg</text>
+<text x="448" y="233" style="fill:#777;font-size:11px">SK Atlas</text>
+<text x="812" y="224" text-anchor="end" style="fill:#555;font-size:12px">64.2</text>
+<rect x="830" y="202" width="48" height="36" rx="8" fill="#d6ecd6" stroke="#3d8b3d" stroke-width="1.5"/>
+<text x="854.0" y="221" text-anchor="middle" style="font-size:15px;font-weight:700">70</text>
+<text x="854.0" y="233" text-anchor="middle" style="fill:#3d8b3d;font-size:11px;font-weight:700">✓</text>
+<rect x="884" y="202" width="48" height="36" rx="8" fill="#ffffff" stroke="#e8741a" stroke-width="3.5"/>
+<text x="908.0" y="225" text-anchor="middle" style="font-size:15px;font-weight:700">73</text>
+<rect x="938" y="202" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="962.0" y="225" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~76</text>
+<line x1="408" y1="248" x2="1000" y2="248" stroke="#d4d4d4" stroke-width="1"/>
+<text x="422" y="281" style="fill:#777;font-size:11px">1</text>
+<text x="448" y="272" style="fill:#222;font-size:14px;font-weight:700">Sara Lind</text>
+<text x="448" y="289" style="fill:#777;font-size:11px">IK Vasa</text>
+<text x="812" y="280" text-anchor="end" style="fill:#555;font-size:12px">59.8</text>
+<rect x="830" y="258" width="48" height="36" rx="8" fill="#f3d3d3" stroke="#b3382f" stroke-width="1.5"/>
+<text x="854.0" y="277" text-anchor="middle" style="font-size:15px;font-weight:700">74</text>
+<text x="854.0" y="289" text-anchor="middle" style="fill:#b3382f;font-size:11px;font-weight:700">✗</text>
+<rect x="884" y="258" width="48" height="36" rx="8" fill="#ffffff" stroke="#555555" stroke-width="1.5"/>
+<text x="908.0" y="281" text-anchor="middle" style="font-size:15px;font-weight:700">74</text>
+<rect x="938" y="258" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="962.0" y="281" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~80</text>
+<line x1="408" y1="304" x2="1000" y2="304" stroke="#d4d4d4" stroke-width="1"/>
+<text x="422" y="337" style="fill:#777;font-size:11px">6</text>
+<text x="448" y="328" style="fill:#222;font-size:14px;font-weight:700">Karl Nyberg</text>
+<text x="448" y="345" style="fill:#777;font-size:11px">SK Atlas</text>
+<text x="812" y="336" text-anchor="end" style="fill:#555;font-size:12px">88.5</text>
+<rect x="830" y="314" width="48" height="36" rx="8" fill="#d6ecd6" stroke="#3d8b3d" stroke-width="1.5"/>
+<text x="854.0" y="333" text-anchor="middle" style="font-size:15px;font-weight:700">72</text>
+<text x="854.0" y="345" text-anchor="middle" style="fill:#3d8b3d;font-size:11px;font-weight:700">✓</text>
+<rect x="884" y="314" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="908.0" y="337" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~75</text>
+<rect x="938" y="314" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="962.0" y="337" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~78</text>
+<line x1="408" y1="360" x2="1000" y2="360" stroke="#d4d4d4" stroke-width="1"/>
+<rect x="408" y="362" width="592" height="82" rx="0" fill="#fff3e3" stroke="none" stroke-width="0"/>
+<rect x="408" y="362" width="5" height="82" rx="0" fill="#e8741a" stroke="none" stroke-width="0"/>
+<text x="422" y="393" style="fill:#777;font-size:11px">7</text>
+<text x="448" y="384" style="fill:#222;font-size:14px;font-weight:700">Niclas Hugdahl</text>
+<rect x="558.4" y="371" width="25.6" height="17" rx="8" fill="#e8741a" stroke="none" stroke-width="0"/>
+<text x="571.1999999999999" y="383.5" text-anchor="middle" style="fill:#fff;font-size:10px;font-weight:700">ME</text>
+<text x="448" y="401" style="fill:#777;font-size:11px">SK Atlas</text>
+<text x="812" y="392" text-anchor="end" style="fill:#555;font-size:12px">71.0</text>
+<rect x="830" y="370" width="48" height="36" rx="8" fill="#ffffff" stroke="#555555" stroke-width="1.5"/>
+<text x="854.0" y="393" text-anchor="middle" style="font-size:15px;font-weight:700">78</text>
+<rect x="884" y="370" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="908.0" y="393" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~81</text>
+<rect x="938" y="370" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="962.0" y="393" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~84</text>
+<g transform="translate(432,429) scale(0.55)"><path d="M0,-14 C9,-6 9,6 5,12 L-5,12 C-9,6 -9,-6 0,-14Z" fill="#fff" stroke="#222" stroke-width="1.8"/><circle cx="0" cy="-3" r="3" fill="none" stroke="#222" stroke-width="1.6"/><path d="M-5,6 L-11,13 L-5,12Z M5,6 L11,13 L5,12Z" fill="#222"/><path d="M-3,14 L0,21 L3,14Z" fill="#e8741a"/></g>
+<text x="448" y="433" style="font-size:13px;font-weight:700">T–4 lifts</text>
+<text x="516.1" y="433" style="font-size:13px">· ~5–6 min · around 14:32</text>
+<line x1="408" y1="446" x2="1000" y2="446" stroke="#d4d4d4" stroke-width="1"/>
+<text x="422" y="479" style="fill:#777;font-size:11px">4</text>
+<text x="448" y="470" style="fill:#222;font-size:14px;font-weight:700">Erik Lund</text>
+<text x="448" y="487" style="fill:#777;font-size:11px">Hammar AK</text>
+<text x="812" y="478" text-anchor="end" style="fill:#555;font-size:12px">95.3</text>
+<rect x="830" y="456" width="48" height="36" rx="8" fill="#ffffff" stroke="#555555" stroke-width="1.5"/>
+<text x="854.0" y="479" text-anchor="middle" style="font-size:15px;font-weight:700">80</text>
+<rect x="884" y="456" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="908.0" y="479" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~83</text>
+<rect x="938" y="456" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="962.0" y="479" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~86</text>
+<line x1="408" y1="502" x2="1000" y2="502" stroke="#d4d4d4" stroke-width="1"/>
+<rect x="408" y="508" width="592" height="22" rx="4" fill="#ececec" stroke="none" stroke-width="0"/>
+<text x="418" y="523" style="fill:#666;font-size:12px;font-weight:700">Finished or stopped (2)</text>
+<text x="422" y="567" style="fill:#777;font-size:11px">2</text>
+<text x="448" y="558" style="fill:#777;font-size:14px;font-weight:700">Maja Holm</text>
+<text x="448" y="575" style="fill:#777;font-size:11px">SK Atlas</text>
+<text x="812" y="566" text-anchor="end" style="fill:#777;font-size:12px">58.1</text>
+<rect x="830" y="544" width="48" height="36" rx="8" fill="#d6ecd6" stroke="#3d8b3d" stroke-width="1.5"/>
+<text x="854.0" y="563" text-anchor="middle" style="font-size:15px;font-weight:700">60</text>
+<text x="854.0" y="575" text-anchor="middle" style="fill:#3d8b3d;font-size:11px;font-weight:700">✓</text>
+<rect x="884" y="544" width="48" height="36" rx="8" fill="#d6ecd6" stroke="#3d8b3d" stroke-width="1.5"/>
+<text x="908.0" y="563" text-anchor="middle" style="font-size:15px;font-weight:700">63</text>
+<text x="908.0" y="575" text-anchor="middle" style="fill:#3d8b3d;font-size:11px;font-weight:700">✓</text>
+<rect x="938" y="544" width="48" height="36" rx="8" fill="#f3d3d3" stroke="#b3382f" stroke-width="1.5"/>
+<text x="962.0" y="563" text-anchor="middle" style="font-size:15px;font-weight:700">65</text>
+<text x="962.0" y="575" text-anchor="middle" style="fill:#b3382f;font-size:11px;font-weight:700">✗</text>
+<line x1="408" y1="590" x2="1000" y2="590" stroke="#d4d4d4" stroke-width="1"/>
+<text x="422" y="623" style="fill:#777;font-size:11px">5</text>
+<text x="448" y="614" style="fill:#777;font-size:14px;font-weight:700">Lars Falk</text>
+<text x="448" y="632" style="fill:#777;font-size:11px">Stopped</text>
+<rect x="501.3" y="621" width="62" height="18" rx="9" fill="#fff" stroke="#222" stroke-width="1.2"/>
+<text x="532.3" y="634" text-anchor="middle" style="font-size:11px;font-weight:700">Restore</text>
+<text x="812" y="622" text-anchor="end" style="fill:#777;font-size:12px">81.4</text>
+<rect x="830" y="600" width="48" height="36" rx="8" fill="#f3d3d3" stroke="#b3382f" stroke-width="1.5"/>
+<text x="854.0" y="619" text-anchor="middle" style="font-size:15px;font-weight:700">68</text>
+<text x="854.0" y="631" text-anchor="middle" style="fill:#b3382f;font-size:11px;font-weight:700">✗</text>
+<rect x="884" y="600" width="48" height="36" rx="8" fill="#f0f0f0" stroke="#bbbbbb" stroke-width="1.5"/>
+<text x="908.0" y="624" text-anchor="middle" style="fill:#999;font-size:16px">–</text>
+<rect x="938" y="600" width="48" height="36" rx="8" fill="#f0f0f0" stroke="#bbbbbb" stroke-width="1.5"/>
+<text x="962.0" y="624" text-anchor="middle" style="fill:#999;font-size:16px">–</text>
+<line x1="408" y1="646" x2="1000" y2="646" stroke="#d4d4d4" stroke-width="1"/>
+<line x1="408" y1="700" x2="1000" y2="700" stroke="#999" stroke-width="1" stroke-dasharray="4 3"/>
+<text x="408" y="724" style="fill:#888;font-size:16px;font-weight:700">Clean &amp; Jerk</text>
+<text x="1000" y="724" text-anchor="end" style="fill:#888;font-size:12px">below, starts when Snatch is done</text>
+</g>
+<text x="1010" y="140" style="font-size:14px;font-weight:700">Two columns</text>
+<text x="1010" y="160" style="fill:#333;font-size:12.5px">Left: everything for the current attempt (next</text>
+<text x="1010" y="177" style="fill:#333;font-size:12.5px">lifter, plates, flags, Enter result) and the tracked</text>
+<text x="1010" y="194" style="fill:#333;font-size:12.5px">lifter. Right: the lifter table. The left column</text>
+<text x="1010" y="211" style="fill:#333;font-size:12.5px">stays in place while the table scrolls.</text>
+<text x="1010" y="246" style="font-size:14px;font-weight:700">Bigger T-minus</text>
+<text x="1010" y="266" style="fill:#333;font-size:12.5px">On wide screens the tracked lifter gets a card</text>
+<text x="1010" y="283" style="fill:#333;font-size:12.5px">with a large 'T–4'. A second tracked lifter</text>
+<text x="1010" y="300" style="fill:#333;font-size:12.5px">is one line under it.</text>
+<text x="1010" y="335" style="font-size:14px;font-weight:700">Wider table</text>
+<text x="1010" y="355" style="fill:#333;font-size:12.5px">Bodyweight gets a column (weigh-in). The</text>
+<text x="1010" y="372" style="fill:#333;font-size:12.5px">Clean &amp; Jerk list sits under the Snatch list,</text>
+<text x="1010" y="389" style="fill:#333;font-size:12.5px">as on the phone.</text>
+<text x="1010" y="424" style="font-size:14px;font-weight:700">Touch</text>
+<text x="1010" y="444" style="fill:#333;font-size:12.5px">Tap targets stay at least 44 px. The flags and</text>
+<text x="1010" y="461" style="fill:#333;font-size:12.5px">Enter result are in the left column, close to</text>
+<text x="1010" y="478" style="fill:#333;font-size:12.5px">the thumb when the tablet is held in landscape.</text>
+<text x="40" y="881" style="font-size:15px;font-weight:700">Desktop (1366 × 720)</text>
+<g transform="translate(40,897) scale(0.9)">
+<rect x="0" y="0" width="1366" height="720" rx="16" fill="#fff" stroke="#222" stroke-width="2.5"/>
+<rect x="1.25" y="1.25" width="1363.5" height="54" rx="14" fill="#ececec" stroke="none" stroke-width="0"/>
+<rect x="1.25" y="30" width="1363.5" height="26" rx="0" fill="#ececec" stroke="none" stroke-width="0"/>
+<line x1="0" y1="56" x2="1366" y2="56" stroke="#bdbdbd" stroke-width="1"/>
+<g transform="translate(32,28) scale(0.9)"><path d="M0,-14 C9,-6 9,6 5,12 L-5,12 C-9,6 -9,-6 0,-14Z" fill="#fff" stroke="#222" stroke-width="1.8"/><circle cx="0" cy="-3" r="3" fill="none" stroke="#222" stroke-width="1.6"/><path d="M-5,6 L-11,13 L-5,12Z M5,6 L11,13 L5,12Z" fill="#222"/><path d="M-3,14 L0,21 L3,14Z" fill="#e8741a"/></g>
+<text x="52" y="33" style="font-size:15px;font-weight:700">LiftOff Comp</text>
+<text x="200" y="33" style="font-size:13.5px;font-weight:700">Competitions</text>
+<line x1="200" y1="40" x2="291.2" y2="40" stroke="#e8741a" stroke-width="3"/>
+<text x="319.2" y="33" style="font-size:13.5px;font-weight:400">Lifters</text>
+<text x="400.4" y="33" style="font-size:13.5px;font-weight:400">Members</text>
+<text x="1176" y="33" style="fill:#444;font-size:12.5px">SK Atlas</text>
+<circle cx="1258" cy="28" r="9" fill="#fff" stroke="#222" stroke-width="1.8"/><path d="M1258,19 A9,9 0 0 1 1258,37Z" fill="#222"/>
+<rect x="1286" y="12" width="60" height="32" rx="16" fill="#fff" stroke="#555" stroke-width="1.3"/>
+<text x="1302" y="33" style="font-size:12px;font-weight:700">AS ▾</text>
+<text x="24" y="84" style="fill:#555;font-size:12px">‹ Spring Open 2026</text>
+<text x="24" y="118" style="font-size:26px;font-weight:700">Group F</text>
+<rect x="130" y="98" width="97" height="26" rx="13" fill="#222" stroke="none" stroke-width="0"/>
+<text x="178.5" y="115.5" text-anchor="middle" style="fill:#fff;font-size:12px;font-weight:700">SNATCH</text>
+<text x="246" y="117" style="fill:#666;font-size:12px">18 Oct 2026 · 7 lifters</text>
+<rect x="1182" y="98" width="160" height="28" rx="14" fill="#fff" stroke="#555" stroke-width="1.2"/>
+<text x="1262" y="116.5" text-anchor="middle" style="font-size:11.5px">↻  Updated 12 s ago</text>
+<rect x="24" y="150" width="360" height="322" rx="12" fill="#f4f4f4" stroke="#222" stroke-width="2"/>
+<text x="40" y="176" style="fill:#c25e0a;font-size:11px;font-weight:700">NEXT UP</text>
+<text x="368" y="176" text-anchor="end" style="font-size:12px">Snatch · attempt 2 of 3</text>
+<text x="40" y="208" style="font-size:26px;font-weight:700">Anna Berg</text>
+<text x="40" y="228" style="fill:#666;font-size:12px">SK Atlas · lot 3 · 64.2 kg</text>
+<text x="38" y="296" style="font-size:66px;font-weight:700">73</text>
+<text x="120" y="296" style="fill:#555;font-size:20px">kg</text>
+<line x1="184" y1="274" x2="368" y2="274" stroke="#555" stroke-width="7"/>
+<rect x="184" y="267" width="10" height="14" rx="0" fill="#eee" stroke="#555" stroke-width="1.2"/>
+<rect x="220" y="243.0" width="14" height="62" rx="2" fill="#bdbdbd" stroke="#555" stroke-width="1.2"/>
+<rect x="235" y="257.0" width="9" height="34" rx="2" fill="#cfcfcf" stroke="#555" stroke-width="1.2"/>
+<rect x="245" y="261.0" width="7" height="26" rx="2" fill="#bdbdbd" stroke="#555" stroke-width="1.2"/>
+<rect x="254" y="267" width="10" height="14" rx="2" fill="#8a8a8a" stroke="#555" stroke-width="1.2"/>
+<text x="276" y="314" text-anchor="middle" style="fill:#666;font-size:10.5px">29 kg per side on a 15 kg bar</text>
+<rect x="40" y="326" width="104" height="58" rx="10" fill="#fff" stroke="#222" stroke-width="2"/>
+<g fill="none" stroke="#222" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"><line x1="74" y1="334" x2="74" y2="360"/><path d="M74,334 L100,340 L74,349Z" fill="#fff"/></g>
+<text x="92" y="377" text-anchor="middle" style="fill:#222;font-size:10.5px;font-weight:700">LEFT</text>
+<rect x="152" y="326" width="104" height="58" rx="10" fill="#d9534f" stroke="#7a1a17" stroke-width="2"/>
+<g fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"><line x1="186" y1="334" x2="186" y2="360"/><path d="M186,334 L212,340 L186,349Z" fill="none"/></g>
+<text x="204" y="377" text-anchor="middle" style="fill:#fff;font-size:10.5px;font-weight:700">CENTRE</text>
+<text x="236" y="354" text-anchor="middle" style="fill:#fff;font-size:20px;font-weight:700">✗</text>
+<rect x="264" y="326" width="104" height="58" rx="10" fill="#fff" stroke="#222" stroke-width="2"/>
+<g fill="none" stroke="#222" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"><line x1="298" y1="334" x2="298" y2="360"/><path d="M298,334 L324,340 L298,349Z" fill="#fff"/></g>
+<text x="316" y="377" text-anchor="middle" style="fill:#222;font-size:10.5px;font-weight:700">RIGHT</text>
+<text x="204.0" y="404" text-anchor="middle" style="fill:#2f7a2f;font-size:13px;font-weight:700">✓  2 of 3 white: good lift</text>
+<rect x="40" y="416" width="328" height="44" rx="10" fill="#222" stroke="none" stroke-width="0"/>
+<text x="204.0" y="445" text-anchor="middle" style="fill:#fff;font-size:16px;font-weight:700">Enter result</text>
+<rect x="24" y="484" width="360" height="118" rx="12" fill="#fff3e3" stroke="#e8741a" stroke-width="2"/>
+<g transform="translate(48,508) scale(0.6)"><path d="M0,-14 C9,-6 9,6 5,12 L-5,12 C-9,6 -9,-6 0,-14Z" fill="#fff" stroke="#222" stroke-width="1.8"/><circle cx="0" cy="-3" r="3" fill="none" stroke="#222" stroke-width="1.6"/><path d="M-5,6 L-11,13 L-5,12Z M5,6 L11,13 L5,12Z" fill="#222"/><path d="M-3,14 L0,21 L3,14Z" fill="#e8741a"/></g>
+<text x="68" y="513" style="font-size:13px;font-weight:700">ME · Niclas Hugdahl</text>
+<text x="40" y="566" style="font-size:44px;font-weight:700">T–4</text>
+<text x="142" y="550" style="font-size:13px">4 lifts before my turn</text>
+<text x="142" y="570" style="font-size:13px;font-weight:700">~5–6 min · around 14:32</text>
+<line x1="40" y1="582" x2="368" y2="582" stroke="#e8c9a0" stroke-width="1"/>
+<text x="40" y="596" style="fill:#555;font-size:11.5px">Karl Nyberg · T–2 · ~3 min</text>
+<text x="408" y="156" style="font-size:19px;font-weight:700">Snatch</text>
+<text x="878" y="156" text-anchor="end" style="fill:#666;font-size:12px">5 still to lift</text>
+<rect x="408" y="166" width="470" height="24" rx="4" fill="#ececec" stroke="none" stroke-width="0"/>
+<text x="422" y="182" style="fill:#666;font-size:11px;font-weight:700">#</text>
+<text x="448" y="182" style="fill:#666;font-size:11px;font-weight:700">Lifter</text>
+<text x="732" y="182" text-anchor="middle" style="fill:#666;font-size:11px;font-weight:700">1</text>
+<text x="786" y="182" text-anchor="middle" style="fill:#666;font-size:11px;font-weight:700">2</text>
+<text x="840" y="182" text-anchor="middle" style="fill:#666;font-size:11px;font-weight:700">3</text>
+<rect x="408" y="194" width="470" height="52" rx="0" fill="#fff3e3" stroke="none" stroke-width="0"/>
+<rect x="408" y="194" width="5" height="52" rx="0" fill="#e8741a" stroke="none" stroke-width="0"/>
+<text x="422" y="225" style="fill:#777;font-size:11px">3</text>
+<text x="448" y="216" style="fill:#222;font-size:14px;font-weight:700">Anna Berg</text>
+<text x="448" y="233" style="fill:#777;font-size:11px">SK Atlas</text>
+<rect x="708" y="202" width="48" height="36" rx="8" fill="#d6ecd6" stroke="#3d8b3d" stroke-width="1.5"/>
+<text x="732.0" y="221" text-anchor="middle" style="font-size:15px;font-weight:700">70</text>
+<text x="732.0" y="233" text-anchor="middle" style="fill:#3d8b3d;font-size:11px;font-weight:700">✓</text>
+<rect x="762" y="202" width="48" height="36" rx="8" fill="#ffffff" stroke="#e8741a" stroke-width="3.5"/>
+<text x="786.0" y="225" text-anchor="middle" style="font-size:15px;font-weight:700">73</text>
+<rect x="816" y="202" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="840.0" y="225" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~76</text>
+<line x1="408" y1="248" x2="878" y2="248" stroke="#d4d4d4" stroke-width="1"/>
+<text x="422" y="281" style="fill:#777;font-size:11px">1</text>
+<text x="448" y="272" style="fill:#222;font-size:14px;font-weight:700">Sara Lind</text>
+<text x="448" y="289" style="fill:#777;font-size:11px">IK Vasa</text>
+<rect x="708" y="258" width="48" height="36" rx="8" fill="#f3d3d3" stroke="#b3382f" stroke-width="1.5"/>
+<text x="732.0" y="277" text-anchor="middle" style="font-size:15px;font-weight:700">74</text>
+<text x="732.0" y="289" text-anchor="middle" style="fill:#b3382f;font-size:11px;font-weight:700">✗</text>
+<rect x="762" y="258" width="48" height="36" rx="8" fill="#ffffff" stroke="#555555" stroke-width="1.5"/>
+<text x="786.0" y="281" text-anchor="middle" style="font-size:15px;font-weight:700">74</text>
+<rect x="816" y="258" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="840.0" y="281" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~80</text>
+<line x1="408" y1="304" x2="878" y2="304" stroke="#d4d4d4" stroke-width="1"/>
+<text x="422" y="337" style="fill:#777;font-size:11px">6</text>
+<text x="448" y="328" style="fill:#222;font-size:14px;font-weight:700">Karl Nyberg</text>
+<text x="448" y="345" style="fill:#777;font-size:11px">SK Atlas</text>
+<rect x="708" y="314" width="48" height="36" rx="8" fill="#d6ecd6" stroke="#3d8b3d" stroke-width="1.5"/>
+<text x="732.0" y="333" text-anchor="middle" style="font-size:15px;font-weight:700">72</text>
+<text x="732.0" y="345" text-anchor="middle" style="fill:#3d8b3d;font-size:11px;font-weight:700">✓</text>
+<rect x="762" y="314" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="786.0" y="337" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~75</text>
+<rect x="816" y="314" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="840.0" y="337" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~78</text>
+<line x1="408" y1="360" x2="878" y2="360" stroke="#d4d4d4" stroke-width="1"/>
+<rect x="408" y="362" width="470" height="82" rx="0" fill="#fff3e3" stroke="none" stroke-width="0"/>
+<rect x="408" y="362" width="5" height="82" rx="0" fill="#e8741a" stroke="none" stroke-width="0"/>
+<text x="422" y="393" style="fill:#777;font-size:11px">7</text>
+<text x="448" y="384" style="fill:#222;font-size:14px;font-weight:700">Niclas Hugdahl</text>
+<rect x="558.4" y="371" width="25.6" height="17" rx="8" fill="#e8741a" stroke="none" stroke-width="0"/>
+<text x="571.1999999999999" y="383.5" text-anchor="middle" style="fill:#fff;font-size:10px;font-weight:700">ME</text>
+<text x="448" y="401" style="fill:#777;font-size:11px">SK Atlas</text>
+<rect x="708" y="370" width="48" height="36" rx="8" fill="#ffffff" stroke="#555555" stroke-width="1.5"/>
+<text x="732.0" y="393" text-anchor="middle" style="font-size:15px;font-weight:700">78</text>
+<rect x="762" y="370" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="786.0" y="393" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~81</text>
+<rect x="816" y="370" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="840.0" y="393" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~84</text>
+<g transform="translate(432,429) scale(0.55)"><path d="M0,-14 C9,-6 9,6 5,12 L-5,12 C-9,6 -9,-6 0,-14Z" fill="#fff" stroke="#222" stroke-width="1.8"/><circle cx="0" cy="-3" r="3" fill="none" stroke="#222" stroke-width="1.6"/><path d="M-5,6 L-11,13 L-5,12Z M5,6 L11,13 L5,12Z" fill="#222"/><path d="M-3,14 L0,21 L3,14Z" fill="#e8741a"/></g>
+<text x="448" y="433" style="font-size:13px;font-weight:700">T–4 lifts</text>
+<text x="516.1" y="433" style="font-size:13px">· ~5–6 min · around 14:32</text>
+<line x1="408" y1="446" x2="878" y2="446" stroke="#d4d4d4" stroke-width="1"/>
+<text x="422" y="479" style="fill:#777;font-size:11px">4</text>
+<text x="448" y="470" style="fill:#222;font-size:14px;font-weight:700">Erik Lund</text>
+<text x="448" y="487" style="fill:#777;font-size:11px">Hammar AK</text>
+<rect x="708" y="456" width="48" height="36" rx="8" fill="#ffffff" stroke="#555555" stroke-width="1.5"/>
+<text x="732.0" y="479" text-anchor="middle" style="font-size:15px;font-weight:700">80</text>
+<rect x="762" y="456" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="786.0" y="479" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~83</text>
+<rect x="816" y="456" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="840.0" y="479" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~86</text>
+<line x1="408" y1="502" x2="878" y2="502" stroke="#d4d4d4" stroke-width="1"/>
+<rect x="408" y="508" width="470" height="22" rx="4" fill="#ececec" stroke="none" stroke-width="0"/>
+<text x="418" y="523" style="fill:#666;font-size:12px;font-weight:700">Finished or stopped (2)</text>
+<text x="422" y="567" style="fill:#777;font-size:11px">2</text>
+<text x="448" y="558" style="fill:#777;font-size:14px;font-weight:700">Maja Holm</text>
+<text x="448" y="575" style="fill:#777;font-size:11px">SK Atlas</text>
+<rect x="708" y="544" width="48" height="36" rx="8" fill="#d6ecd6" stroke="#3d8b3d" stroke-width="1.5"/>
+<text x="732.0" y="563" text-anchor="middle" style="font-size:15px;font-weight:700">60</text>
+<text x="732.0" y="575" text-anchor="middle" style="fill:#3d8b3d;font-size:11px;font-weight:700">✓</text>
+<rect x="762" y="544" width="48" height="36" rx="8" fill="#d6ecd6" stroke="#3d8b3d" stroke-width="1.5"/>
+<text x="786.0" y="563" text-anchor="middle" style="font-size:15px;font-weight:700">63</text>
+<text x="786.0" y="575" text-anchor="middle" style="fill:#3d8b3d;font-size:11px;font-weight:700">✓</text>
+<rect x="816" y="544" width="48" height="36" rx="8" fill="#f3d3d3" stroke="#b3382f" stroke-width="1.5"/>
+<text x="840.0" y="563" text-anchor="middle" style="font-size:15px;font-weight:700">65</text>
+<text x="840.0" y="575" text-anchor="middle" style="fill:#b3382f;font-size:11px;font-weight:700">✗</text>
+<line x1="408" y1="590" x2="878" y2="590" stroke="#d4d4d4" stroke-width="1"/>
+<text x="422" y="623" style="fill:#777;font-size:11px">5</text>
+<text x="448" y="614" style="fill:#777;font-size:14px;font-weight:700">Lars Falk</text>
+<text x="448" y="632" style="fill:#777;font-size:11px">Stopped</text>
+<rect x="501.3" y="621" width="62" height="18" rx="9" fill="#fff" stroke="#222" stroke-width="1.2"/>
+<text x="532.3" y="634" text-anchor="middle" style="font-size:11px;font-weight:700">Restore</text>
+<rect x="708" y="600" width="48" height="36" rx="8" fill="#f3d3d3" stroke="#b3382f" stroke-width="1.5"/>
+<text x="732.0" y="619" text-anchor="middle" style="font-size:15px;font-weight:700">68</text>
+<text x="732.0" y="631" text-anchor="middle" style="fill:#b3382f;font-size:11px;font-weight:700">✗</text>
+<rect x="762" y="600" width="48" height="36" rx="8" fill="#f0f0f0" stroke="#bbbbbb" stroke-width="1.5"/>
+<text x="786.0" y="624" text-anchor="middle" style="fill:#999;font-size:16px">–</text>
+<rect x="816" y="600" width="48" height="36" rx="8" fill="#f0f0f0" stroke="#bbbbbb" stroke-width="1.5"/>
+<text x="840.0" y="624" text-anchor="middle" style="fill:#999;font-size:16px">–</text>
+<line x1="408" y1="646" x2="878" y2="646" stroke="#d4d4d4" stroke-width="1"/>
+<g opacity="0.5">
+<text x="902" y="156" style="font-size:19px;font-weight:700">Clean &amp; Jerk</text>
+<text x="1342" y="156" text-anchor="end" style="fill:#666;font-size:12px">starts when Snatch is done</text>
+<rect x="902" y="166" width="440" height="24" rx="4" fill="#ececec" stroke="none" stroke-width="0"/>
+<text x="916" y="182" style="fill:#666;font-size:11px;font-weight:700">#</text>
+<text x="942" y="182" style="fill:#666;font-size:11px;font-weight:700">Lifter</text>
+<text x="1196" y="182" text-anchor="middle" style="fill:#666;font-size:11px;font-weight:700">1</text>
+<text x="1250" y="182" text-anchor="middle" style="fill:#666;font-size:11px;font-weight:700">2</text>
+<text x="1304" y="182" text-anchor="middle" style="fill:#666;font-size:11px;font-weight:700">3</text>
+<text x="916" y="225" style="fill:#777;font-size:11px">2</text>
+<text x="942" y="216" style="fill:#222;font-size:14px;font-weight:700">Maja Holm</text>
+<text x="942" y="233" style="fill:#777;font-size:11px">SK Atlas</text>
+<rect x="1172" y="202" width="48" height="36" rx="8" fill="#ffffff" stroke="#555555" stroke-width="1.5"/>
+<text x="1196.0" y="225" text-anchor="middle" style="font-size:15px;font-weight:700">80</text>
+<rect x="1226" y="202" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="1250.0" y="225" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~84</text>
+<rect x="1280" y="202" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="1304.0" y="225" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~87</text>
+<line x1="902" y1="248" x2="1342" y2="248" stroke="#d4d4d4" stroke-width="1"/>
+<text x="916" y="281" style="fill:#777;font-size:11px">1</text>
+<text x="942" y="272" style="fill:#222;font-size:14px;font-weight:700">Sara Lind</text>
+<text x="942" y="289" style="fill:#777;font-size:11px">IK Vasa</text>
+<rect x="1172" y="258" width="48" height="36" rx="8" fill="#ffffff" stroke="#555555" stroke-width="1.5"/>
+<text x="1196.0" y="281" text-anchor="middle" style="font-size:15px;font-weight:700">85</text>
+<rect x="1226" y="258" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="1250.0" y="281" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~89</text>
+<rect x="1280" y="258" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="1304.0" y="281" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~92</text>
+<line x1="902" y1="304" x2="1342" y2="304" stroke="#d4d4d4" stroke-width="1"/>
+<text x="916" y="337" style="fill:#777;font-size:11px">5</text>
+<text x="942" y="328" style="fill:#222;font-size:14px;font-weight:700">Lars Falk</text>
+<text x="942" y="345" style="fill:#777;font-size:11px">IK Vasa</text>
+<rect x="1172" y="314" width="48" height="36" rx="8" fill="#ffffff" stroke="#555555" stroke-width="1.5"/>
+<text x="1196.0" y="337" text-anchor="middle" style="font-size:15px;font-weight:700">88</text>
+<rect x="1226" y="314" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="1250.0" y="337" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~92</text>
+<rect x="1280" y="314" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="1304.0" y="337" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~95</text>
+<line x1="902" y1="360" x2="1342" y2="360" stroke="#d4d4d4" stroke-width="1"/>
+<text x="916" y="393" style="fill:#777;font-size:11px">3</text>
+<text x="942" y="384" style="fill:#222;font-size:14px;font-weight:700">Anna Berg</text>
+<text x="942" y="401" style="fill:#777;font-size:11px">SK Atlas</text>
+<rect x="1172" y="370" width="48" height="36" rx="8" fill="#ffffff" stroke="#555555" stroke-width="1.5"/>
+<text x="1196.0" y="393" text-anchor="middle" style="font-size:15px;font-weight:700">90</text>
+<rect x="1226" y="370" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="1250.0" y="393" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~94</text>
+<rect x="1280" y="370" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="1304.0" y="393" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~97</text>
+<line x1="902" y1="416" x2="1342" y2="416" stroke="#d4d4d4" stroke-width="1"/>
+<text x="916" y="449" style="fill:#777;font-size:11px">6</text>
+<text x="942" y="440" style="fill:#222;font-size:14px;font-weight:700">Karl Nyberg</text>
+<text x="942" y="457" style="fill:#777;font-size:11px">SK Atlas</text>
+<rect x="1172" y="426" width="48" height="36" rx="8" fill="#ffffff" stroke="#555555" stroke-width="1.5"/>
+<text x="1196.0" y="449" text-anchor="middle" style="font-size:15px;font-weight:700">95</text>
+<rect x="1226" y="426" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="1250.0" y="449" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~99</text>
+<rect x="1280" y="426" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="1304.0" y="449" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~103</text>
+<line x1="902" y1="472" x2="1342" y2="472" stroke="#d4d4d4" stroke-width="1"/>
+<text x="916" y="505" style="fill:#777;font-size:11px">7</text>
+<text x="942" y="496" style="fill:#222;font-size:14px;font-weight:700">Niclas Hugdahl</text>
+<text x="942" y="513" style="fill:#777;font-size:11px">SK Atlas</text>
+<rect x="1172" y="482" width="48" height="36" rx="8" fill="#ffffff" stroke="#555555" stroke-width="1.5"/>
+<text x="1196.0" y="505" text-anchor="middle" style="font-size:15px;font-weight:700">98</text>
+<rect x="1226" y="482" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="1250.0" y="505" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~102</text>
+<rect x="1280" y="482" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="1304.0" y="505" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~106</text>
+<line x1="902" y1="528" x2="1342" y2="528" stroke="#d4d4d4" stroke-width="1"/>
+<text x="916" y="561" style="fill:#777;font-size:11px">4</text>
+<text x="942" y="552" style="fill:#222;font-size:14px;font-weight:700">Erik Lund</text>
+<text x="942" y="569" style="fill:#777;font-size:11px">Hammar AK</text>
+<rect x="1172" y="538" width="48" height="36" rx="8" fill="#ffffff" stroke="#555555" stroke-width="1.5"/>
+<text x="1196.0" y="561" text-anchor="middle" style="font-size:15px;font-weight:700">100</text>
+<rect x="1226" y="538" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="1250.0" y="561" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~104</text>
+<rect x="1280" y="538" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="1304.0" y="561" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~108</text>
+<line x1="902" y1="584" x2="1342" y2="584" stroke="#d4d4d4" stroke-width="1"/>
+</g>
+</g>
+<text x="40" y="1575" style="fill:#333;font-size:12.5px">Same left column as the tablet. The Snatch and Clean &amp; Jerk lists sit side by side: the list that is not in play is dimmed.</text>
+<text x="40" y="1593" style="fill:#333;font-size:12.5px">When the Snatch is done the Clean &amp; Jerk list gets full colour and the Snatch list is dimmed. The bodyweight column is left out to save width.</text>
+<text x="40" y="1611" style="fill:#333;font-size:12.5px">The sticky bar from the phone is not needed here: the tracked card is always visible in the left column.</text>
+<text x="40" y="1651" style="font-size:15px;font-weight:700">Cut-outs: states from wireframe 2 on a wide screen</text>
+<circle cx="51" cy="1673" r="11" fill="#e8741a"/>
+<text x="51" y="1677" text-anchor="middle" style="fill:#fff;font-size:12px;font-weight:700">A</text>
+<text x="70" y="1678" style="font-size:14px;font-weight:700">Row menu as a popover</text>
+<g transform="translate(40,1693)">
+<rect x="0" y="0" width="420" height="272" rx="12" fill="#fff" stroke="#222" stroke-width="2"/>
+<rect x="20" y="16" width="380" height="52" rx="0" fill="#fff3e3" stroke="none" stroke-width="0"/>
+<rect x="20" y="16" width="5" height="52" rx="0" fill="#e8741a" stroke="none" stroke-width="0"/>
+<text x="34" y="47" style="fill:#777;font-size:11px">3</text>
+<text x="60" y="38" style="fill:#222;font-size:14px;font-weight:700">Anna Berg</text>
+<text x="60" y="55" style="fill:#777;font-size:11px">SK Atlas</text>
+<text x="212" y="46" text-anchor="end" style="fill:#555;font-size:12px">64.2</text>
+<rect x="230" y="24" width="48" height="36" rx="8" fill="#d6ecd6" stroke="#3d8b3d" stroke-width="1.5"/>
+<text x="254.0" y="43" text-anchor="middle" style="font-size:15px;font-weight:700">70</text>
+<text x="254.0" y="55" text-anchor="middle" style="fill:#3d8b3d;font-size:11px;font-weight:700">✓</text>
+<rect x="284" y="24" width="48" height="36" rx="8" fill="#ffffff" stroke="#e8741a" stroke-width="3.5"/>
+<text x="308.0" y="47" text-anchor="middle" style="font-size:15px;font-weight:700">73</text>
+<rect x="338" y="24" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="362.0" y="47" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~76</text>
+<line x1="20" y1="70" x2="400" y2="70" stroke="#d4d4d4" stroke-width="1"/>
+<rect x="20" y="72" width="380" height="52" rx="0" fill="#e4e4e4" stroke="none" stroke-width="0"/>
+<text x="34" y="103" style="fill:#777;font-size:11px">1</text>
+<text x="60" y="94" style="fill:#222;font-size:14px;font-weight:700">Sara Lind</text>
+<text x="60" y="111" style="fill:#777;font-size:11px">IK Vasa</text>
+<text x="212" y="102" text-anchor="end" style="fill:#555;font-size:12px">59.8</text>
+<rect x="230" y="80" width="48" height="36" rx="8" fill="#f3d3d3" stroke="#b3382f" stroke-width="1.5"/>
+<text x="254.0" y="99" text-anchor="middle" style="font-size:15px;font-weight:700">74</text>
+<text x="254.0" y="111" text-anchor="middle" style="fill:#b3382f;font-size:11px;font-weight:700">✗</text>
+<rect x="284" y="80" width="48" height="36" rx="8" fill="#ffffff" stroke="#555555" stroke-width="1.5"/>
+<text x="308.0" y="103" text-anchor="middle" style="font-size:15px;font-weight:700">74</text>
+<rect x="338" y="80" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="362.0" y="103" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~80</text>
+<line x1="20" y1="126" x2="400" y2="126" stroke="#d4d4d4" stroke-width="1"/>
+<rect x="60" y="128" width="190" height="124" rx="10" fill="#fff" stroke="#222" stroke-width="2"/>
+<path d="M96,128 L106,116 L116,128Z" fill="#fff" stroke="#222" stroke-width="2"/>
+<rect x="98" y="127" width="16" height="3" rx="0" fill="#fff" stroke="none" stroke-width="0"/>
+<g transform="translate(80,150) scale(0.5)"><path d="M0,-14 C9,-6 9,6 5,12 L-5,12 C-9,6 -9,-6 0,-14Z" fill="#fff" stroke="#222" stroke-width="1.8"/><circle cx="0" cy="-3" r="3" fill="none" stroke="#222" stroke-width="1.6"/><path d="M-5,6 L-11,13 L-5,12Z M5,6 L11,13 L5,12Z" fill="#222"/><path d="M-3,14 L0,21 L3,14Z" fill="#e8741a"/></g>
+<text x="98" y="155" style="font-size:13.5px;font-weight:700">Track</text>
+<line x1="68" y1="169" x2="242" y2="169" stroke="#ddd" stroke-width="1"/>
+<text x="78" y="191" style="font-size:13.5px;font-weight:700">Stop Snatch</text>
+<line x1="68" y1="205" x2="242" y2="205" stroke="#ddd" stroke-width="1"/>
+<text x="78" y="227" style="font-size:13.5px;font-weight:700">✕  Withdraw</text>
+</g>
+<text x="44" y="1983" style="fill:#333;font-size:12.5px">On wide screens the menu opens as a popover under the</text>
+<text x="44" y="2000" style="fill:#333;font-size:12.5px">name instead of a strip that pushes the rows down.</text>
+<circle cx="531" cy="1673" r="11" fill="#e8741a"/>
+<text x="531" y="1677" text-anchor="middle" style="fill:#fff;font-size:12px;font-weight:700">B</text>
+<text x="550" y="1678" style="font-size:14px;font-weight:700">Refused weights</text>
+<g transform="translate(520,1693)">
+<rect x="0" y="0" width="420" height="272" rx="12" fill="#fff" stroke="#222" stroke-width="2"/>
+<text x="34" y="47" style="fill:#777;font-size:11px">6</text>
+<text x="60" y="38" style="fill:#222;font-size:14px;font-weight:700">Karl Nyberg</text>
+<text x="60" y="55" style="fill:#777;font-size:11px">SK Atlas</text>
+<text x="212" y="46" text-anchor="end" style="fill:#555;font-size:12px">88.5</text>
+<rect x="230" y="24" width="48" height="36" rx="8" fill="#d6ecd6" stroke="#3d8b3d" stroke-width="1.5"/>
+<text x="254.0" y="43" text-anchor="middle" style="font-size:15px;font-weight:700">72</text>
+<text x="254.0" y="55" text-anchor="middle" style="fill:#3d8b3d;font-size:11px;font-weight:700">✓</text>
+<rect x="284" y="24" width="48" height="36" rx="8" fill="#ffffff" stroke="#b3382f" stroke-width="3.5"/>
+<text x="308.0" y="47" text-anchor="middle" style="font-size:15px;font-weight:700">75</text>
+<circle cx="329" cy="27" r="8" fill="#b3382f"/>
+<text x="329" y="31" text-anchor="middle" style="fill:#fff;font-size:11px;font-weight:700">!</text>
+<rect x="338" y="24" width="48" height="36" rx="8" fill="#ffffff" stroke="#888888" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="362.0" y="47" text-anchor="middle" style="fill:#666;font-size:14px;font-style:italic">~78</text>
+<line x1="20" y1="70" x2="400" y2="70" stroke="#d4d4d4" stroke-width="1"/>
+<rect x="20" y="74" width="380" height="38" rx="8" fill="#fbeaea" stroke="#b3382f" stroke-width="1.3"/>
+<circle cx="38" cy="93" r="8" fill="#b3382f"/>
+<text x="38" y="97" text-anchor="middle" style="fill:#fff;font-size:11px;font-weight:700">!</text>
+<text x="54" y="98" style="fill:#7a1a17;font-size:12.5px;font-weight:700">Weight can not be lower than 73 kg</text>
+<text x="34" y="157" style="fill:#777;font-size:11px">2</text>
+<text x="60" y="148" style="fill:#222;font-size:14px;font-weight:700">Maja Holm</text>
+<text x="60" y="165" style="fill:#777;font-size:11px">SK Atlas</text>
+<text x="212" y="156" text-anchor="end" style="fill:#555;font-size:12px">58.1</text>
+<rect x="230" y="134" width="48" height="36" rx="8" fill="#ffffff" stroke="#b3382f" stroke-width="3.5"/>
+<text x="254.0" y="157" text-anchor="middle" style="font-size:15px;font-weight:700">60</text>
+<circle cx="275" cy="137" r="8" fill="#b3382f"/>
+<text x="275" y="141" text-anchor="middle" style="fill:#fff;font-size:11px;font-weight:700">!</text>
+<rect x="284" y="134" width="48" height="36" rx="8" fill="#d6ecd6" stroke="#3d8b3d" stroke-width="1.5"/>
+<text x="308.0" y="153" text-anchor="middle" style="font-size:15px;font-weight:700">63</text>
+<text x="308.0" y="165" text-anchor="middle" style="fill:#3d8b3d;font-size:11px;font-weight:700">✓</text>
+<rect x="338" y="134" width="48" height="36" rx="8" fill="#f3d3d3" stroke="#b3382f" stroke-width="1.5"/>
+<text x="362.0" y="153" text-anchor="middle" style="font-size:15px;font-weight:700">65</text>
+<text x="362.0" y="165" text-anchor="middle" style="fill:#b3382f;font-size:11px;font-weight:700">✗</text>
+<line x1="20" y1="180" x2="400" y2="180" stroke="#d4d4d4" stroke-width="1"/>
+<rect x="20" y="184" width="380" height="52" rx="8" fill="#fbeaea" stroke="#b3382f" stroke-width="1.3"/>
+<circle cx="38" cy="210" r="8" fill="#b3382f"/>
+<text x="38" y="214" text-anchor="middle" style="fill:#fff;font-size:11px;font-weight:700">!</text>
+<text x="54" y="205" style="fill:#7a1a17;font-size:12.5px;font-weight:700">Weight can not be higher than 62 kg</text>
+<text x="54" y="223" style="fill:#7a1a17;font-size:12px">(attempt 2 is already done)</text>
+</g>
+<text x="524" y="1983" style="fill:#333;font-size:12.5px">The message is a row under the lifter, as on the phone. The</text>
+<text x="524" y="2000" style="fill:#333;font-size:12.5px">cell keeps its old value, a red outline and a ! badge.</text>
+</svg>

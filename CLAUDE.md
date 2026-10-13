@@ -55,6 +55,7 @@ TODO: fill in when the project is scaffolded (dev, build, lint, format, test, te
 - **Club scoping** is mandatory. Every data function takes a `clubId` and filters by it. A coach's `clubId` is their own club. An admin acts in one **active club** at a time (club switcher, cookie checked against the database). Never write cross-club queries.
 - **Board data comes from server props.** Do not copy props into `useState`. Derive board state from props plus optimistic changes (`useOptimistic`), otherwise the auto-refresh (`router.refresh()` about every 15 s, context doc §11) changes nothing.
 - **Derived values are never stored** (good/no-lift result, phase, predicted order, time estimate). Only store what the context doc §7 lists.
+- **Layout follows the wireframes** in `readme-assets/wireframes/` (context doc §12). Phone first, then tablet (768 px and up) and desktop (1200 px and up). The wireframes show layout and states only: colours and fonts come from the tokens. If a wireframe and the context doc disagree, ask.
 - Styling: tokens in `src/styles/`, no hard-coded colours in components, no inline styles except genuinely dynamic values.
 - Names: `PascalCase` components, one component per folder (`Name/Name.tsx`, `Name.module.scss`, `Name.test.tsx`), `camelCase` functions, `kebab-case` for non-component files.
 - Do not use `any`. Prefer small functions with a single job.
@@ -99,4 +100,4 @@ the path with a suggested file name, and add a TODO comment. For example:
 | `docs/PROJECT4_CONTEXT.md` | Decisions, domain rules, estimator, data model, routes, testing, build plan |
 | `README.md` | Public project description (sections with TODOs are filled in at the end) |
 | `TESTING.md` | Test notes (created in the last phase) |
-| `readme-assets/` | Wireframes and screenshots |
+| `readme-assets/wireframes/` | The eight wireframe sheets (SVG). Screenshots go in `readme-assets/screenshots/` |

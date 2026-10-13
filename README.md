@@ -102,8 +102,14 @@ TODO: the rocket icon, the T-minus display and the plate graphics (SVG).
 
 TODO: describe how the wireframes changed into the final design.
 
-<details><summary>Wireframe of the group board</summary> <p align="left"><img src="readme-assets/wireframes/group-board.svg" alt="wireframe of the group board with the next lifter panel and the lifter table" width="700"/></p> </details>
-<!-- TODO: add the other wireframes when they are drawn -->
+<details><summary>Wireframe of the group board on a phone</summary> <p align="left"><img src="readme-assets/wireframes/01-group-board-phone.svg" alt="wireframe of the group board on a phone with the next lifter panel, flag buttons and the lifter table" width="700"/></p> </details>
+<details><summary>Wireframes of the group board states</summary> <p align="left"><img src="readme-assets/wireframes/02-group-board-states.svg" alt="twelve states of the group board: row menu, weight editing, refused weights, next lifter changes, offline and group finished" width="700"/></p> </details>
+<details><summary>Wireframes of the add lifter form</summary> <p align="left"><img src="readme-assets/wireframes/03-add-lifter.svg" alt="add lifter form with name suggestions, required fields, the automatic 4 and 8 percent preview and validation errors" width="700"/></p> </details>
+<details><summary>Wireframes of the dashboard and competitions</summary> <p align="left"><img src="readme-assets/wireframes/04-dashboard-competitions.svg" alt="dashboard, competition overview, new competition, add group, empty state and the list of all competitions" width="700"/></p> </details>
+<details><summary>Wireframes of the lifters pages</summary> <p align="left"><img src="readme-assets/wireframes/05-lifters.svg" alt="lifter directory, lifter detail with best lifts and Sinclair, and the judge flags for each attempt" width="700"/></p> </details>
+<details><summary>Wireframes of the login page</summary> <p align="left"><img src="readme-assets/wireframes/06-login.svg" alt="login page with the rocket icon and tagline, a wrong password message and the logging in state" width="700"/></p> </details>
+<details><summary>Wireframes of the menu, members and admin pages</summary> <p align="left"><img src="readme-assets/wireframes/07-menu-members-admin.svg" alt="menu, admin club switcher, members list, add coach, clubs list and create club" width="700"/></p> </details>
+<details><summary>Wireframes of the group board on tablet and desktop</summary> <p align="left"><img src="readme-assets/wireframes/08-group-board-tablet-desktop.svg" alt="group board on a landscape tablet and a desktop with the next lifter and tracking card on the left and the lifter tables on the right" width="700"/></p> </details>
 
 ### Accessibility
 

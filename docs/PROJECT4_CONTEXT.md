@@ -3,9 +3,9 @@
 Agreed plan for Project 4. It replaces the brief (`project4-liftoff-comp.md`):
 everything that matters is summarised here.
 
-> **Status (13 Oct 2026, updated after review):** docs stage. Sections marked
-> **TODO** are filled in the next two stages: wireframes (§12), then visual
-> tokens + build plan (§12, §15).
+> **Status (13 Oct 2026, after the wireframes):** docs and wireframes are done
+> (§12, `readme-assets/wireframes/`). Sections marked **TODO** are filled in the
+> last stage: visual tokens (§12) and the build plan (§15).
 
 **From the brief:** Choose and develop your own frontend project. Plan, design,
 develop and deploy a complete project. *A small, well-designed and functional
@@ -54,7 +54,7 @@ previous competitions?"*. Fun detail: a **T-minus** countdown and a rocket icon.
 | Groups | Men and women can compete in the same group in this version. The group table gets an `allowedSex` column now (empty = mixed) so a restriction can be added later without a migration (§7) |
 | Fresh data | The board **refreshes itself about every 15 s** (polling with `router.refresh()`, §11). No WebSockets |
 | Styling | **CSS Modules written in Sass** (`.module.scss`) + a global token file (CSS custom properties). No UI library |
-| Theme | Dark by default: **dark + orange**, with a special **blue accent**. Light mode too. Exact tokens: **TODO** (after wireframes) |
+| Theme | Dark by default: **dark + orange**, with a special **blue accent**. Light mode too. Exact tokens: **TODO** (stage 3) |
 | Fun detail | T-minus display ("T–7") + rocket icon |
 | Testing | **Vitest** + React Testing Library + jsdom. Unit tests for domain functions and components, integration tests at the end |
 | Quality | ESLint + Prettier, TypeScript strict |
@@ -102,14 +102,14 @@ not how long until *your* turn. Lifters count lifts in their head and guess.
 | # | Feature |
 |---|---------|
 | M1 | Login. A seed script creates the first **admin**. All pages are behind login |
-| M2 | **Clubs and accounts:** the admin has full access to every club (create clubs, add coaches, add and edit competitions and lifters) and acts in one club at a time through a **club switcher**. A coach can add coaches to their own club. The admin's last active club is remembered, so after login they land in that club. Lifter accounts come later (C1) |
+| M2 | **Clubs and accounts:** the admin has full access to every club (create clubs, with an optional first coach in the same form, add coaches, add and edit competitions and lifters) and acts in one club at a time through a **club switcher**. A coach can add coaches to their own club. The admin's last active club is remembered, so after login they land in that club. Lifter accounts come later (C1) |
 | M3 | Competitions: create (name, date or date range, location optional) and list. Add groups to a competition (name, editable pace defaults). A group can mix men and women |
 | M4 | Add lifters to a group: name with **suggestions from the club's lifter directory**, **sex and birth year (both required)**, bodyweight (weigh-in), lot number, and **both** the Snatch and the Clean & Jerk opening (both required). All six attempts get a weight at once: attempts 2 and 3 are estimated at +4 % / +8 % |
-| M5 | **Group board:** next-lifter panel (name, attempt, weight, **plate diagram**) above a lifter table sorted by next weight. The panel always follows the table order, so it changes by itself when a weight is edited (R13). Finished/stopped lifters at the bottom. Clean & Jerk list under Snatch and moves to the top when Snatch is done |
+| M5 | **Group board:** next-lifter panel (name, attempt, weight, **plate diagram**) above a lifter table sorted by next weight. The panel always follows the table order, so it changes by itself when a weight is edited (R13). Finished/stopped lifters at the bottom. Clean & Jerk list under Snatch and moves to the top when Snatch is done. Phone: one column. Tablet and desktop: panel and tracked card on the left, lists on the right (§12) |
 | M6 | Inline weight editing: click the weight, blank input, click away. Blank restores the old value. The weight rules are enforced (R10): at least +1 kg after a good lift, a repeat is allowed after a no-lift, raising an attempt moves the later ones up. A refused weight shows a message |
 | M7 | Three judge flags (left / centre / right), white ⇄ red toggles + "Enter result". ≥ 2 white = good lift. Row weight turns green or red. Weights and flags editable afterwards |
 | M8 | Row actions: **stop this lift**, **withdraw**, **restore**, **track** |
-| M9 | **Tracked lifter ("ME")** with "T–N lifts" before the start and "~9–11 min" after, using the default pace |
+| M9 | **Tracked lifter ("ME")** with "T–N lifts" before the start and "~9–11 min" after, using the default pace. On a phone a thin sticky bar under the top bar keeps it in view while the list is scrolled |
 | M10 | **Auto-refresh:** the board refreshes itself about every 15 s, so other coaches never look at a stale screen (§11) |
 | M11 | Light/dark theme, responsive (phone/tablet/desktop), accessibility basics |
 | M12 | Unit tests, a few integration tests, README + TESTING.md, deployed on Vercel |
@@ -499,23 +499,28 @@ client components. All behaviour worth testing lives in `domain/` and in client 
 ## 10. Components (draft, finalised after the wireframes)
 
 ```
-AppShell · NavMenu · ClubSwitcher (admin) · ThemeToggle · RocketIcon · Button
+AppShell · NavMenu · ClubSwitcher (admin) · AdminBand · ThemeToggle · RocketIcon · Button
+Field · SegmentedControl · Banner (error / offline) · PhaseChip · EmptyState
 LoginForm
-MembersTable · AddCoachForm · ClubsTable · CreateClubForm
+MembersTable · AddCoachForm · ClubsTable · CreateClubForm (optional first coach)
 CompetitionForm · GroupForm · CompetitionCard · GroupCard
+LifterList · LifterDetail · StatCard · FlagSquares · JudgePattern (later)
 GroupBoard                  client: board state = server props + optimistic changes, plus actions
  ├─ AutoRefresh · LastUpdated   runs useAutoRefresh; shows "Updated 12 s ago" + refresh button (§11)
+ ├─ StickyTMinusBar         phone only: tracked lifters stay visible when the list is scrolled
  ├─ NextLifterPanel         name, attempt, weight. Derived from the table order (R13)
  │   └─ PlateDiagram        SVG plates (ported from weightlifting-calculator)
  ├─ FlagToggleGroup         3 × FlagToggle (left / centre / right) + EnterResultButton
+ ├─ TrackingCard            tablet and desktop: large "T–4" for each tracked lifter
  ├─ LiftSection (Snatch, Clean & Jerk)
  │   └─ LifterTable → LifterRow
  │        ├─ AttemptCell    weight + state colour (pending / good / no-lift / cancelled)
  │        │    └─ EditableWeight   button ⇄ input, blank restores, inline error message (R10)
- │        ├─ TMinus         "T–7 · ~9–11 min" badge (tracked rows only)
- │        └─ RowMenu        stop lift · withdraw · restore · track
+ │        ├─ TMinus         "T–7 · ~9–11 min" strip (tracked rows only)
+ │        └─ RowMenu        stop lift · withdraw · restore · track (strip on a phone, popover on wider screens)
  └─ AddLifterForm
-      └─ LifterCombobox     suggestions from the club directory
+      ├─ LifterCombobox     suggestions from the club directory
+      └─ AttemptPreview     the 4 % / 8 % preview for both lifts
 ```
 
 **Where the brief's React concepts show up**
@@ -523,7 +528,7 @@ GroupBoard                  client: board state = server props + optimistic chan
 - State: `EditableWeight` (editing/value), `FlagToggleGroup`, `GroupBoard` (board state), forms
 - Events: weight edit, flag toggle, enter result, row menu, theme toggle
 - Conditional rendering: pre-start vs live estimate, pending/good/no-lift/cancelled cell, tracked rows, empty states
-- Reusable components: `Button`, `AttemptCell`, `FlagToggle`, `LiftSection` (used for both lifts)
+- Reusable components: `Button`, `Field`, `Banner`, `PhaseChip`, `AttemptCell`, `FlagToggle`, `LiftSection` (used for both lifts)
 - Custom hooks (draft): `useBoardState`, `useNow` (ticks once a second for the estimate), `useAutoRefresh` (§11)
 - Next.js on top: layouts and route groups, Server Components, Server Actions, loading and error states
 
@@ -536,7 +541,10 @@ GroupBoard                  client: board state = server props + optimistic chan
   A weight that breaks R10 is not saved: the old value comes back and a short message under the field (linked with `aria-describedby`) says *"Weight can not be lower than 93 kg"* (the real minimum).
   When raising an attempt makes the app move later attempts up, those cells show the estimate marker so the coach notices the change.
 - The next-lifter panel never has its own state: it reads the first attempt of the sorted table. If the current lifter raises to a weight above the next one, the panel switches by itself and any toggled flags reset (R13).
-- Admins see the active club's name in the top bar with a switcher. Make it obvious which club they are acting in, because they can edit any club.
+- Admins see the active club's name in the top bar with a switcher **and** an orange "ADMIN · acting in SK Atlas" band under it on every page. It must be obvious which club they are acting in, because they can edit any club.
+- Phone: the weight cell states are the same everywhere (good = green + ✓, no-lift = red + ✗, pending = solid outline, next attempt = thick orange outline, estimate = dashed with ~, cancelled = grey dash). A refused weight gets a red outline, a "!" badge and a message row under the lifter.
+- Forms show errors after submit: a summary at the top ("Fix 4 fields …"), one message next to each field, and focus on the first field with an error.
+- Offline: a banner with the time of the last data. Refresh and Enter result are disabled, nothing is queued (offline mode is C4).
 
 ---
 
@@ -585,23 +593,36 @@ refreshes when visible again, skips while editing, stops on unmount (§13).
 
 ---
 
-## 12. Design: wireframes and visual tokens (TODO)
+## 12. Design: wireframes and visual tokens
 
-**Stage 2: wireframes** (`readme-assets/wireframes/*.svg`). Draw in this order,
-phone first, then tablet and desktop for the first two:
+### Stage 2: wireframes (done, approved 13 Oct 2026)
+Eight greyscale SVG sheets in `readme-assets/wireframes/`. Each sheet shows its
+screens with short notes. Colours, fonts and icons in them are **placeholders**
+until the visual tokens exist (stage 3). All names and numbers are made up.
 
-| # | Screen | Must show |
-|---|--------|-----------|
-| 1 | **Group board** | Next-lifter panel + plates, flag toggles + "Enter result", lifter table with 3 weights per row, tracked row with "T–7" before start and "T–7 · ~9–11 min" after start, Snatch list with Clean & Jerk list underneath, finished lifters at the bottom, the "Updated 12 s ago" refresh indicator, an inline weight error ("Weight can not be lower than 92 kg") |
-| 2 | Group board states | Row menu open (stop lift, withdraw, restore, track), weight being edited, withdrawn lifter, group finished |
-| 3 | Add lifter | Name field with suggestions, **sex and birth year (required)**, bodyweight, lot number, **both openings (required)**, the auto-filled 4 % / 8 % preview for both lifts |
-| 4 | Dashboard + competitions | Upcoming/recent competitions, create competition, add group |
-| 5 | Lifter detail | Competitions list, each lift with its three flags in order, Sinclair |
-| 6 | Login | Simple, rocket icon, tagline |
-| 7 | Members + admin | Members list with "Add coach"; admin clubs list with "Create club"; club switcher in the top bar (club name always visible) |
+| # | File | Shows |
+|---|------|-------|
+| 1 | `01-group-board-phone.svg` | **Group board** (phone, live Snatch): next-lifter panel with plates, flag toggles and Enter result, lifter table with 3 weights per row, tracked row with "T–4 lifts · ~5–6 min · around 14:32", finished and stopped lifters at the bottom, Clean & Jerk list underneath, "Updated 12 s ago" indicator, cell-state legend |
+| 2 | `02-group-board-states.svg` | 12 states: row menu, editing a weight, refused weights, raising moves later attempts up, the next lifter changes by itself, Enter result refused, stopped and withdrawn, before the first result, tracked lifter next or done, two tracked lifters + sticky bar, offline, group finished |
+| 3 | `03-add-lifter.svg` | Add lifter: name suggestions, sex and birth year required, optional bodyweight and club, lot number, both openings required, 4 % / 8 % preview, validation errors |
+| 4 | `04-dashboard-competitions.svg` | Dashboard, competition overview with groups, new competition, add group (pace defaults), first-use empty state, all competitions |
+| 5 | `05-lifters.svg` | Lifter directory, lifter detail (best lifts, total, Sinclair), one competition with the three flags per attempt, red flags by judge (later) |
+| 6 | `06-login.svg` | Login, wrong email or password, logging in |
+| 7 | `07-menu-members-admin.svg` | Menu, admin club switcher + ADMIN band, members, add coach, clubs list, create club with optional first coach |
+| 8 | `08-group-board-tablet-desktop.svg` | Group board on a landscape tablet (1024 px) and a desktop (1366 px), plus cut-outs of the row menu popover and refused weights |
 
-**Stage 3: visual tokens** (after the wireframes are agreed, same method as Project 3:
-tokens for both themes, every text pair checked for WCAG AA 4.5:1 and UI borders 3:1).
+**Layout decisions from the wireframes**
+- **Breakpoints (draft):** phone below 768 px, tablet 768–1199 px, desktop 1200 px and up. Check them when the tokens are made.
+- **Phone:** one column. The next-lifter panel with flags and Enter result is at the **top** (as in the brief). A sticky bottom result bar was considered and not chosen. A thin **sticky T-minus bar** under the top bar keeps the tracked lifters in view when the list is scrolled.
+- **Tablet and desktop:** two columns. Left: the next-lifter panel and a **tracking card** with a large "T–4". Right: the Snatch list, with the Clean & Jerk list under it on a tablet and **beside it on a desktop** (dimmed until the Snatch is done, then they swap). The bodyweight column is only shown on a tablet.
+- **Row menu:** a strip under the row on a phone, a popover on wider screens. Stopped and withdrawn lifters show **Restore** in the row.
+- **Result entry:** flags are outlined (white) or filled with a mark (red), so colour is never the only cue.
+- **Admin:** orange club pill + ADMIN band on every page, so it is always clear which club is being edited.
+- **No self sign-up:** the login page has no sign-up link and no password reset (not in the first slice).
+
+### Stage 3: visual tokens (TODO)
+Same method as Project 3: tokens for both themes, every text pair checked for
+WCAG AA 4.5:1 and UI borders 3:1.
 
 Direction so far: dark by default with **orange** as the main colour and a
 **special blue accent**, plus a light mode. A T-minus readout with large tabular
@@ -767,10 +788,18 @@ Cut order if time runs short: S5 → S4 → S3 → S1, then shrink M2 (admin cre
 | 13 | **Pace outlier limit is 240 s** (changed directly in the repo copy of this file) |
 | 14 | **Birth year is required** on every lifter (needed for age classes) |
 | 15 | **The admin's last active club is remembered** in a long-lived cookie, with `/admin/clubs` as the fallback |
+| 16 | **R10 confirmed:** at least +1 kg after a good lift and between two attempts with no result. The **same weight is allowed only after a no-lift** |
+| 17 | **Flags and Enter result stay in the top panel** on a phone (as in the brief). A sticky bottom result bar was considered and not chosen |
+| 18 | **Sticky T-minus bar** under the top bar on a phone keeps tracked lifters visible while scrolling |
+| 19 | **Create club** has an **optional first coach** (name, email, password) in the same form |
+| 20 | A new coach's password is set by the person who adds them and shared in person. No self sign-up and no password reset by email in the first slice |
+| 21 | The admin always sees which club they act in: orange club pill in the top bar plus an ADMIN band |
+| 22 | The lifter directory and detail stay **Should** (S2, S4). **Red flags by judge** over many attempts is later (shown from 10 attempts) |
+| 23 | **Wireframes approved** (13 Oct 2026): eight sheets in `readme-assets/wireframes/` |
 
 ### Still open
-Nothing blocks the wireframes. One interpretation to confirm:
-- **R10 minimum:** +1 kg is enforced after a good lift and between two attempts that have no result yet (the app assumes success). After a no-lift the same weight is allowed, because repeating a missed weight is normal. Say so if you want +1 kg everywhere.
+Nothing blocks the next stage (visual tokens and the build plan). The Sinclair
+constants for 2025–2028 are still **TODO** (§7).
 
 ---
 
