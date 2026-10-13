@@ -85,14 +85,15 @@ TODO: update the stories when the final features are decided.
 
 ### Colours
 
-TODO: colour scheme (dark and orange with a special blue accent, plus a light mode).
+The app is dark by default, because it is used in a dim competition hall, and has a light mode that the user can switch to. Orange is used for actions and the next attempt, and blue for the tracked lifter, the T-minus readout, links and focus. Good and no-lift results are green and red, but always come with a tick or a cross, so colour is never the only signal. Every text colour was checked against WCAG AA (4.5:1) and every border and outline against 3:1, in both modes.
 
-![Colour scheme for LiftOff Comp in dark and light mode](readme-assets/design/colour-scheme.png)
-<!-- TODO: create colour scheme image -->
+![Colour scheme for LiftOff Comp in dark and light mode, with every colour, its hex code and the colours in use on the group board](readme-assets/design/colour-scheme.png)
 
 ### Typography
 
-TODO: fonts and why they were chosen.
+Two fonts are used, both loaded with `next/font` so they are served from the app itself. **Inter** is used for text, tables, forms and buttons, because it is very readable at small sizes on a phone in a bright or loud hall. **Space Grotesk** is used for headings and the big numbers, because its technical look fits the T-minus idea. Both have tabular numerals, so weights and the countdown keep the same width and the columns line up. All sizes come from one scale in `rem`, from 12 px for captions to 56 px for the T-minus on the tracking card, and all spacing from one 4 px scale. Everything that can be tapped is at least 44 px high.
+
+![Fonts, type scale, spacing and radii for LiftOff Comp, shown with the group board in dark mode](readme-assets/design/type-and-spacing.png)
 
 ### Images and icons
 
@@ -230,7 +231,8 @@ TODO: update at the end.
 - Git and GitHub
 - Vercel
 - VS Code and Claude Code
-- TODO: wireframe tool, icon source, font source, image converter
+- Inter and Space Grotesk fonts (Google Fonts, through `next/font`)
+- TODO: wireframe tool, icon source, image converter
 
 
 ## Testing
@@ -266,7 +268,9 @@ TODO: Sinclair coefficients are published by the International Weightlifting Fed
 
 ### Media
 
-TODO: rocket icon source, plate graphics (from my own Weightlifting Calculator project), fonts.
+TODO: rocket icon source, plate graphics (from my own Weightlifting Calculator project).
+
+Fonts: [Inter](https://fonts.google.com/specimen/Inter) and [Space Grotesk](https://fonts.google.com/specimen/Space+Grotesk) from Google Fonts, both licensed under the SIL Open Font License.
 
 ### Code
 

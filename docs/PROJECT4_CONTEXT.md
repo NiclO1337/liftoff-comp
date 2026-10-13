@@ -3,8 +3,8 @@
 Agreed plan for Project 4. It replaces the brief (`project4-liftoff-comp.md`):
 everything that matters is summarised here.
 
-> **Status (13 Oct 2026, build plan written):** docs, wireframes and the build plan (§15) are done.
-> Still **TODO**: visual tokens (§12, stage 3) and the 2025–2028 Sinclair constants (§7).
+> **Status (13 Oct 2026, visual tokens approved):** docs, wireframes, the build plan (§15) and the visual tokens (§12) are done.
+> Still **TODO**: the 2025–2028 Sinclair constants (§7).
 
 **From the brief:** Choose and develop your own frontend project. Plan, design,
 develop and deploy a complete project. *A small, well-designed and functional
@@ -53,7 +53,8 @@ previous competitions?"*. Fun detail: a **T-minus** countdown and a rocket icon.
 | Groups | Men and women can compete in the same group in this version. The group table gets an `allowedSex` column now (empty = mixed) so a restriction can be added later without a migration (§7) |
 | Fresh data | The board **refreshes itself about every 15 s** (polling with `router.refresh()`, §11). No WebSockets |
 | Styling | **CSS Modules written in Sass** (`.module.scss`) + a global token file (CSS custom properties). No UI library |
-| Theme | Dark by default: **dark + orange**, with a special **blue accent**. Light mode too. Exact tokens: **TODO** (stage 3) |
+| Theme | Dark by default: **dark + orange**, with a special **blue accent**. Light mode too. Tokens in §12 (colours, fonts, spacing and radii) |
+| Fonts | **Inter** for text, tables and forms, **Space Grotesk** for headings and the T-minus numbers. Loaded with `next/font/google`, both with tabular numerals (§12) |
 | Fun detail | T-minus display ("T–7") + rocket icon |
 | Testing | **Vitest** + React Testing Library + jsdom. Unit tests for domain functions and components, integration tests at the end |
 | Quality | ESLint + Prettier, TypeScript strict |
@@ -462,7 +463,7 @@ by switching the active club. Unit-test this with two clubs, as coach and as adm
 liftoff-comp/
 ├── CLAUDE.md   README.md   TESTING.md
 ├── docs/                    PROJECT4_CONTEXT.md
-├── readme-assets/           wireframes/  screenshots/
+├── readme-assets/           wireframes/  design/  screenshots/
 ├── prisma/                  schema.prisma  migrations/  seed.ts
 ├── prisma.config.ts
 ├── proxy.ts
@@ -597,7 +598,7 @@ refreshes when visible again, skips while editing, stops on unmount (§13).
 ### Stage 2: wireframes (done, approved 13 Oct 2026)
 Eight greyscale SVG sheets in `readme-assets/wireframes/`. Each sheet shows its
 screens with short notes. Colours, fonts and icons in them are **placeholders**
-until the visual tokens exist (stage 3). All names and numbers are made up.
+until the visual tokens exist (stage 3, now done). All names and numbers are made up.
 
 | # | File | Shows |
 |---|------|-------|
@@ -611,7 +612,7 @@ until the visual tokens exist (stage 3). All names and numbers are made up.
 | 8 | `08-group-board-tablet-desktop.svg` | Group board on a landscape tablet (1024 px) and a desktop (1366 px), plus cut-outs of the row menu popover and refused weights |
 
 **Layout decisions from the wireframes**
-- **Breakpoints (draft):** phone below 768 px, tablet 768–1199 px, desktop 1200 px and up. Check them when the tokens are made.
+- **Breakpoints (confirmed with the tokens):** phone below 768 px, tablet 768–1199 px, desktop 1200 px and up.
 - **Phone:** one column. The next-lifter panel with flags and Enter result is at the **top** (as in the brief). A sticky bottom result bar was considered and not chosen. A thin **sticky T-minus bar** under the top bar keeps the tracked lifters in view when the list is scrolled.
 - **Tablet and desktop:** two columns. Left: the next-lifter panel and a **tracking card** with a large "T–4". Right: the Snatch list, with the Clean & Jerk list under it on a tablet and **beside it on a desktop** (dimmed until the Snatch is done, then they swap). The bodyweight column is only shown on a tablet.
 - **Row menu:** a strip under the row on a phone, a popover on wider screens. Stopped and withdrawn lifters show **Restore** in the row.
@@ -619,13 +620,128 @@ until the visual tokens exist (stage 3). All names and numbers are made up.
 - **Admin:** orange club pill + ADMIN band on every page, so it is always clear which club is being edited.
 - **No self sign-up:** the login page has no sign-up link and no password reset (not in the first slice).
 
-### Stage 3: visual tokens (TODO)
-Same method as Project 3: tokens for both themes, every text pair checked for
-WCAG AA 4.5:1 and UI borders 3:1.
+### Stage 3: visual tokens (done, approved 13 Oct 2026)
 
-Direction so far: dark by default with **orange** as the main colour and a
-**special blue accent**, plus a light mode. A T-minus readout with large tabular
-numerals, and a rocket icon. Fonts, spacing and radii: **TODO**.
+#### Colours (approved 13 Oct 2026)
+Picture for the README: `readme-assets/design/colour-scheme.png`. Tokens live in
+`src/styles/tokens.scss` as CSS custom properties, set by `data-theme="dark"` or
+`data-theme="light"` on `<html>`.
+
+- **Dark is the default for every first visit** (the device setting is ignored). A saved choice (localStorage) wins.
+  A small inline script in the root layout sets `data-theme` before the first paint, so the page never flashes the wrong theme (`suppressHydrationWarning` on `<html>`).
+- **Roles:** orange = actions and "now" (buttons, the next attempt, the ADMIN band). Blue = the tracked lifter (ME), T-minus, links and focus.
+  If the next lifter is also tracked, the row gets the orange tint and keeps the blue ME chip and T-minus strip.
+- Results always have a tick or a cross as well as colour. A red flag has a mark, a white flag is an outline.
+- No hard-coded colours in components. Use the tokens.
+
+| Token | Dark (default) | Light | Used for |
+|-------|----------------|-------|----------|
+| `--color-bg` | `#0d1219` | `#f3f5f9` | Page background |
+| `--color-surface` | `#151c27` | `#ffffff` | Cards, table, panels |
+| `--color-surface-2` | `#1f2937` | `#e8ecf3` | Inputs, top bar, next-lifter panel, raised areas |
+| `--color-text` | `#eef2f8` | `#0e141d` | Body text |
+| `--color-text-muted` | `#a3afc2` | `#4a566e` | Secondary text, estimates, club names |
+| `--color-border` | `#2b3648` | `#d3dae6` | Decorative dividers only |
+| `--color-border-strong` | `#72829c` | `#6f7f99` | Control borders, button outlines, estimate dashes, flag outlines (3:1) |
+| `--color-accent` | `#ff8a3d` | `#c2500a` | Primary buttons, next-attempt outline, row bar, ADMIN band, club pill outline |
+| `--color-on-accent` | `#1a0d03` | `#ffffff` | Text on `accent` |
+| `--color-accent-text` | `#ff9a58` | `#a8430a` | Orange text ("NEXT UP") |
+| `--color-accent-bg` | `#2a1b10` | `#fdeedd` | Tint of the next-lifter row |
+| `--color-blue` | `#5cc0ff` | `#0b63c5` | Tracked lifter (ME), T-minus, links |
+| `--color-on-blue` | `#04131f` | `#ffffff` | Text on `blue` (ME chip) |
+| `--color-blue-bg` | `#10283d` | `#e2eefc` | Tint of a tracked row |
+| `--color-focus` | `#5cc0ff` | `#0b63c5` | Focus ring (3px, 2px offset) |
+| `--color-good-bg` | `#12301f` | `#dcf3e3` | Good-lift cell background |
+| `--color-good-border` | `#3fae6a` | `#2f8a52` | Good-lift cell border |
+| `--color-good-text` | `#86e6a6` | `#14562e` | Good-lift tick, "2 of 3 white" |
+| `--color-bad-bg` | `#3b161a` | `#fbe1e0` | No-lift cell and error background |
+| `--color-bad-border` | `#e5584f` | `#c23a33` | No-lift cell and error border |
+| `--color-bad-text` | `#ff9a93` | `#8f1f1a` | No-lift cross, error text |
+| `--color-flag-red` | `#d23b41` | `#c8323a` | Red flag button |
+| `--color-on-flag-red` | `#ffffff` | `#ffffff` | Mark on the red flag |
+
+**Checked:** 40 pairs per theme. All text pairs are at least 4.5:1 (lowest 4.7:1: white on the red flag in dark mode, white on orange in light mode) and all borders and outlines are at least 3:1 (lowest 3.4:1).
+Light mode uses a deeper orange (`#c2500a`) because the bright orange only reaches 2.4:1 on white.
+Planned: a Vitest test (`src/styles/tokens.test.ts`) that repeats this check, so a token change that breaks contrast fails the tests.
+
+#### Fonts, type scale, spacing and radii (approved 13 Oct 2026)
+Picture for the README: `readme-assets/design/type-and-spacing.png`. These are CSS custom properties in
+`src/styles/tokens.scss`, next to the colours. The sizes are the same in both themes.
+
+**Fonts**
+- **Inter**: body text, tables, forms, buttons and attempt cells. Weights 400, 600 and 700.
+- **Space Grotesk**: headings, the weight in the next-lifter panel and the T-minus numbers. Bold (700) only.
+- Both are loaded with `next/font/google` in `src/app/fonts.ts`: subsets `latin` and `latin-ext` (so names like Łukasz or Şahin display correctly), `display: "swap"`.
+  Next.js downloads the files when the app is built and serves them from the same site, so the page makes no request to Google while it runs.
+  They are set as `--font-body` and `--font-display`, with `system-ui, "Segoe UI", sans-serif` as the fallback.
+- Both fonts have tabular numerals (checked in the font files, 13 Oct 2026). A Sass mixin `tabular` (`font-variant-numeric: tabular-nums`) is used on every weight,
+  lot number, time and T-minus, so columns line up and the countdown does not wobble while it ticks. Running text keeps the normal digits.
+- Neither font has a tick or a cross, so ✓ and ✗ are **SVG icons** (like the rocket), never text characters.
+
+**Type scale** (sizes in `rem`, so the user's browser font size is respected; the root stays 16 px)
+
+| Token | Value | Pixels |
+|-------|-------|--------|
+| `--text-xs` | `0.75rem` | 12 px |
+| `--text-sm` | `0.875rem` | 14 px |
+| `--text-md` | `1rem` | 16 px |
+| `--text-lg` | `1.125rem` | 18 px |
+| `--text-xl` | `1.375rem` | 22 px |
+| `--text-2xl` | `1.75rem` | 28 px |
+| `--text-3xl` | `2.75rem` | 44 px |
+| `--text-4xl` | `3.5rem` | 56 px |
+
+| Token | Value | Used for |
+|-------|-------|----------|
+| `--leading-none` | 1 | big numbers |
+| `--leading-snug` | 1.3 | titles, buttons, cells, table rows |
+| `--leading-normal` | 1.5 | running text |
+
+| Role | Font | Size | Weight | Line height | Notes |
+|------|------|------|--------|-------------|-------|
+| Weight in the next-lifter panel | Space Grotesk | `--text-3xl` (44 px) | 700 | `--leading-none` | tabular |
+| T-minus on the tracking card | Space Grotesk | `--text-4xl` (56 px) | 700 | `--leading-none` | tabular |
+| Page title (h1) | Space Grotesk | `--text-xl` (22 px) | 700 | `--leading-snug` | `--text-2xl` from the tablet breakpoint |
+| Lifter name in the panel | Space Grotesk | `--text-xl` (22 px) | 700 | `--leading-snug` | – |
+| Section title (h2) | Space Grotesk | `--text-lg` (18 px) | 700 | `--leading-snug` | – |
+| Body text and inputs | Inter | `--text-md` (16 px) | 400 | `--leading-normal` | – |
+| Buttons and lifter names in the table | Inter | `--text-md` (16 px) | 700 | `--leading-snug` | – |
+| Weight in an attempt cell | Inter | `--text-md` (16 px) | 700 | `--leading-none` | tabular |
+| Secondary text, club, T-minus line | Inter | `--text-sm` (14 px) | 400 | `--leading-snug` | tabular |
+| Captions, chips, flag labels | Inter | `--text-xs` (12 px) | 700 | `--leading-snug` | capitals, letter-spacing 0.04em |
+
+Rules: nothing is smaller than `--text-xs` (12 px). Inputs use `--text-md` (16 px), so phones do not zoom into the field on focus.
+Weight 600 is used for error messages, estimate cells and the unit after a weight (`kg`). Letter-spacing is only changed for the capital captions (NEXT UP, flag labels).
+
+**Spacing** (4 px base)
+
+| Token | Value | Pixels | Used for |
+|-------|-------|--------|----------|
+| `--space-1` | `0.25rem` | 4 px | icon and text gap |
+| `--space-2` | `0.5rem` | 8 px | gap between cells, chips |
+| `--space-3` | `0.75rem` | 12 px | padding inside a row or cell group |
+| `--space-4` | `1rem` | 16 px | card padding, page gutter on a phone |
+| `--space-5` | `1.5rem` | 24 px | gap between sections, gutter on a tablet |
+| `--space-6` | `2rem` | 32 px | gutter on a desktop |
+| `--space-7` | `3rem` | 48 px | space inside empty states |
+| `--space-8` | `4rem` | 64 px | large breaks between page areas |
+
+Layout tokens: `--gutter` is `--space-4` on a phone, `--space-5` on a tablet and `--space-6` on a desktop. `--container-max` is `80rem` (1280 px).
+`--tap-min` is `2.75rem` (**44 px**): flags, attempt cells, buttons, menu items and inputs are at least that high.
+Line widths: `--border-w` 1 px (dividers), `--border-w-strong` 2 px (controls, flags, cells), `--outline-w` 3 px (focus ring and the next-attempt outline), `--bar-w` 5 px (the bar at the left of the next-lifter row and a tracked row).
+
+**Radii**
+
+| Token | Value | Used for |
+|-------|-------|----------|
+| `--radius-sm` | `6px` | small chips, the mark on a flag |
+| `--radius-md` | `10px` | inputs, buttons, attempt cells, flags |
+| `--radius-lg` | `14px` | cards, the next-lifter panel, popovers |
+| `--radius-pill` | `999px` | club pill, ME chip, filter chips |
+
+**Breakpoints** (confirmed): tablet from 768 px, desktop from 1200 px. Media queries cannot read custom properties, so they are Sass variables
+(`$bp-tablet: 48em`, `$bp-desktop: 75em`) used through a `from(tablet)` / `from(desktop)` mixin in `src/styles/_mixins.scss`. They are written in `em`, so they also follow zoom and larger text settings.
+Components are written for a phone and widened with `min-width` queries.
 
 ---
 
@@ -710,7 +826,7 @@ npm i -D sass vitest @vitejs/plugin-react jsdom vite-tsconfig-paths \
 - **Claude Code does not start the dev server.** After every step that changes the UI it says what to look at, and Niclas checks it in the browser.
 - **Domain first, test-first.** Everything in `src/domain/` is written as failing test → code. UI comes after the logic it shows.
 - **Zod schemas live in `src/lib/schemas/`**, next to no other layer, so a form and its Server Action share one schema. Each schema is tested in the commit that adds it.
-- **Phone first.** Components are styled for a phone and widened at the breakpoints (draft: 768 px and 1200 px, §12). The board gets its tablet and desktop layout in one step (57).
+- **Phone first.** Components are styled for a phone and widened at the breakpoints (768 px and 1200 px, §12). The board gets its tablet and desktop layout in one step (57).
 - **The *Covers* column** points to the scope tiers (M, S: §4) and rules (R: §5), so it is clear what each step buys. "—" in *Commit* means a checkpoint, not a commit.
 
 ### Timeline and gates
@@ -748,7 +864,7 @@ Without Phase 5 and the optional step 74, the plan is about 65 commits, around 3
 
 ### Phase 1 – Domain (pure TypeScript, test-first)
 
-Every file imports nothing outside `src/domain/`, and time is always a parameter. **Not a code step:** finish the visual tokens (§12, stage 3) during this phase, because there is no UI work to compete with it and step 21 needs them.
+Every file imports nothing outside `src/domain/`, and time is always a parameter. The visual tokens (§12, stage 3) are already decided, so step 21 only has to turn them into code.
 
 | # | Step | Covers | Commit |
 |---|------|--------|--------|
@@ -776,7 +892,7 @@ Every file imports nothing outside `src/domain/`, and time is always a parameter
 | 18 | `prisma/seed.ts` creates the first admin from `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD` in `.env` (names only in `.env.example`) and a `db:seed` script. Check the Better Auth docs for how to create a user without public sign-up | M1 | `add admin seed` |
 | 19 | The rest of the data model from §7: `Lifter`, `Competition`, `Group`, `Entry`, `Attempt`, `Tracking`, the enums and `User.lifterId`. Second migration | §7 | `add domain tables` |
 | 20 | `server/session.ts`: `getSession` and `requireClubAccess()` returning `{ userId, clubId, role }`. Coach = own club. Admin = active club from the long-lived cookie, checked against the database, otherwise redirect to `/admin/clubs`. Unit tests with two clubs, as coach and as admin | M2, §7 | `add club access` |
-| 21 | Visual tokens from §12 for both themes, Sass mixins, global styles, fonts, the no-flash theme script. *Needs §12 finished* | M11, §12 | `add design tokens` |
+| 21 | Visual tokens from §12 for both themes, Sass mixins, global styles, fonts through `next/font/google` (`src/app/fonts.ts`), the `tabular` and `from()` mixins, the no-flash theme script. *Uses the tokens in §12, which are all decided* | M11, §12 | `add design tokens` |
 | 22 | `ThemeToggle` (`aria-pressed`, choice saved in `localStorage`) | M11 | `add theme toggle` |
 | 23 | `Button`, `Field` and `Banner`, with tests (link or button rendering, label and error wiring) | M11 | `add base components` |
 | 24 | `/login`: `LoginForm` (wrong email or password, logging-in state), logout action, `proxy.ts` with the optimistic redirect to `/login`. Wireframe sheet 06 | M1 | `add login` |
@@ -878,7 +994,6 @@ Cut order: **S5 → S4 → S3 → S1**, then shrink M2 (admin creates clubs and 
 | 14 | Access to `weightlifting-calculator` (`plates.js` and the plate SVGs) |
 | 16 | A Neon database through the Vercel Marketplace, with a dev branch |
 | 18 | The admin's email and password, kept in `.env` and never committed |
-| 21 | §12 finished (visual tokens) |
 | 58 | Time to click through the 12 board states on a phone |
 | 67 | The IWF Sinclair constants for 2025–2028, if they have been published |
 | 79 | Screenshots of the finished app |
@@ -959,9 +1074,13 @@ Cut order: **S5 → S4 → S3 → S1**, then shrink M2 (admin creates clubs and 
 | 21 | The admin always sees which club they act in: orange club pill in the top bar plus an ADMIN band |
 | 22 | The lifter directory and detail stay **Should** (S2, S4). **Red flags by judge** over many attempts is later (shown from 10 attempts) |
 | 23 | **Wireframes approved** (13 Oct 2026): eight sheets in `readme-assets/wireframes/` |
+| 24 | **Colour scheme approved** (13 Oct 2026): dark and light tokens in §12. Orange for actions and the next attempt, blue for the tracked lifter, T-minus, links and focus |
+| 25 | **Dark is the default theme** on a first visit, whatever the device setting. A saved choice wins |
+| 26 | **Fonts, type scale, spacing and radii approved** (13 Oct 2026): Inter for text, Space Grotesk for headings and the T-minus numbers, a 4 px spacing scale, radii 6 / 10 / 14 px plus a pill, tap targets of at least 44 px (§12) |
+| 27 | **Breakpoints confirmed:** 768 px and 1200 px, written in `em` in Sass |
 
 ### Still open
-Nothing blocks the next stage (visual tokens and the build plan). The Sinclair
+Nothing blocks the next stage (building, from step 1). The Sinclair
 constants for 2025–2028 are still **TODO** (§7).
 
 ---

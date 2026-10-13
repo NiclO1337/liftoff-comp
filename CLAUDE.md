@@ -21,7 +21,7 @@ beats a big unfinished one. Stick to the Must tier in the context doc (§4) firs
 - Next.js 16 (App Router) + TypeScript (strict) + React 19
 - PostgreSQL (Neon) + Prisma 7 (**pin 7.x**, not 8)
 - Better Auth (email + password), Zod for validation
-- CSS Modules written in Sass (`.module.scss`) + global tokens. No UI library
+- CSS Modules written in Sass (`.module.scss`) + global tokens. No UI library. Fonts: Inter and Space Grotesk through `next/font/google`
 - Vitest + React Testing Library + jsdom
 - Deployed on Vercel
 
@@ -55,8 +55,9 @@ TODO: fill in when the project is scaffolded (dev, build, lint, format, test, te
 - **Club scoping** is mandatory. Every data function takes a `clubId` and filters by it. A coach's `clubId` is their own club. An admin acts in one **active club** at a time (club switcher, cookie checked against the database). Never write cross-club queries.
 - **Board data comes from server props.** Do not copy props into `useState`. Derive board state from props plus optimistic changes (`useOptimistic`), otherwise the auto-refresh (`router.refresh()` about every 15 s, context doc §11) changes nothing.
 - **Derived values are never stored** (good/no-lift result, phase, predicted order, time estimate). Only store what the context doc §7 lists.
-- **Layout follows the wireframes** in `readme-assets/wireframes/` (context doc §12). Phone first, then tablet (768 px and up) and desktop (1200 px and up). The wireframes show layout and states only: colours and fonts come from the tokens. If a wireframe and the context doc disagree, ask.
-- Styling: tokens in `src/styles/`, no hard-coded colours in components, no inline styles except genuinely dynamic values.
+- **Layout follows the wireframes** in `readme-assets/wireframes/` (context doc §12). Phone first, then tablet (768 px and up) and desktop (1200 px and up), through the `from(tablet)` / `from(desktop)` mixins (written in `em`). The wireframes show layout and states only: colours and fonts come from the tokens. If a wireframe and the context doc disagree, ask.
+- Styling: tokens in `src/styles/` (colours, fonts, type scale, spacing and radii are all in context doc §12, dark is the default theme). No hard-coded colours, font sizes, spacing or radii in components: use the tokens. No inline styles except genuinely dynamic values.
+- Numbers that line up or count (weights, lot numbers, times, T-minus) use the `tabular` mixin. Ticks and crosses are SVG icons, not text characters. Anything tappable is at least `--tap-min` (44 px) high. Nothing is smaller than 12 px.
 - Names: `PascalCase` components, one component per folder (`Name/Name.tsx`, `Name.module.scss`, `Name.test.tsx`), `camelCase` functions, `kebab-case` for non-component files.
 - Do not use `any`. Prefer small functions with a single job.
 
