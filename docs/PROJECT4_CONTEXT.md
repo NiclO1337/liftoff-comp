@@ -3,9 +3,8 @@
 Agreed plan for Project 4. It replaces the brief (`project4-liftoff-comp.md`):
 everything that matters is summarised here.
 
-> **Status (13 Oct 2026, after the wireframes):** docs and wireframes are done
-> (§12, `readme-assets/wireframes/`). Sections marked **TODO** are filled in the
-> last stage: visual tokens (§12) and the build plan (§15).
+> **Status (13 Oct 2026, build plan written):** docs, wireframes and the build plan (§15) are done.
+> Still **TODO**: visual tokens (§12, stage 3) and the 2025–2028 Sinclair constants (§7).
 
 **From the brief:** Choose and develop your own frontend project. Plan, design,
 develop and deploy a complete project. *A small, well-designed and functional
@@ -702,24 +701,188 @@ npm i -D sass vitest @vitejs/plugin-react jsdom vite-tsconfig-paths \
 
 ---
 
-## 15. Build plan (TODO: written in stage 3, after wireframes)
+## 15. Build plan
 
-Rules: **one step = one commit**, tests in the same commit, short commit messages,
-deploy early. Draft phase outline (the commit-level steps come later):
+**Rules**
+- **One step = one commit.** Tests go in the same commit as the code they test. If a step grows past one commit, split it. If a fix needs another fix, stop and rethink (CLAUDE.md).
+- **Short commit messages, no prefix.** This repo holds one project, so the `project-N:` prefix from the monorepo is not used.
+- **Push after every commit.** Vercel builds `main`, so a broken build shows up at once.
+- **Claude Code does not start the dev server.** After every step that changes the UI it says what to look at, and Niclas checks it in the browser.
+- **Domain first, test-first.** Everything in `src/domain/` is written as failing test → code. UI comes after the logic it shows.
+- **Zod schemas live in `src/lib/schemas/`**, next to no other layer, so a form and its Server Action share one schema. Each schema is tested in the commit that adds it.
+- **Phone first.** Components are styled for a phone and widened at the breakpoints (draft: 768 px and 1200 px, §12). The board gets its tablet and desktop layout in one step (57).
+- **The *Covers* column** points to the scope tiers (M, S: §4) and rules (R: §5), so it is clear what each step buys. "—" in *Commit* means a checkpoint, not a commit.
 
-| Phase | Content | Target |
-|-------|---------|--------|
-| 0 | Scaffold, Sass, Prettier, Vitest, first deploy to Vercel | week 1 |
-| 1 | **Domain first, test-first:** attempts, order, estimate (+ pace, plates). No UI, no DB | week 1 |
-| 2 | Prisma 7 + Neon, schema + migration, Better Auth, seed (first admin), protected app shell, club switcher, clubs + members pages, theme tokens | week 1–2 |
-| 3 | Competitions and groups: create/list, group overview | week 2 |
-| 4 | **Group board:** table, add lifters, inline edit with weight rules, flags + result, next-lifter panel + plates, row menu, tracking + T-minus, auto-refresh | week 2–3 |
-| 5 | Should items as time allows: measured pace, lifter detail with flags, history, Sinclair | week 3 |
-| 6 | Integration tests, responsive pass (375 / 768 / 1024 / 1440 px), accessibility check, README + TESTING.md + screenshots | week 3 |
+### Timeline and gates
 
-Cut order if time runs short: S5 → S4 → S3 → S1, then shrink M2 (admin creates clubs and coaches only, plain select as club switcher). Never cut M1 or M3–M12.
+| Phase | Content | Steps | Target |
+|-------|---------|-------|--------|
+| 0 | Setup, first deploy | 1–4 | week 1 (from 13 Oct) |
+| 1 | **Domain, test-first**: attempts, order, estimate, plates. No UI, no database | 5–15 | week 1 |
+| 2 | Database, auth, theme, app shell, clubs and members | 16–30 | weeks 1–2 |
+| 3 | Competitions and groups | 31–35 | week 2 |
+| 4 | **Group board** | 36–59 | weeks 2–3 |
+| 5 | Should items (optional) | 60–69 | week 3, only if time is left |
+| 6 | Integration tests, responsive pass, accessibility, README, submit | 70–80 | week 3, starting 31 Oct at the latest |
+
+Week 1 is 13–19 Oct, week 2 is 20–26 Oct, week 3 is 27 Oct – 2 Nov. **3 Nov is a spare day.**
+
+Without Phase 5 and the optional step 74, the plan is about 65 commits, around 3 a day. That is possible but leaves little slack, so there are three gates:
+
+| Gate | Date | Must be true | If behind |
+|------|------|--------------|-----------|
+| **A** | 19 Oct | Steps 1–20 done: domain tested, Prisma and Better Auth work locally, club access tested | Nothing else starts until the domain is done. If steps 16–19 are the problem, see the note under Phase 2 |
+| **B** | 26 Oct | Steps 21–46 done: admin and coach flows work on the live site and a result can be entered on the live board | Use the shrink options in steps 28 and 29 |
+| **C** | 30 Oct | Steps 47–59 done: all Must features work on the live site | Skip Phase 5. Phase 6 shrinks to its minimum (see the cut rules at the end) |
 
 ---
+
+### Phase 0 – Setup
+
+| # | Step | Covers | Commit |
+|---|------|--------|--------|
+| 1 | Scaffold Next.js 16.4 in the public repo `NiclO1337/liftoff-comp`: TypeScript, ESLint, App Router, `src/` dir, alias `@/*`, npm, no Tailwind. The folder is not empty, so scaffold in a temporary folder, move the files in, then `git checkout -- README.md CLAUDE.md` (§14) | §14 | `scaffold next app` |
+| 2 | Remove the demo code. Add Sass, Prettier, `eslint-config-prettier`, TypeScript strict, the folder structure from §9 and the `format` script | §14 | `clean up template` |
+| 3 | Vitest setup: config (React plugin, jsdom, tsconfig paths), `src/test/setup.ts`, `src/test/factories.ts`, one smoke test, scripts `test` and `test:run` | §13 | `set up vitest` |
+| 4 | `.env.example` (names only) and `engines` for Node ≥ 22.18. Import the repo in Vercel (Next.js preset, Node 24.x) and deploy the bare app, so the pipeline works before there is anything to break | M12, §16 | `add env example` |
+
+### Phase 1 – Domain (pure TypeScript, test-first)
+
+Every file imports nothing outside `src/domain/`, and time is always a parameter. **Not a code step:** finish the visual tokens (§12, stage 3) during this phase, because there is no UI work to compete with it and step 21 needs them.
+
+| # | Step | Covers | Commit |
+|---|------|--------|--------|
+| 5 | Domain types (`Sex`, `LiftType`, `Flag`, `AttemptState`, `EntryState`, `Pace`), `resolveResult` for all 8 flag combinations, `canEnterGroup` (always true) and the factories `makeEntry` / `makeAttempt` | R3, R14 | `add domain types` |
+| 6 | `estimateWeight` and `minWeight`: 100 → 104 → 108, at least +1 kg over the previous attempt, a repeat is allowed only after a no-lift | R2, R10 | `add weight estimate` |
+| 7 | `applyWeightChange`, part 1: refuses weights that are not whole kg, too low (the result carries the real minimum) or too high when the next attempt already has a result. Attempt 1 and the other lift have no lower limit | R10 | `add weight validation` |
+| 8 | `applyWeightChange`, part 2: raising moves later attempts up (90 / 92 / 94 with attempt 2 → 94 gives 90 / 94 / 95), unconfirmed estimates are re-estimated, moved attempts become `isEstimated`, cancelled attempts move too, attempts with a result never move | R2, R10 | `add weight cascade` |
+| 9 | `applyResultChange`: after a result or flag change, later attempts move up when needed (a no-lift corrected to good) | R10 | `add result change` |
+| 10 | `predictOrder` and `sortForDisplay`: order by weight, then attempt number, then lot number. Cancelled and finished at the bottom, a lifter following themselves, a raised weight changes the first attempt | R6, R7, R13 | `add lifting order` |
+| 11 | `getPhase`: `SNATCH` → `CLEAN_JERK` → `FINISHED` | R9 | `add phase` |
+| 12 | `liftsAhead`: next = 0, unknown lifter = null, tracked lifter's next attempt in the other lift | §6.2 | `add lifts ahead` |
+| 13 | `estimateWait`: ranges from the pace settings, same-lifter steps, the last attempted entry makes the first step "same", elapsed time subtracted and clamped at 0, not started = no minutes | §6.3, R5, R12 | `add wait estimate` |
+| 14 | `plates.ts`: port the logic and tests from `plates.js` in `weightlifting-calculator`. Whole kg only, **metal plates only, no 1.25 kg plate**, bar 20 kg (men) or 15 kg (women). *Needs access to that repo* | M5 | `add plate calculation` |
+| 15 | ESLint rule: files in `src/domain/` may not import React, Next, Prisma or other `src/` folders, and may not call `Date.now()` | §9 | `lint domain imports` |
+
+### Phase 2 – Database, auth, shell, clubs
+
+> **Timebox for steps 16–19.** This is where Prisma 7 + Better Auth + Next 16 setup friction shows up (§18). If it takes more than a day, stop and redo it with the smallest setup from the current guides (one table, one login) instead of patching.
+> *Needs:* the Neon dev database (a branch, not production) and `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL` in `.env`.
+
+| # | Step | Covers | Commit |
+|---|------|--------|--------|
+| 16 | Prisma 7 (pinned): `prisma.config.ts`, Postgres driver adapter for Neon, `src/server/db.ts`, `postinstall: prisma generate`, a connection check | §14, §16 | `set up prisma` |
+| 17 | Better Auth: `src/server/auth.ts` (email + password, **sign-up disabled**), route handler `api/auth/[...all]`, tables from its CLI, plus `Club` and the `role` / `clubId` fields on the user. First migration | M1, M2 | `add auth tables` |
+| 18 | `prisma/seed.ts` creates the first admin from `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD` in `.env` (names only in `.env.example`) and a `db:seed` script. Check the Better Auth docs for how to create a user without public sign-up | M1 | `add admin seed` |
+| 19 | The rest of the data model from §7: `Lifter`, `Competition`, `Group`, `Entry`, `Attempt`, `Tracking`, the enums and `User.lifterId`. Second migration | §7 | `add domain tables` |
+| 20 | `server/session.ts`: `getSession` and `requireClubAccess()` returning `{ userId, clubId, role }`. Coach = own club. Admin = active club from the long-lived cookie, checked against the database, otherwise redirect to `/admin/clubs`. Unit tests with two clubs, as coach and as admin | M2, §7 | `add club access` |
+| 21 | Visual tokens from §12 for both themes, Sass mixins, global styles, fonts, the no-flash theme script. *Needs §12 finished* | M11, §12 | `add design tokens` |
+| 22 | `ThemeToggle` (`aria-pressed`, choice saved in `localStorage`) | M11 | `add theme toggle` |
+| 23 | `Button`, `Field` and `Banner`, with tests (link or button rendering, label and error wiring) | M11 | `add base components` |
+| 24 | `/login`: `LoginForm` (wrong email or password, logging-in state), logout action, `proxy.ts` with the optimistic redirect to `/login`. Wireframe sheet 06 | M1 | `add login` |
+| 25 | `(app)` layout that requires a session, `AppShell` (skip link, landmarks, `NavMenu`, `RocketIcon`, `ThemeToggle`) and a placeholder dashboard. Wireframe sheet 07 | M1, M11 | `add app shell` |
+| 26 | `/admin/clubs`: admin-only guard and `ClubsTable` | M2 | `add clubs page` |
+| 27 | `CreateClubForm` with an optional first coach (Zod schema, action, password set by the person who creates the account) | M2 | `add create club` |
+| 28 | `ClubSwitcher` and `AdminBand` (orange pill and band on every page), the action that sets the active-club cookie. A coach sees only the club name. *Shrink option: a plain `<select>`, the band stays* | M2 | `add club switcher` |
+| 29 | `/members`: `MembersTable`, `AddCoachForm` and its action (a coach adds to their own club, the admin to the active club). *Shrink option: only the add form* | M2 | `add members page` |
+| 30 | **Checkpoint, no commit.** Apply migrations to the production Neon database (`prisma migrate deploy`), run the seed once, set the three env vars in Vercel. On the live site: log in as admin, create a club and a coach, log in as the coach | M1, M12 | — |
+
+### Phase 3 – Competitions and groups
+
+| # | Step | Covers | Commit |
+|---|------|--------|--------|
+| 31 | `CompetitionForm` on `/competitions/new` (name, date or date range, optional location), Zod schema (end not before start), `createCompetition` action and a club-scoped query | M3 | `add new competition` |
+| 32 | `/competitions` (upcoming and previous) and the dashboard `/`: `CompetitionCard` and `EmptyState` for first use. Wireframe sheet 04 | M3 | `add competition list` |
+| 33 | `/competitions/[competitionId]`: overview with `GroupCard`s and "Add group". Unknown or foreign ids give a 404, tested | M3, §8 | `add competition page` |
+| 34 | `GroupForm`: name and the four pace defaults (75 / 90 s and 100 / 120 s, low below high) with the `createGroup` action | M3 | `add group form` |
+| 35 | `not-found.tsx` and `error.tsx` | §8 | `add error pages` |
+
+### Phase 4 – Group board
+
+`GroupBoard` is a client component. Its state is **server props plus `useOptimistic`**. Props are never copied into `useState`, or a refresh would change nothing (§11). Each step ends with "look at it in the browser".
+
+| # | Step | Covers | Commit |
+|---|------|--------|--------|
+| 36 | `getGroupBoard` query (club-scoped through the whole chain, plain serializable props), a tested mapper to `EntryState`, and the group page with heading, `PhaseChip` and an empty state | M5 | `add group page` |
+| 37 | `addLifter` schema and action: find or create in the club directory, lot number, optional bodyweight, **sex, birth year and both openings required**. Creates the entry with six attempts, attempts 2 and 3 as estimates | M4, R2 | `add lifter action` |
+| 38 | `LifterCombobox`: suggestions from the club directory, picking one fills sex and birth year, standard keyboard pattern | M4 | `add lifter combobox` |
+| 39 | `AddLifterForm` and `AttemptPreview` (4 % / 8 % for both lifts), error summary at the top, focus on the first field with an error. Wireframe sheet 03 | M4 | `add lifter form` |
+| 40 | `AttemptCell`: pending, good, no-lift, cancelled, next-attempt outline and estimate marker, always with an icon or text, not colour alone | M5, M7 | `add attempt cell` |
+| 41 | `GroupBoard` with `LifterRow` and `LifterTable` for one lift: `<caption>`, `<th scope>`, order from `sortForDisplay`, finished and stopped lifters at the bottom | M5, R7 | `add lifter table` |
+| 42 | `LiftSection` used for both lifts: Clean & Jerk under Snatch, moving to the top when `getPhase` says Snatch is done | M5, R9 | `add lift sections` |
+| 43 | `PlateDiagram`: SVG plates from `plates.ts`, bar chosen by the lifter's sex (the SVGs come from `weightlifting-calculator`) | M5 | `add plate diagram` |
+| 44 | `NextLifterPanel`: always the first attempt of the predicted order, no state of its own, `aria-live="polite"` | M5, R13 | `add next lifter panel` |
+| 45 | `FlagToggle`, `FlagToggleGroup` and the "Enter result" button: default white, red = filled with a mark, accessible names, reset when the attempt changes | M7 | `add flag toggles` |
+| 46 | `enterResult` action: sends the attempt id and the weight that was shown, refused if the weight changed or a result exists, flags all-or-none (Zod), `resultAt` set once. Optimistic update with a saving / failed marker per attempt | M7, R3, R4, R13 | `add enter result` |
+| 47 | Edit a result afterwards: a separate `editFlags` action, `resultAt` untouched, `applyResultChange` | M7, R4 | `add result editing` |
+| 48 | `EditableWeight`: button ⇄ blank input, Enter or click-away commits, blank or Esc restores, a refused value keeps the old one and shows the message under the field (`aria-invalid`, `aria-describedby`) | M6 | `add editable weight` |
+| 49 | `changeWeight` action using `applyWeightChange`: moved attempts get the estimate marker, a refused weight gets the red outline and message, the panel switches by itself and toggled flags reset | M6, R10, R13 | `save weight edits` |
+| 50 | `RowMenu`: strip under the row on a phone, popover on wider screens, Escape closes, focus returns. Actions passed in as props | M8 | `add row menu` |
+| 51 | `stopLift`, `withdraw` and `restore` actions (set and clear `cancelled`, nothing is deleted), wired to the menu | M8, R8 | `add stop and restore` |
+| 52 | Tracking: track and untrack action, the first tracked lifter is "ME", more than one is allowed | M9, R11 | `add tracking` |
+| 53 | `useNow` (1 s tick) and `TMinus` in the tracked row: lifts only before the start, range and "around 14:32" after, "You're up next", other lift, finished. Full-sentence accessible name | M9, §6.5 | `add t-minus` |
+| 54 | `StickyTMinusBar` (phone) and `TrackingCard` (tablet and desktop) | M9 | `add tracking bar` |
+| 55 | `useAutoRefresh`: `router.refresh()` every 15 s, pause when hidden, refresh on visible / focus / online, skip while busy. Fake-timer tests | M10, §11 | `add auto refresh` |
+| 56 | Busy registration (open weight input, unsent flags, save in flight), `LastUpdated` ("Updated 12 s ago" and a button, not a live region) and the offline `Banner` | M10, §11 | `add refresh indicator` |
+| 57 | Tablet (768–1199 px) and desktop (≥ 1200 px) board layout: panel and tracking card on the left, lists on the right, Clean & Jerk beside Snatch on desktop. Wireframe sheet 08 | M5, M11 | `add board layout` |
+| 58 | Click through the 12 states on wireframe sheet 02 and fix what differs | M5–M11 | `polish board states` |
+| 59 | **Checkpoint, no commit.** Deploy, run a small group on a phone, open the board on a second device and see a result arrive within about 15 s. Look at Vercel and Neon usage (§11) | M10, M12 | — |
+
+### Phase 5 – Should items (optional, only after gate C)
+
+Built in the reverse of the cut order, so stopping at any point cuts the right thing. S2 is not in the cut order, so it comes first.
+
+| # | Step | Covers | Commit |
+|---|------|--------|--------|
+| 60 | `domain/results.ts`: best Snatch, best Clean & Jerk and total (no total when a lift has no good attempt) | S2 | `add best lifts` |
+| 61 | `/lifters`: club-scoped directory with search | S2 | `add lifter list` |
+| 62 | `/lifters/[lifterId]`: competitions, each attempt with `FlagSquares` (left / centre / right), best lifts and total. Foreign ids give a 404. Wireframe sheet 05 | S2 | `add lifter detail` |
+| 63 | `pace.ts`: `measureIntervals` and `blendPace` (ignore < 20 s and > 240 s, last 10 per kind, weight `n / (n + 5)`, ±10 % range) | S1 | `add measured pace` |
+| 64 | Use it on the board: the measured pace replaces the default after a few lifts, with a small "pace from N lifts" note | S1 | `use measured pace` |
+| 65 | `groupStats`: duration (first to last `resultAt`), number of lifts, average pace | S3 | `add group stats` |
+| 66 | Finished groups on the competition page show the stats and a results table | S3 | `add results view` |
+| 67 | `sinclair.ts` with coefficients per cycle, chosen by the competition date. *Check the IWF 2025–2028 values first (§7).* If they are still missing, use 2021–2024 and say so in the UI | S4 | `add sinclair` |
+| 68 | Show the Sinclair total on the lifter detail page and the results table | S4 | `show sinclair` |
+| 69 | Suggest the last finished group's average pace as the default in `GroupForm`. It is derived when read, with no new column, because §7 lists pace as never stored | S5 | `suggest default pace` |
+
+### Phase 6 – Quality and docs
+
+Integration tests use mocked Server Actions. The numbers refer to the list in §13.
+
+| # | Step | Covers | Commit |
+|---|------|--------|--------|
+| 70 | Integration setup (`renderBoard`, a full-group factory) and tests 1 and 2: add lifters, enter results, the next lifter changes, a finished lifter moves down | M12 | `add result tests` |
+| 71 | Tests 3, 4 and 5: tracking and T-minus, stop / withdraw / restore, correcting a result keeps `resultAt` | M12 | `add tracking tests` |
+| 72 | Tests 7, 10 and 11: raising above the next lifter, the cascade, weight rules after results | M12 | `add weight rule tests` |
+| 73 | Tests 6, 8 and 9: theme persists, auto-refresh, admin club switch | M12 | `add refresh tests` |
+| 74 | *Optional:* tenancy tests with two clubs against a throwaway Neon branch | M12 | `add tenancy tests` |
+| 75 | Responsive pass at 375 / 768 / 1024 / 1440 px on every page, fine-tune the breakpoints | M11 | `refine responsive layout` |
+| 76 | Accessibility pass: keyboard only through the board, contrast in both themes, Lighthouse, WAVE | M11 | `fix accessibility issues` |
+| 77 | **Checkpoint, no commit.** Final run on the live site: migrations, seed, env vars, a full group on a phone | M12 | — |
+| 78 | `TESTING.md` with the manual test notes and results | M12 | `add testing doc` |
+| 79 | README: fill in every TODO, screenshots in `readme-assets/screenshots/` (for each image write the import line, a suggested alt text and a suggested file name), setup instructions, technologies, live URL | M12 | `update readme` |
+| 80 | **Submit**: repo URL, live URL and the short project description (§1) | §1 | — |
+
+---
+
+### If time runs short
+
+Cut order: **S5 → S4 → S3 → S1**, then shrink M2 (admin creates clubs and coaches only, plain select as club switcher: steps 28 and 29). **Never cut M1 or M3–M12.** Because Phase 5 is built in reverse order, stopping early already follows this.
+
+**Phase 6 minimum** if gate C is missed: tests 70 and 72 (they cover the core loop and the weight rules), steps 75 and 76, and the README. Club scoping is already covered by the unit tests in step 20.
+
+### Needs from Niclas
+
+| Before step | What |
+|-------------|------|
+| 14 | Access to `weightlifting-calculator` (`plates.js` and the plate SVGs) |
+| 16 | A Neon database through the Vercel Marketplace, with a dev branch |
+| 18 | The admin's email and password, kept in `.env` and never committed |
+| 21 | §12 finished (visual tokens) |
+| 58 | Time to click through the 12 board states on a phone |
+| 67 | The IWF Sinclair constants for 2025–2028, if they have been published |
+| 79 | Screenshots of the finished app |
+
 
 ## 16. Deployment (Vercel + Neon)
 
