@@ -47,3 +47,15 @@ export type QueuedAttempt = {
   lotNumber: number;
   attempt: AttemptState;
 };
+
+/** The newest result of the lift in play: who lifted last, and when it was entered. */
+export type LastResult = {
+  entryId: string;
+  at: Date;
+};
+
+/** How long until a lifter's turn, as a range in seconds. */
+export type WaitRange = {
+  minSeconds: number;
+  maxSeconds: number;
+};

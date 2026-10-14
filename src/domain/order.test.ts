@@ -2,7 +2,13 @@ import { describe, expect, it } from "vitest";
 
 import { good, makeEntry, noLift } from "@/test/factories";
 
-import { getPhase, isLiftStarted, predictOrder, sortForDisplay } from "./order";
+import {
+  getPhase,
+  isLiftStarted,
+  lastResult,
+  predictOrder,
+  sortForDisplay,
+} from "./order";
 import type { EntryState, Phase, QueuedAttempt } from "./types";
 
 /** `["a", 1]` is attempt 1 of entry "a". */
@@ -442,5 +448,59 @@ describe("isLiftStarted", () => {
     ];
 
     expect(isLiftStarted(entries, "SNATCH")).toBe(false);
+  });
+});
+
+describe("lastResult", () => {
+  const at = (time: string) => new Date(`2026-10-18T${time}Z`);
+  const goodAt = (weightKg: number, time: string) => ({
+    ...good(weightKg),
+    resultAt: at(time),
+  });
+
+  it("is null without entries or before the first result", () => {
+    expect(lastResult([], "SNATCH")).toBeNull();
+    expect(lastResult([makeEntry()], "SNATCH")).toBeNull();
+  });
+
+  it("is the newest result of the lift, and who lifted it", () => {
+    const entries = [
+      makeEntry({
+        id: "a",
+        lotNumber: 1,
+        snatch: [goodAt(100, "14:00:00"), goodAt(104, "14:05:00"), 108],
+      }),
+      makeEntry({
+        id: "b",
+        lotNumber: 2,
+        snatch: [goodAt(102, "14:03:00"), 106, 110],
+      }),
+    ];
+
+    expect(lastResult(entries, "SNATCH")).toEqual({
+      entryId: "a",
+      at: at("14:05:00"),
+    });
+  });
+
+  it("only looks at the lift it is asked for", () => {
+    const entries = [
+      makeEntry({
+        id: "a",
+        snatch: [goodAt(100, "14:00:00"), 104, 108],
+        cleanJerk: [goodAt(120, "15:00:00"), 124, 128],
+      }),
+    ];
+
+    expect(lastResult(entries, "SNATCH")?.at).toEqual(at("14:00:00"));
+    expect(lastResult(entries, "CLEAN_JERK")?.at).toEqual(at("15:00:00"));
+  });
+
+  it("is null for the Clean & Jerk until it has its own first result", () => {
+    const entries = [
+      makeEntry({ snatch: [goodAt(100, "14:00:00"), 104, 108] }),
+    ];
+
+    expect(lastResult(entries, "CLEAN_JERK")).toBeNull();
   });
 });

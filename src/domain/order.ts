@@ -1,4 +1,10 @@
-import type { EntryState, LiftType, Phase, QueuedAttempt } from "./types";
+import type {
+  EntryState,
+  LastResult,
+  LiftType,
+  Phase,
+  QueuedAttempt,
+} from "./types";
 
 /** R6: lowest weight first, then lower attempt number, then lower lot number. */
 function compareQueued(a: QueuedAttempt, b: QueuedAttempt): number {
@@ -98,4 +104,25 @@ export function isLiftStarted(entries: EntryState[], lift: LiftType): boolean {
       (attempt) => attempt.lift === lift && attempt.resultAt !== null,
     ),
   );
+}
+
+/**
+ * §6.3: the newest result of one lift and who lifted it. The break between
+ * Snatch and Clean & Jerk never counts as waiting time, so only the lift in
+ * play is looked at. `null` until that lift has a result.
+ */
+export function lastResult(
+  entries: EntryState[],
+  lift: LiftType,
+): LastResult | null {
+  let latest: LastResult | null = null;
+  for (const entry of entries) {
+    for (const attempt of entry.attempts) {
+      if (attempt.lift !== lift || attempt.resultAt === null) continue;
+      if (latest === null || attempt.resultAt.getTime() > latest.at.getTime()) {
+        latest = { entryId: entry.id, at: attempt.resultAt };
+      }
+    }
+  }
+  return latest;
 }
