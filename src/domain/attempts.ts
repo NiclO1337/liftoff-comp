@@ -1,8 +1,17 @@
-import type { AttemptNumber, Flags, Result } from "./types";
+import type { AttemptNumber, AttemptState, Flags, Result } from "./types";
 
 const WHITE_FLAGS_FOR_GOOD_LIFT = 2;
 const ESTIMATE_STEP_PERCENT = 4;
 const LOWEST_WEIGHT_KG = 1;
+
+export type WeightChange =
+  | { ok: true; lift: AttemptState[] }
+  | {
+      ok: false;
+      reason: "NOT_WHOLE" | "TOO_LOW" | "TOO_HIGH";
+      /** The lowest (TOO_LOW) or highest (TOO_HIGH) weight that would have been accepted. */
+      limit?: number;
+    };
 
 /** R3: at least two white flags is a good lift. Which judge shows red does not matter. */
 export function resolveResult(flags: Flags): Result {
@@ -37,4 +46,56 @@ export function minWeight(
   return previous.result === "NO_LIFT"
     ? previous.weightKg
     : previous.weightKg + 1;
+}
+
+function resultOf(attempt: AttemptState): Result | null {
+  return attempt.flags === null ? null : resolveResult(attempt.flags);
+}
+
+function findAttempt(
+  lift: AttemptState[],
+  number: number,
+): AttemptState | undefined {
+  return lift.find((attempt) => attempt.number === number);
+}
+
+/**
+ * R10: change the weight of one attempt in one lift. Refuses a weight that is
+ * not whole kg, lower than the minimum after the previous attempt, or so high
+ * that the next attempt, which already has a result, could no longer follow it.
+ * A refusal carries the real limit for the message.
+ */
+export function applyWeightChange(
+  lift: AttemptState[],
+  attemptNumber: AttemptNumber,
+  newWeight: number,
+): WeightChange {
+  const edited = findAttempt(lift, attemptNumber);
+  if (!edited) throw new Error(`Attempt ${attemptNumber} is not in this lift`);
+
+  if (!Number.isInteger(newWeight)) return { ok: false, reason: "NOT_WHOLE" };
+
+  const previous = findAttempt(lift, attemptNumber - 1);
+  const min = minWeight(
+    previous
+      ? { weightKg: previous.weightKg, result: resultOf(previous) }
+      : null,
+  );
+  if (newWeight < min) return { ok: false, reason: "TOO_LOW", limit: min };
+
+  const next = findAttempt(lift, attemptNumber + 1);
+  if (next?.flags) {
+    const max =
+      resultOf(edited) === "NO_LIFT" ? next.weightKg : next.weightKg - 1;
+    if (newWeight > max) return { ok: false, reason: "TOO_HIGH", limit: max };
+  }
+
+  return {
+    ok: true,
+    lift: lift.map((attempt) =>
+      attempt === edited
+        ? { ...attempt, weightKg: newWeight, isEstimated: false }
+        : attempt,
+    ),
+  };
 }
