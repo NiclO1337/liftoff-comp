@@ -5,7 +5,7 @@ everything that matters is summarised here.
 
 > **Status (13 Oct 2026, visual tokens approved):** docs, wireframes, the build plan (§15) and the visual tokens (§12) are done.
 > Still **TODO**: the 2025–2028 Sinclair constants (§7).
-> **Review of 14 Oct 2026:** decisions 28–40 in §19 are worked into the rules, the data model and the build plan (now 83 steps). Decision 41 (a missed lift is repeated, R16) was added while building step 9.
+> **Review of 14 Oct 2026:** decisions 28–40 in §19 are worked into the rules, the data model and the build plan (now 83 steps). Decisions 41 (a missed lift is repeated, R16) and 42 (the plate set) were added while building.
 
 **From the brief:** Choose and develop your own frontend project. Plan, design,
 develop and deploy a complete project. *A small, well-designed and functional
@@ -185,7 +185,7 @@ page shows them per attempt, and later per lifter ("left judge: 9 red of 24"),
 so a coach sees a consistent pattern.
 
 ### Plates and collars
-Competitions use heavy **2.5 kg collars**, one on each side of the bar, so the loaded bar weighs bar + 5 kg before any plate: **25 kg for men (20 kg bar) and 20 kg for women (15 kg bar)**. The plate diagram shows one side: `(weight − bar − 5) / 2` kg per side, with the collar drawn on the outside. At or below 25 kg (men) or 20 kg (women) there are no plates, only a short note. Whole kg only, metal plates only, no 1.25 kg plate (decision 6). Check at step 14 whether the earlier calculator already counts collars. The wireframes show the old numbers (for example 29 kg per side for 73 kg on a 15 kg bar): this rule wins.
+Competitions use heavy **2.5 kg collars**, one on each side of the bar, so the loaded bar weighs bar + 5 kg before any plate: **25 kg for men (20 kg bar) and 20 kg for women (15 kg bar)**. The plate diagram shows one side: `(weight − bar − 5) / 2` kg per side, with the collar drawn on the outside. At or below 25 kg (men) or 20 kg (women) there are no plates, only a short note. Whole kg only, metal plates only, no 1.25 kg plate (decision 6). The earlier calculator does **not** count collars, and neither will the planned warm-up page (checked at step 14, 14 Oct 2026): the collars are specific to this app. The wireframes show the old numbers (for example 29 kg per side for 73 kg on a 15 kg bar): this rule wins.
 
 ---
 
@@ -1080,7 +1080,7 @@ Cut order: **S5 → S4 → S3 → S1**, then shrink M2 (admin creates clubs and 
 
 ## 19. Review decisions and open questions
 
-### Decided in review (13 Oct 2026; numbers 28–41 on 14 Oct 2026)
+### Decided in review (13 Oct 2026; numbers 28–42 on 14 Oct 2026)
 | # | Decision |
 |---|----------|
 | 1 | **Lifting order confirmed** (R6). The only special case: a lifter following themselves gets a 2-minute clock instead of 1 minute |
@@ -1124,6 +1124,7 @@ Cut order: **S5 → S4 → S3 → S1**, then shrink M2 (admin creates clubs and 
 | 39 | **Edge cases:** a group with no entries has no phase. "ME" is the oldest tracked entry (`Tracking.createdAt`). Restore clears all cancelled attempts of the lifter. Toggled flags reset when the attempt or its weight changes. A result correction is never refused. Entering a result clears `isEstimated` |
 | 40 | **Scheduled start times (R12).** Each group has a date and a Snatch and a Clean & Jerk start time (required, wall-clock `HH:mm`, no timezone stored). Before a lift's first result a tracked lifter sees one fixed clock time (`start + N lifts × the middle of the pace`, rounded to the minute: 13:50 and T–7 = "around 14:00", Clean & Jerk 14:45 and T–7 = "around 14:55"). After the first result only live minutes. A start time that has passed counts from now. Validation is light: the date inside the competition's dates and Clean & Jerk after Snatch, nothing else |
 | 41 | **A missed lift is repeated by default (R16).** After a no-lift the next attempt of that lift takes the failed weight if it is still an estimate, as the bar does in competition when no weight is declared (the IWF rule number was not checked against the rulebook, which could not be opened on 14 Oct 2026). Replaces the Could item C5 and saves the coach a manual edit on every miss. A good lift changes nothing |
+| 42 | **The plate set** (step 14): 25, 20, 15, 10, 5, 2.5, 2, 1.5, 1 and 0.5 kg. Ported from `weightlifting-calculator`, whose default list has no 25 kg plate (a gym does not have them, a competition does), so 25 kg is added. The 5 kg plate is the white metal one, not the black plastic one, and there is no 1.25 kg plate. Plates are loaded heaviest first. Because the smallest plate is 0.5 kg, every whole-kg weight above the bar and collars can be loaded, so the original backtracking search is not needed: a largest-first loop gives the same answer. The diagram colours and sizes come from `PLATE_MAP` in that repo (the metal 5 kg plate is `#ffffff`, 7 wide, 32 tall) and are used in step 44 |
 
 ### Still open
 Nothing blocks the next stage (building, from step 1). The Sinclair
