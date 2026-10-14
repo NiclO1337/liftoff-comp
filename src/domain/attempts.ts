@@ -90,6 +90,15 @@ function raiseLaterAttempts(lift: AttemptState[]): AttemptState[] {
 }
 
 /**
+ * R10: call this after a result or its flags changed. A correction is never
+ * refused. Later attempts move up when the new result needs it, for example
+ * a repeated weight after a no-lift that is corrected to a good lift.
+ */
+export function applyResultChange(lift: AttemptState[]): AttemptState[] {
+  return raiseLaterAttempts(lift);
+}
+
+/**
  * R10: change the weight of one attempt in one lift. Refuses a weight that is
  * not whole kg, lower than the minimum after the previous attempt, or so high
  * that the next attempt, which already has a result, could no longer follow it.

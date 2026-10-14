@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { makeEntry, type AttemptSpec } from "@/test/factories";
 
 import {
+  applyResultChange,
   applyWeightChange,
   estimateWeight,
   minWeight,
@@ -410,6 +411,77 @@ describe("applyWeightChange: cascade", () => {
     change(lift, 2, 94);
 
     expect(weights(lift)).toEqual([90, 92, 94]);
+    expect(estimated(lift)).toEqual([false, false, false]);
+  });
+});
+
+describe("applyResultChange", () => {
+  const weights = (lift: ReturnType<typeof snatch>) =>
+    lift.map((attempt) => attempt.weightKg);
+  const estimated = (lift: ReturnType<typeof snatch>) =>
+    lift.map((attempt) => attempt.isEstimated);
+
+  it("moves a repeated weight up when a no-lift is corrected to a good lift", () => {
+    const lift = snatch(good(90), 90, 94);
+
+    const result = applyResultChange(lift);
+
+    expect(weights(result)).toEqual([90, 91, 94]);
+    expect(estimated(result)).toEqual([false, true, false]);
+  });
+
+  it("moves the following attempts up as well", () => {
+    const result = applyResultChange(snatch(good(90), 90, 91));
+
+    expect(weights(result)).toEqual([90, 91, 92]);
+    expect(estimated(result)).toEqual([false, true, true]);
+  });
+
+  it("moves cancelled attempts too, and keeps them cancelled", () => {
+    const lift = snatch(good(90), { weightKg: 90, cancelled: true }, 94);
+
+    const result = applyResultChange(lift);
+
+    expect(result[1]).toMatchObject({
+      weightKg: 91,
+      cancelled: true,
+      isEstimated: true,
+    });
+  });
+
+  it("leaves a repeated weight alone while the result is still a no-lift", () => {
+    const lift = snatch(noLift(90), 90, 94);
+
+    expect(weights(applyResultChange(lift))).toEqual([90, 90, 94]);
+  });
+
+  it("does not move anything when a good lift is corrected to a no-lift", () => {
+    const lift = snatch(noLift(90), 91, 94);
+
+    expect(weights(applyResultChange(lift))).toEqual([90, 91, 94]);
+  });
+
+  it("never moves an attempt that has a result, and does not refuse the correction", () => {
+    const lift = snatch(good(90), good(90), 90);
+
+    const result = applyResultChange(lift);
+
+    expect(result[1]).toEqual(lift[1]);
+    expect(weights(result)).toEqual([90, 90, 91]);
+  });
+
+  it("keeps the flags and the result time of every attempt", () => {
+    const lift = snatch(good(90), 90, 94);
+
+    expect(applyResultChange(lift)[0]).toEqual(lift[0]);
+  });
+
+  it("does not change the input", () => {
+    const lift = snatch(good(90), 90, 94);
+
+    applyResultChange(lift);
+
+    expect(weights(lift)).toEqual([90, 90, 94]);
     expect(estimated(lift)).toEqual([false, false, false]);
   });
 });
