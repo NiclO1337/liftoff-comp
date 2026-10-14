@@ -40,8 +40,9 @@ writing Next-specific code. Same for Prisma 7 and Better Auth.
 | `npm test` | Vitest in watch mode |
 | `npm run test:run` | Vitest, one run |
 | `npx tsc --noEmit` | Type check |
+| `npm run db:migrate` | `prisma migrate dev` against the dev branch (direct URL) |
 
-TODO: add `db:migrate` and `db:seed` when Prisma is set up (steps 16 and 18).
+TODO: add `db:seed` when the seed exists (step 18).
 
 ## How we work together
 
