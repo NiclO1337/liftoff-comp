@@ -9,6 +9,22 @@ import type {
 export type AttemptSpec =
   number | Partial<Omit<AttemptState, "id" | "lift" | "number">>;
 
+export const RESULT_AT = new Date("2026-10-18T14:00:00Z");
+
+/** An attempt with a good lift (two white flags, one red). Spread it into `makeEntry` specs. */
+export const good = (weightKg: number): Exclude<AttemptSpec, number> => ({
+  weightKg,
+  flags: ["WHITE", "WHITE", "RED"],
+  resultAt: RESULT_AT,
+});
+
+/** An attempt with a no-lift (two red flags, one white). */
+export const noLift = (weightKg: number): Exclude<AttemptSpec, number> => ({
+  weightKg,
+  flags: ["RED", "RED", "WHITE"],
+  resultAt: RESULT_AT,
+});
+
 export function makeAttempt(
   overrides: Partial<AttemptState> = {},
 ): AttemptState {

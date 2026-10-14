@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import { makeEntry, type AttemptSpec } from "@/test/factories";
+import {
+  good,
+  makeEntry,
+  noLift,
+  RESULT_AT,
+  type AttemptSpec,
+} from "@/test/factories";
 
 import {
   applyResultChange,
@@ -82,17 +88,6 @@ describe("minWeight", () => {
   });
 });
 
-const resultAt = new Date("2026-10-18T14:00:00Z");
-const good = (weightKg: number): Exclude<AttemptSpec, number> => ({
-  weightKg,
-  flags: ["WHITE", "WHITE", "RED"],
-  resultAt,
-});
-const noLift = (weightKg: number): Exclude<AttemptSpec, number> => ({
-  weightKg,
-  flags: ["RED", "RED", "WHITE"],
-  resultAt,
-});
 const snatch = (...specs: AttemptSpec[]) =>
   makeEntry({ snatch: specs }).attempts.slice(0, specs.length);
 
@@ -246,7 +241,7 @@ describe("applyWeightChange: validation", () => {
       expect(change.ok && change.lift[0]).toMatchObject({
         weightKg: 91,
         flags: ["WHITE", "WHITE", "RED"],
-        resultAt,
+        resultAt: RESULT_AT,
       });
     });
 

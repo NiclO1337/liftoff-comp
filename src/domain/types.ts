@@ -38,3 +38,10 @@ export type Pace = {
   /** A lifter following themselves (2-minute clock). */
   same: PaceRange;
 };
+
+/** One pending attempt in the predicted order of a lift. */
+export type QueuedAttempt = {
+  entryId: string;
+  lotNumber: number;
+  attempt: AttemptState;
+};
