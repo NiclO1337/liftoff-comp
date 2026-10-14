@@ -90,12 +90,33 @@ function raiseLaterAttempts(lift: AttemptState[]): AttemptState[] {
 }
 
 /**
- * R10: call this after a result or its flags changed. A correction is never
- * refused. Later attempts move up when the new result needs it, for example
- * a repeated weight after a no-lift that is corrected to a good lift.
+ * R16: after a no-lift the next attempt repeats the failed weight, as it does
+ * in competition when no weight is declared. Only an attempt that is still an
+ * estimate changes, so a weight someone typed in is never overwritten. After
+ * a good lift nothing changes: the 4 % / 8 % estimate is already above the
+ * automatic +1 kg.
+ */
+function repeatAfterNoLift(lift: AttemptState[]): AttemptState[] {
+  return lift.map((attempt) => {
+    const previous = findAttempt(lift, attempt.number - 1);
+    const repeats =
+      previous !== undefined &&
+      resultOf(previous) === "NO_LIFT" &&
+      attempt.flags === null &&
+      attempt.isEstimated &&
+      attempt.weightKg > previous.weightKg;
+    return repeats ? { ...attempt, weightKg: previous.weightKg } : attempt;
+  });
+}
+
+/**
+ * Call this after a result or its flags changed. A correction is never
+ * refused. A missed lift is repeated by default (R16), then later attempts
+ * move up where the new result needs it (R10), for example a repeated weight
+ * after a no-lift that is corrected to a good lift.
  */
 export function applyResultChange(lift: AttemptState[]): AttemptState[] {
-  return raiseLaterAttempts(lift);
+  return raiseLaterAttempts(repeatAfterNoLift(lift));
 }
 
 /**

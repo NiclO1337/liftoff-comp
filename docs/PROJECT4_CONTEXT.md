@@ -5,7 +5,7 @@ everything that matters is summarised here.
 
 > **Status (13 Oct 2026, visual tokens approved):** docs, wireframes, the build plan (§15) and the visual tokens (§12) are done.
 > Still **TODO**: the 2025–2028 Sinclair constants (§7).
-> **Review of 14 Oct 2026:** decisions 28–40 in §19 are worked into the rules, the data model and the build plan (now 83 steps).
+> **Review of 14 Oct 2026:** decisions 28–40 in §19 are worked into the rules, the data model and the build plan (now 83 steps). Decision 41 (a missed lift is repeated, R16) was added while building step 9.
 
 **From the brief:** Choose and develop your own frontend project. Plan, design,
 develop and deploy a complete project. *A small, well-designed and functional
@@ -133,7 +133,7 @@ C1 lifter accounts created by coaches or the admin + 1RM PR page (coach read-onl
 C2 **Warmup page** (port from `weightlifting-calculator`) ·
 C3 read-only live view for lifters on their own phone (reuses the auto-refresh) ·
 C4 offline queue / PWA ·
-C5 adaptive estimate (a no-lift usually repeats the weight) ·
+C5 *(merged into the Must slice as R16: a missed lift is repeated. The number stays free so C6–C9 keep theirs)* ·
 C6 CSV export · C7 charts · C9 **clock time for the tracked lifter's Clean & Jerk** while Snatch is still running (uses the Clean & Jerk start time) ·
 C8 **weight classes and age classes** (for example W40), with the winner of each class on the results screen of a previous competition. Nothing extra is stored for this: class comes from sex, bodyweight and birth year, which are already saved (§7). The class tables change over time, so they are kept per cycle like Sinclair.
 
@@ -177,6 +177,7 @@ Payments, **push-based real-time sync** (updates in under a second with WebSocke
 | R13 | **The next lifter is always derived.** The next-lifter panel shows the first attempt in the predicted order (§6.1). It is never stored or set by hand. When a weight is edited, for example the current lifter raises from 92 to 95 while another lifter is at 93, the table re-sorts and the panel switches to the new next lifter at once. Flags that are toggled but not yet sent belong to **one attempt and its weight**: if the next attempt or its weight changes, they reset to white. **Enter result** sends the attempt id and the weight that was shown. The server refuses it if the weight has changed since (*"This attempt is now 93 kg. Check and try again."*) or if a result already exists (*"Result already entered: white, white, red. Refresh."*). That second case covers two coaches pressing the button at nearly the same time. Flags are changed afterwards with a separate edit action, which keeps `resultAt` |
 | R14 | **Mixed groups.** A group can have men and women in this version. The lifter's own sex decides the bar in the plate diagram (20 kg men, 15 kg women) and the Sinclair constants, not the group's. `Group.allowedSex` exists but is empty (= mixed). To restrict a group later, add the field to the group form and let `canEnterGroup(group, lifter)` in `domain/` refuse the wrong sex. That function exists from the start and always returns `true` |
 | R15 | **Enter result for any lifter.** The next-lifter panel is the normal place to enter a result, but the hall does not always follow the app's order (a weight change that was never entered, a lifter called out of turn). The row menu therefore has *Enter result*, which opens the three flag toggles in that row for the lifter's **next pending attempt in the current lift** (attempt 2 cannot get a result before attempt 1). It uses the same `enterResult` action, so the server still checks the attempt id and the shown weight, refuses a second result and sets `resultAt` once. The panel is not changed by this: it stays derived from the order and moves on by itself when the result is in |
+| R16 | **A missed lift is repeated by default.** In competition the bar goes up 1 kg automatically after a good lift and stays at the same weight after a no-lift when no weight is declared. So when a result is entered or corrected and an attempt is a **no-lift**, the lifter's **next attempt in that lift** takes the failed weight, **but only if that attempt is still an estimate** (`isEstimated`). A weight someone typed in is never overwritten, and an attempt with a result never moves. The attempt stays marked as an estimate (the dashed `~`), so the coach sees that the app moved it. Only the next attempt changes: a later estimate stays where it is. After a **good lift nothing changes**, because the 4 % / 8 % estimate is already above the automatic +1 kg. If the no-lift is later corrected to a good lift, R10 moves the repeated weight up by 1 kg. It is not a new percentage, so "the percentages are used once" (R2) still holds |
 
 ### Judge flags: why order matters
 Left / centre / right are stored as three separate columns. The lifter detail
@@ -285,7 +286,7 @@ minWeight(previous: { weightKg: number; result: "GOOD" | "NO_LIFT" | null } | nu
 applyWeightChange(lift: AttemptState[], attemptNumber: 1 | 2 | 3, newWeight: number): WeightChange
 // WeightChange = { ok: true; lift: AttemptState[] }   // includes the later attempts that were moved up (R10)
 //              | { ok: false; reason: "NOT_WHOLE" | "TOO_LOW" | "TOO_HIGH"; limit?: number }
-applyResultChange(lift: AttemptState[]): AttemptState[]   // after a result or flag change: move later attempts up if needed
+applyResultChange(lift: AttemptState[]): AttemptState[]   // after a result or flag change: the next estimate repeats a failed weight (R16), then later attempts move up if needed (R10)
 resolveResult(flags: [Flag, Flag, Flag]): "GOOD" | "NO_LIFT"
 // src/domain/groups.ts
 canEnterGroup(group: { allowedSex: Sex | null }, lifter: { sex: Sex }): boolean   // always true for now
@@ -293,9 +294,9 @@ isScheduleValid(date: string, snatchStart: string, cleanJerkStart: string, compe
 ```
 
 ### 6.7 Known inaccuracy
-A no-lift usually means the lifter repeats the same weight, and lifters often
-change weights at the last second. The estimate cannot know this in advance.
-That is accepted for the first slice and C5 improves it later.
+A no-lift usually means the lifter repeats the same weight, so the next estimate is set to the failed weight (R16). Lifters also often
+change weights at the last second, and the estimate cannot know this in advance.
+That is accepted.
 Late attempts (3rd) built on estimated weights are also less certain.
 
 ---
@@ -781,7 +782,7 @@ builds entries and attempts for tests (`makeEntry({ snatch: [100, 104, 108] })`)
 
 | Target | What we test |
 |--------|--------------|
-| `attempts.ts` | `estimateWeight` (100 → 104, 108; rounding; at least +1 kg over the previous attempt), `minWeight` (+1 after a good or pending attempt, equal after a no-lift), `applyWeightChange` (not whole kg, too low with the minimum in the result, equal accepted after a no-lift, raising moves later attempts up: 90 / 92 / 94 with attempt 2 → 94 gives 90 / 94 / 95, attempt 1 raised over attempt 2 moves both, lowering attempt 1 or 2 leaves the later attempts unchanged (no new percentage estimate), cancelled attempts are moved too, a later attempt with a result is not moved and the edit is refused with the highest allowed weight, no limit for attempt 1 or between Snatch and Clean & Jerk), `applyResultChange` (a no-lift corrected to good moves a repeated weight up, a correction is never refused, attempts with a result do not move), `resolveResult` for all 8 flag combinations (position of the red flag does not change the result) |
+| `attempts.ts` | `estimateWeight` (100 → 104, 108; rounding; at least +1 kg over the previous attempt), `minWeight` (+1 after a good or pending attempt, equal after a no-lift), `applyWeightChange` (not whole kg, too low with the minimum in the result, equal accepted after a no-lift, raising moves later attempts up: 90 / 92 / 94 with attempt 2 → 94 gives 90 / 94 / 95, attempt 1 raised over attempt 2 moves both, lowering attempt 1 or 2 leaves the later attempts unchanged (no new percentage estimate), cancelled attempts are moved too, a later attempt with a result is not moved and the edit is refused with the highest allowed weight, no limit for attempt 1 or between Snatch and Clean & Jerk), `applyResultChange` (a no-lift corrected to good moves a repeated weight up, a correction is never refused, attempts with a result do not move, **R16:** after a no-lift the next estimate takes the failed weight and stays an estimate, a confirmed weight is never overwritten, a good lift changes nothing, only the next attempt changes, applying it twice gives the same lift), `resolveResult` for all 8 flag combinations (position of the red flag does not change the result) |
 | `order.ts` | Sort by weight, tie by attempt number then lot number, cancelled and finished at the bottom, lifter following themselves, a lifter raising above the next lifter changes the first attempt in the order, phase switches Snatch → Clean & Jerk → finished, no entries = no phase, `isLiftStarted` per lift |
 | `groups.ts` | `canEnterGroup` is true for a mixed group (and already correct for `MALE` / `FEMALE` groups, so the later restriction is only UI). `isScheduleValid`: the first and last day of the competition are accepted, the day before and after are refused, Clean & Jerk at or before Snatch is refused, a bad `HH:mm` is refused |
 | `estimate.ts` | `liftsAhead` (next = 0, unknown = null), 7 different lifters = 9–11 min, same-lifter steps use 100–120 s, elapsed time is taken off the first step only (a long pause does not wipe out the other steps), the last-attempt lifter in this lift makes the first step "same", a lift without a result has no minutes (and the minutes are gone again when Clean & Jerk starts). `estimateClock`: 13:50 start with 7 lifts ahead = 14:00, 14:45 with 7 = 14:55, T–0 = the start time, same-lifter steps use the 110 s middle, a start time in the past counts from now, rounded to the minute |
@@ -900,7 +901,7 @@ Every file imports nothing outside `src/domain/`, and time is always a parameter
 | 6 | `estimateWeight` and `minWeight`: 100 → 104 → 108 (only used when a lifter is added), at least +1 kg over the previous attempt, a repeat is allowed only after a no-lift | R2, R10 | `add weight estimate` |
 | 7 | `applyWeightChange`, part 1: refuses weights that are not whole kg, too low (the result carries the real minimum) or too high when the next attempt already has a result. Attempt 1 and the other lift have no lower limit | R10 | `add weight validation` |
 | 8 | `applyWeightChange`, part 2: raising moves later attempts up (90 / 92 / 94 with attempt 2 → 94 gives 90 / 94 / 95), lowering never changes the other attempts (the percentages are not used again), moved attempts become `isEstimated`, cancelled attempts move too, attempts with a result never move | R2, R10 | `add weight cascade` |
-| 9 | `applyResultChange`: after a result or flag change, later attempts move up when needed (a no-lift corrected to good). A correction is never refused, attempts with a result do not move | R10 | `add result change` |
+| 9 | `applyResultChange`: after a result or flag change, later attempts move up when needed (a no-lift corrected to good). A correction is never refused, attempts with a result do not move. Second commit in the same step: a missed lift is repeated, the next estimate takes the failed weight (R16) | R10, R16 | `add result change`, `repeat after no-lift` |
 | 10 | `predictOrder` and `sortForDisplay`: order by weight, then attempt number, then lot number. Cancelled and finished at the bottom, a lifter following themselves, a raised weight changes the first attempt | R6, R7, R13 | `add lifting order` |
 | 11 | `getPhase`: `SNATCH` → `CLEAN_JERK` → `FINISHED`, no entries = no phase, and `isLiftStarted` per lift | R5, R9 | `add phase` |
 | 12 | `liftsAhead`: next = 0, unknown lifter = null, tracked lifter's next attempt in the other lift | §6.2 | `add lifts ahead` |
@@ -1066,7 +1067,7 @@ Cut order: **S5 → S4 → S3 → S1**, then shrink M2 (admin creates clubs and 
 |------|------------|
 | **Scope** is large for 3 weeks | Must/Should/Could tiers (§4), cut order in §15 |
 | **Poor connection in the hall** | Optimistic updates with a visible saving/failed state. Offline queue is C4, not in the first slice |
-| **Estimate accuracy** (weight changes, repeated attempts) | Pure function recalculated on every change, range instead of one number, measured pace (S1), adaptive repeats later (C5) |
+| **Estimate accuracy** (weight changes, repeated attempts) | Pure function recalculated on every change, range instead of one number, measured pace (S1), a missed lift is repeated by default (R16) |
 | **Entering data under pressure** | Flags default white, big targets, everything reversible (restore, edit after result) |
 | **Two coaches editing one group** | Last write wins. The board refreshes itself about every 15 s (§11) and *Enter result* is guarded against stale weights and double results (R13). Push-based sync is out of scope |
 | **Stale screens** (a lifter or second coach sees old data) | Auto-refresh every 15 s, "Updated … ago" indicator, offline notice (§11) |
@@ -1079,7 +1080,7 @@ Cut order: **S5 → S4 → S3 → S1**, then shrink M2 (admin creates clubs and 
 
 ## 19. Review decisions and open questions
 
-### Decided in review (13 Oct 2026; numbers 28–40 on 14 Oct 2026)
+### Decided in review (13 Oct 2026; numbers 28–41 on 14 Oct 2026)
 | # | Decision |
 |---|----------|
 | 1 | **Lifting order confirmed** (R6). The only special case: a lifter following themselves gets a 2-minute clock instead of 1 minute |
@@ -1122,6 +1123,7 @@ Cut order: **S5 → S4 → S3 → S1**, then shrink M2 (admin creates clubs and 
 | 38 | **Server Actions and components:** only the board's top client component (and the form containers) import from `server/actions` and pass callbacks down. Presentational components get props only, so they test without mocks (§9) |
 | 39 | **Edge cases:** a group with no entries has no phase. "ME" is the oldest tracked entry (`Tracking.createdAt`). Restore clears all cancelled attempts of the lifter. Toggled flags reset when the attempt or its weight changes. A result correction is never refused. Entering a result clears `isEstimated` |
 | 40 | **Scheduled start times (R12).** Each group has a date and a Snatch and a Clean & Jerk start time (required, wall-clock `HH:mm`, no timezone stored). Before a lift's first result a tracked lifter sees one fixed clock time (`start + N lifts × the middle of the pace`, rounded to the minute: 13:50 and T–7 = "around 14:00", Clean & Jerk 14:45 and T–7 = "around 14:55"). After the first result only live minutes. A start time that has passed counts from now. Validation is light: the date inside the competition's dates and Clean & Jerk after Snatch, nothing else |
+| 41 | **A missed lift is repeated by default (R16).** After a no-lift the next attempt of that lift takes the failed weight if it is still an estimate, as the bar does in competition when no weight is declared (the IWF rule number was not checked against the rulebook, which could not be opened on 14 Oct 2026). Replaces the Could item C5 and saves the coach a manual edit on every miss. A good lift changes nothing |
 
 ### Still open
 Nothing blocks the next stage (building, from step 1). The Sinclair

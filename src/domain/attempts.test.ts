@@ -485,3 +485,84 @@ describe("applyResultChange", () => {
     expect(estimated(lift)).toEqual([false, false, false]);
   });
 });
+
+describe("applyResultChange: a missed lift is repeated (R16)", () => {
+  const estimate = (weightKg: number): Exclude<AttemptSpec, number> => ({
+    weightKg,
+    isEstimated: true,
+  });
+  const weights = (lift: ReturnType<typeof snatch>) =>
+    lift.map((attempt) => attempt.weightKg);
+  const estimated = (lift: ReturnType<typeof snatch>) =>
+    lift.map((attempt) => attempt.isEstimated);
+
+  it("takes the failed weight for the next attempt, which stays an estimate", () => {
+    const result = applyResultChange(
+      snatch(noLift(100), estimate(104), estimate(108)),
+    );
+
+    expect(weights(result)).toEqual([100, 100, 108]);
+    expect(estimated(result)).toEqual([false, true, true]);
+  });
+
+  it("only changes the next attempt, so attempt 3 keeps its own estimate", () => {
+    const result = applyResultChange(
+      snatch(good(100), noLift(104), estimate(108)),
+    );
+
+    expect(weights(result)).toEqual([100, 104, 104]);
+  });
+
+  it("never overwrites a weight that someone confirmed", () => {
+    const result = applyResultChange(snatch(noLift(100), 104, estimate(108)));
+
+    expect(weights(result)).toEqual([100, 104, 108]);
+  });
+
+  it("leaves the estimates alone after a good lift", () => {
+    const result = applyResultChange(
+      snatch(good(100), estimate(104), estimate(108)),
+    );
+
+    expect(weights(result)).toEqual([100, 104, 108]);
+  });
+
+  it("leaves an estimate that is already at the failed weight, or below it for R10 to raise", () => {
+    const result = applyResultChange(
+      snatch(noLift(100), estimate(100), estimate(98)),
+    );
+
+    expect(weights(result)).toEqual([100, 100, 101]);
+  });
+
+  it("never moves an attempt that has a result", () => {
+    const lift = snatch(noLift(100), { ...good(104), isEstimated: true }, 108);
+
+    expect(applyResultChange(lift)[1]).toEqual(lift[1]);
+  });
+
+  it("moves the repeated weight up by 1 kg when the no-lift is corrected to a good lift", () => {
+    const repeated = applyResultChange(
+      snatch(noLift(100), estimate(104), estimate(108)),
+    );
+    const corrected = [{ ...repeated[0], ...good(100) }, ...repeated.slice(1)];
+
+    expect(weights(applyResultChange(corrected))).toEqual([100, 101, 108]);
+  });
+
+  it("gives the same lift when applied twice", () => {
+    const once = applyResultChange(
+      snatch(noLift(100), estimate(104), estimate(108)),
+    );
+
+    expect(applyResultChange(once)).toEqual(once);
+  });
+
+  it("does not change the input", () => {
+    const lift = snatch(noLift(100), estimate(104), estimate(108));
+
+    applyResultChange(lift);
+
+    expect(weights(lift)).toEqual([100, 104, 108]);
+  });
+});
