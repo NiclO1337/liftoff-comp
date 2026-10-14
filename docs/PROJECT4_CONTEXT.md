@@ -5,6 +5,7 @@ everything that matters is summarised here.
 
 > **Status (13 Oct 2026, visual tokens approved):** docs, wireframes, the build plan (§15) and the visual tokens (§12) are done.
 > Still **TODO**: the 2025–2028 Sinclair constants (§7).
+> **Review of 14 Oct 2026:** decisions 28–40 in §19 are worked into the rules, the data model and the build plan (now 83 steps).
 
 **From the brief:** Choose and develop your own frontend project. Plan, design,
 develop and deploy a complete project. *A small, well-designed and functional
@@ -103,13 +104,13 @@ not how long until *your* turn. Lifters count lifts in their head and guess.
 |---|---------|
 | M1 | Login. A seed script creates the first **admin**. All pages are behind login |
 | M2 | **Clubs and accounts:** the admin has full access to every club (create clubs, with an optional first coach in the same form, add coaches, add and edit competitions and lifters) and acts in one club at a time through a **club switcher**. A coach can add coaches to their own club. The admin's last active club is remembered, so after login they land in that club. Lifter accounts come later (C1) |
-| M3 | Competitions: create (name, date or date range, location optional) and list. Add groups to a competition (name, editable pace defaults). A group can mix men and women |
-| M4 | Add lifters to a group: name with **suggestions from the club's lifter directory**, **sex and birth year (both required)**, bodyweight (weigh-in), lot number, and **both** the Snatch and the Clean & Jerk opening (both required). All six attempts get a weight at once: attempts 2 and 3 are estimated at +4 % / +8 % |
+| M3 | Competitions: create (name, date or date range, location optional), edit and list. Add groups to a competition (name, date, Snatch and Clean & Jerk start times, pace defaults) and edit them later. A group can mix men and women |
+| M4 | Add lifters to a group: name with **suggestions from the club's lifter directory**, **sex and birth year (both required)**, bodyweight (weigh-in), lot number, and **both** the Snatch and the Clean & Jerk opening (both required). All six attempts get a weight at once: attempts 2 and 3 are estimated at +4 % / +8 %, once, when the lifter is added (R2). Lot number, bodyweight and the lifter's details can be edited afterwards from the row menu |
 | M5 | **Group board:** next-lifter panel (name, attempt, weight, **plate diagram**) above a lifter table sorted by next weight. The panel always follows the table order, so it changes by itself when a weight is edited (R13). Finished/stopped lifters at the bottom. Clean & Jerk list under Snatch and moves to the top when Snatch is done. Phone: one column. Tablet and desktop: panel and tracked card on the left, lists on the right (§12) |
 | M6 | Inline weight editing: click the weight, blank input, click away. Blank restores the old value. The weight rules are enforced (R10): at least +1 kg after a good lift, a repeat is allowed after a no-lift, raising an attempt moves the later ones up. A refused weight shows a message |
-| M7 | Three judge flags (left / centre / right), white ⇄ red toggles + "Enter result". ≥ 2 white = good lift. Row weight turns green or red. Weights and flags editable afterwards |
-| M8 | Row actions: **stop this lift**, **withdraw**, **restore**, **track** |
-| M9 | **Tracked lifter ("ME")** with "T–N lifts" before the start and "~9–11 min" after, using the default pace. On a phone a thin sticky bar under the top bar keeps it in view while the list is scrolled |
+| M7 | Three judge flags (left / centre / right), white ⇄ red toggles + "Enter result". ≥ 2 white = good lift. Row weight turns green or red. Weights and flags editable afterwards. A result can also be entered for any lifter's next attempt from the row menu (R15) |
+| M8 | Row actions: **stop this lift**, **withdraw**, **restore**, **track**, **edit**, **enter result** |
+| M9 | **Tracked lifter ("ME")** with "T–N lifts" and, **until the first result of the lift in play, a fixed clock time** from the group's start time ("T–7 · around 14:00"). After the first result only the live minutes are shown ("T–7 · ~9–11 min"), using the default pace. Snatch and Clean & Jerk each work this way, with their own start time (R5, R12). On a phone a thin sticky bar under the top bar keeps it in view while the list is scrolled |
 | M10 | **Auto-refresh:** the board refreshes itself about every 15 s, so other coaches never look at a stale screen (§11) |
 | M11 | Light/dark theme, responsive (phone/tablet/desktop), accessibility basics |
 | M12 | Unit tests, a few integration tests, README + TESTING.md, deployed on Vercel |
@@ -133,7 +134,7 @@ C2 **Warmup page** (port from `weightlifting-calculator`) ·
 C3 read-only live view for lifters on their own phone (reuses the auto-refresh) ·
 C4 offline queue / PWA ·
 C5 adaptive estimate (a no-lift usually repeats the weight) ·
-C6 CSV export · C7 charts ·
+C6 CSV export · C7 charts · C9 **clock time for the tracked lifter's Clean & Jerk** while Snatch is still running (uses the Clean & Jerk start time) ·
 C8 **weight classes and age classes** (for example W40), with the winner of each class on the results screen of a previous competition. Nothing extra is stored for this: class comes from sex, bodyweight and birth year, which are already saved (§7). The class tables change over time, so they are kept per cycle like Sinclair.
 
 ### Not doing
@@ -162,24 +163,28 @@ Payments, **push-based real-time sync** (updates in under a second with WebSocke
 | # | Rule |
 |---|------|
 | R1 | Each lifter has up to 3 attempts per lift: Snatch first, then Clean & Jerk |
-| R2 | **All six weights exist from the start.** When a lifter is entered, **both openings are required**. Attempts 2 and 3 are estimated: `estimate(n) = max(round(attempt 1 × (1 + 0.04 × (n − 1))), previous weight + 1)`, which is +4 % for attempt 2 and +8 % for attempt 3, in whole kg and at least 1 kg above the previous attempt. Estimated weights are marked `isEstimated` until someone confirms them by editing. When a weight changes, the later attempts of the same lift that are still `isEstimated` are re-estimated, and attempts set by hand are moved up only when the weight rules need it (R10). Weights are editable at any time |
+| R2 | **All six weights exist from the start.** When a lifter is entered, **both openings are required**. Attempts 2 and 3 are estimated: `estimate(n) = max(round(attempt 1 × (1 + 0.04 × (n − 1))), previous weight + 1)`, which is +4 % for attempt 2 and +8 % for attempt 3, in whole kg and at least 1 kg above the previous attempt. **The percentages are used once**, when the lifter is added, and never again: if a weight is edited later the other attempts stay as they are and only move when the weight rules force it (R10). Lowering attempt 2 leaves attempt 3 unchanged. Estimated weights are marked `isEstimated` until someone confirms them by editing, or until a result is entered for them. Weights are editable at any time |
 | R3 | **Result = flags.** Three flags, ≥ 2 white = good lift, otherwise a no-lift that does not count. The result is **derived from the flags and never stored** |
-| R4 | **Entering a result:** flags default to white, the coach toggles any red ones, then presses **Enter result**. That sets `resultAt` (timestamp), turns the weight green or red and moves the board on. Flags and weights can be edited afterwards. Editing **never changes `resultAt`**, because the first entry time is the one used for pace |
-| R5 | **The group has started** when the first result is entered (`resultAt` exists). There is no start button. Before that, only "N lifts" is shown, never minutes |
+| R4 | **Entering a result:** flags default to white, the coach toggles any red ones, then presses **Enter result**. That sets `resultAt` (timestamp), clears `isEstimated` on that attempt, turns the weight green or red and moves the board on. Flags and weights can be edited afterwards. Editing **never changes `resultAt`**, because the first entry time is the one used for pace |
+| R5 | **A lift has started** when the first result of that lift is entered (`resultAt` exists on one of its attempts). There is no start button. Snatch and Clean & Jerk each have their own start and their own scheduled start time (R12). Until the lift in play has a result the UI shows "N lifts" and a **clock time** from the schedule, never minutes, and the first lifter is "Next up". After the first result it shows live minutes only. When Snatch is done, Clean & Jerk begins in the same state (Next up for its first lifter, "T–N lifts · around 14:55" for tracked lifters) and minutes return after its first result. The group as a whole has no "started" state |
 | R6 | **Lifting order (confirmed):** ascending by the weight of each lifter's next pending attempt. Ties: lower attempt number first, then lower lot number. A lifter can follow themselves; the clock is then **2 minutes instead of the standard 1 minute**, which is why that interval is longer (§6.3). Repeating a weight after a no-lift has no special rule |
 | R7 | A lifter with no pending attempts in the current lift goes to the **bottom** of that lift's list |
-| R8 | **Stopping early / withdrawing** sets `cancelled` on the pending attempts. Nothing is deleted. *Stop this lift* cancels the rest of one lift. *Withdraw* cancels everything remaining. **Restore** clears `cancelled` again, so a mis-click is always reversible |
-| R9 | **Phase** is derived: `SNATCH` while any active lifter has a pending snatch attempt, then `CLEAN_JERK`, then `FINISHED`. The Clean & Jerk list sits under the Snatch list and moves to the top when Snatch is complete |
+| R8 | **Stopping early / withdrawing** sets `cancelled` on the pending attempts. Nothing is deleted. *Stop this lift* cancels the rest of one lift. *Withdraw* cancels everything remaining. **Restore** clears `cancelled` on all of that lifter's cancelled attempts (a stop and a withdraw are not told apart), so a mis-click is always reversible |
+| R9 | **Phase** is derived: `SNATCH` while any active lifter has a pending snatch attempt, then `CLEAN_JERK`, then `FINISHED`. The Clean & Jerk list sits under the Snatch list and moves to the top when Snatch is complete. A group with no entries has no phase: the page shows an empty state |
 | R10 | **Weight rules.** Weights are **whole kg** ≥ 1 (official competitions use whole kg only). Inside one lift (Snatch and Clean & Jerk are independent, and attempt 1 has no lower limit): **after a good lift the next weight must be at least +1 kg**. **After a no-lift the same weight may be repeated.** While the previous attempt has no result yet the next one must also be at least +1 kg, because the app assumes it will be good. **Raising is always allowed.** Lifters raise a weight (for example 92 → 93) to buy time and stall the clock, which changes the order and the estimate (R13). **A weight below the minimum is refused:** the value is not saved, the field keeps its old value and shows the message *"Weight can not be lower than 93 kg"* with the real minimum. **Raising an attempt moves the later ones up:** if an attempt is raised to or above the next one, the next one becomes the raised weight + 1 kg, and so on down the lift. Example: 90 / 92 / 94 and attempt 2 raised to 94 gives 90 / 94 / 95. Raising attempt 1 over attempt 2 does the same. The same happens when a result changes, for example a no-lift corrected to a good lift makes a repeated weight go up by 1 kg. Attempts that the app moved are marked as estimates, because the lifter has not confirmed them. Only attempts **without a result** are moved (cancelled ones too, so *Restore* never gives an invalid sequence). If the next attempt already has a result it is not changed: an edit that would break the order with it is refused with *"Weight can not be higher than 91 kg (attempt 2 is already done)"* |
-| R11 | **Tracking ("ME"):** a user can track one or more lifters per group. The first is "ME". More are shown by name, so a coach can follow two athletes from the same club. Changing who is tracked takes one tap in the lifter's row menu |
-| R12 | **Clock times:** no scheduled start time is stored. Only the date is. When the estimate exists the UI may show `now + estimate` as "around 14:32" |
-| R13 | **The next lifter is always derived.** The next-lifter panel shows the first attempt in the predicted order (§6.1). It is never stored or set by hand. When a weight is edited, for example the current lifter raises from 92 to 95 while another lifter is at 93, the table re-sorts and the panel switches to the new next lifter at once. Flags that are toggled but not yet sent belong to **one attempt**: if the next attempt changes, they reset to white. **Enter result** sends the attempt id and the weight that was shown. The server refuses it if the weight has changed since (*"This attempt is now 93 kg. Check and try again."*) or if a result already exists (*"Result already entered: white, white, red. Refresh."*). That second case covers two coaches pressing the button at nearly the same time. Flags are changed afterwards with a separate edit action, which keeps `resultAt` |
+| R11 | **Tracking ("ME"):** a user can track one or more lifters per group. The first is "ME". More are shown by name, so a coach can follow two athletes from the same club. Changing who is tracked takes one tap in the lifter's row menu. "ME" is the oldest tracked entry of that user in the group (`Tracking.createdAt`). If it is untracked, the next one becomes "ME" |
+| R12 | **Scheduled start times.** Each group has a date and a start time for Snatch and for Clean & Jerk (wall-clock, for example 13:50 and 14:45). Before the lift in play has a result, a tracked lifter sees **one clock time**: `start + N lifts × the middle of the pace`, rounded to the nearest minute (T–7 from 13:50 = "around 14:00", T–7 from a 14:45 Clean & Jerk = "around 14:55"). It never counts down, so it is the same on every refresh. If the scheduled start has passed without a result (the group runs late) it counts from now instead: `max(start, now) + N × pace`. After the first result of the lift the live minutes replace it. **Validation is light:** the date lies inside the competition's dates and Clean & Jerk starts after Snatch. Nothing else is checked (no limits on time of day, no overlap between groups, no minimum break) |
+| R13 | **The next lifter is always derived.** The next-lifter panel shows the first attempt in the predicted order (§6.1). It is never stored or set by hand. When a weight is edited, for example the current lifter raises from 92 to 95 while another lifter is at 93, the table re-sorts and the panel switches to the new next lifter at once. Flags that are toggled but not yet sent belong to **one attempt and its weight**: if the next attempt or its weight changes, they reset to white. **Enter result** sends the attempt id and the weight that was shown. The server refuses it if the weight has changed since (*"This attempt is now 93 kg. Check and try again."*) or if a result already exists (*"Result already entered: white, white, red. Refresh."*). That second case covers two coaches pressing the button at nearly the same time. Flags are changed afterwards with a separate edit action, which keeps `resultAt` |
 | R14 | **Mixed groups.** A group can have men and women in this version. The lifter's own sex decides the bar in the plate diagram (20 kg men, 15 kg women) and the Sinclair constants, not the group's. `Group.allowedSex` exists but is empty (= mixed). To restrict a group later, add the field to the group form and let `canEnterGroup(group, lifter)` in `domain/` refuse the wrong sex. That function exists from the start and always returns `true` |
+| R15 | **Enter result for any lifter.** The next-lifter panel is the normal place to enter a result, but the hall does not always follow the app's order (a weight change that was never entered, a lifter called out of turn). The row menu therefore has *Enter result*, which opens the three flag toggles in that row for the lifter's **next pending attempt in the current lift** (attempt 2 cannot get a result before attempt 1). It uses the same `enterResult` action, so the server still checks the attempt id and the shown weight, refuses a second result and sets `resultAt` once. The panel is not changed by this: it stays derived from the order and moves on by itself when the result is in |
 
 ### Judge flags: why order matters
 Left / centre / right are stored as three separate columns. The lifter detail
 page shows them per attempt, and later per lifter ("left judge: 9 red of 24"),
 so a coach sees a consistent pattern.
+
+### Plates and collars
+Competitions use heavy **2.5 kg collars**, one on each side of the bar, so the loaded bar weighs bar + 5 kg before any plate: **25 kg for men (20 kg bar) and 20 kg for women (15 kg bar)**. The plate diagram shows one side: `(weight − bar − 5) / 2` kg per side, with the collar drawn on the outside. At or below 25 kg (men) or 20 kg (women) there are no plates, only a short note. Whole kg only, metal plates only, no 1.25 kg plate (decision 6). Check at step 14 whether the earlier calculator already counts collars. The wireframes show the old numbers (for example 29 kg per side for 73 kg on a 15 kg bar): this rule wins.
 
 ---
 
@@ -212,12 +217,13 @@ Each step in the predicted order has an interval from the previous attempt:
 **different lifter** or **same lifter** (a lifter following themselves).
 
 ```
-waitSeconds = sum(interval of each of the liftsAhead steps)  −  secondsSinceLastResult
+waitSeconds = max(0, interval of the first step − secondsSinceLastResult)
+            + sum(interval of the other liftsAhead steps)
 ```
-- `secondsSinceLastResult` is only subtracted once a result exists. The result is clamped at 0.
-- The first step is measured from the last result, so the time already spent waiting counts.
-  Whether it is a "same lifter" step depends on who lifted last, so `estimateWait` also
-  needs the **last attempted entry** (the attempt with the newest `resultAt`).
+- Minutes are only shown once the **lift in play** has a result (R5). Snatch and Clean & Jerk are separate: the last result is taken from the lift in play only, so the break between them never counts as waiting time.
+- The time already spent waiting is taken off the **first step only**, clamped at 0. A long pause (jury, delay) can not wipe out the other steps.
+  Whether the first step is a "same lifter" step depends on who lifted last, so `estimateWait` also
+  needs the **last attempted entry** (the attempt with the newest `resultAt` in this lift).
 - A range is shown: `min` uses the low value of each interval and `max` the high value.
   Minutes are rounded to the nearest whole minute for display.
 
@@ -229,6 +235,14 @@ waitSeconds = sum(interval of each of the liftsAhead steps)  −  secondsSinceLa
 **Worked example:** 7 lifts ahead, none by the same lifter →
 7 × 75 s = 8.75 min to 7 × 90 s = 10.5 min, shown as **"9–11 min"**.
 Both defaults are editable per group.
+
+**Before the first result of the lift (R12): a clock time instead of minutes.**
+`clock = max(startsAt, now) + sum(middle of each step's interval)`, rounded to the nearest minute.
+The middle of an interval is (low + high) / 2: 82.5 s for different lifters, 110 s for the same lifter.
+Worked example: start 13:50, 7 lifts ahead → 7 × 82.5 s = 9 min 37 s → 13:59:37 → **"around 14:00"**.
+A Clean & Jerk that starts 14:45 gives "around 14:55" at T–7. T–0 shows the start time itself.
+`startsAt` is built on the device from the group's date and `HH:mm` (the device's timezone), so the domain
+function stays pure and gets two `Date` values.
 
 ### 6.4 Measured pace (Should: S1)
 - Each group's results give intervals between consecutive `resultAt` stamps, split
@@ -245,8 +259,8 @@ Both defaults are editable per group.
 ### 6.5 What the UI shows
 | Situation | Text |
 |-----------|------|
-| Group not started | "T–7" / "7 lifts to go" (no minutes) |
-| Started | "T–7 · ~9–11 min · around 14:32" |
+| Lift in play has no result yet (Snatch, and again Clean & Jerk) | "T–7 · around 14:00" (clock time from that lift's start time, no minutes). The first lifter is "Next up" |
+| Lift in play has a result | "T–7 · ~9–11 min" (live minutes, no clock time) |
 | Tracked lifter is next | "You're up next" (T–0) |
 | Tracked lifter's next attempt is in the other lift | "Snatch done, Clean & Jerk is next" or "N lifts until the break" |
 | Tracked lifter finished or withdrawn | no estimate |
@@ -255,16 +269,18 @@ Both defaults are editable per group.
 ```ts
 // src/domain/order.ts
 predictOrder(entries: EntryState[], lift: LiftType): QueuedAttempt[]
-getPhase(entries: EntryState[]): "SNATCH" | "CLEAN_JERK" | "FINISHED"
+getPhase(entries: EntryState[]): "SNATCH" | "CLEAN_JERK" | "FINISHED" | null   // null = no entries
+isLiftStarted(entries: EntryState[], lift: LiftType): boolean   // R5: a result exists in that lift
 sortForDisplay(entries: EntryState[], lift: LiftType): EntryState[]
 // src/domain/estimate.ts
 liftsAhead(order: QueuedAttempt[], entryId: string): number | null
-estimateWait(order, entryId, pace: Pace, last: { entryId: string; at: Date } | null, now: Date): WaitRange | null
+estimateWait(order, entryId, pace: Pace, last: { entryId: string; at: Date } | null, now: Date): WaitRange | null   // null until the lift has a result; `last` is the newest result in this lift only
+estimateClock(order, entryId, pace: Pace, startsAt: Date, now: Date): Date | null   // R12, before the lift's first result: max(startsAt, now) + the middle of each step, rounded to the minute
 // src/domain/pace.ts
 measureIntervals(results: ResultStamp[]): { different: number[]; same: number[] }
 blendPace(defaults: Pace, measured: Intervals): Pace
 // src/domain/attempts.ts
-estimateWeight(attemptNumber: 2 | 3, opening: number, previousWeight: number): number   // at least previousWeight + 1
+estimateWeight(attemptNumber: 2 | 3, opening: number, previousWeight: number): number   // at least previousWeight + 1. Only used when a lifter is added (R2)
 minWeight(previous: { weightKg: number; result: "GOOD" | "NO_LIFT" | null } | null): number   // prev + 1, or prev after a no-lift
 applyWeightChange(lift: AttemptState[], attemptNumber: 1 | 2 | 3, newWeight: number): WeightChange
 // WeightChange = { ok: true; lift: AttemptState[] }   // includes the later attempts that were moved up (R10)
@@ -273,6 +289,7 @@ applyResultChange(lift: AttemptState[]): AttemptState[]   // after a result or f
 resolveResult(flags: [Flag, Flag, Flag]): "GOOD" | "NO_LIFT"
 // src/domain/groups.ts
 canEnterGroup(group: { allowedSex: Sex | null }, lifter: { sex: Sex }): boolean   // always true for now
+isScheduleValid(date: string, snatchStart: string, cleanJerkStart: string, competition: { startDate: string; endDate: string | null }): boolean   // R12: date inside the competition, Clean & Jerk after Snatch, HH:mm
 ```
 
 ### 6.7 Known inaccuracy
@@ -338,6 +355,9 @@ model Group {
   id               String  @id @default(cuid())
   competitionId    String
   name             String           // "Group F"
+  date             DateTime @db.Date   // the day this group lifts, inside the competition's dates
+  snatchStart      String           // "13:50": wall-clock time at the hall, no timezone stored (R12)
+  cleanJerkStart   String           // "14:45", later than snatchStart
   allowedSex       Sex?             // empty = mixed group. Not enforced in this version (R14)
   paceMinSeconds   Int     @default(75)
   paceMaxSeconds   Int     @default(90)
@@ -364,7 +384,7 @@ model Attempt {
   lift        LiftType
   number      Int                   // 1..3
   weightKg    Int                   // always set, whole kg (R2, R10)
-  isEstimated Boolean   @default(false)   // not confirmed by a person; also set when the app moves an attempt up (R10)
+  isEstimated Boolean   @default(false)   // from the 4 % / 8 % estimate, or moved up by the app (R10). Cleared when a person edits it or a result is entered
   cancelled   Boolean   @default(false)
   leftFlag    Flag?                 // all three are null until a result is entered
   centerFlag  Flag?
@@ -377,6 +397,7 @@ model Attempt {
 model Tracking {                    // "ME": which entries a user follows
   userId  String
   entryId String
+  createdAt DateTime @default(now())   // the oldest tracked entry is "ME" (R11)
   @@id([userId, entryId])
 }
 ```
@@ -385,16 +406,16 @@ model Tracking {                    // "ME": which entries a user follows
 flags are either all `null` (no result yet) or all set together with `resultAt`.
 `number` is 1–3. An attempt with `resultAt` cannot be `cancelled`. `weightKg` is a whole
 number and respects the minimum from the previous attempt of the same lift (R10: +1 kg after a good or pending attempt, equal allowed after a no-lift). `ADMIN` users have no
-`clubId`, `COACH` and `LIFTER` users always have one.
+`clubId`, `COACH` and `LIFTER` users always have one. An entry's lifter and its group's competition belong to the same club (checked in `addLifter`, the lifter id from the client is never trusted). Dates are `@db.Date`: format them in UTC (or as plain `YYYY-MM-DD`), otherwise a server in another timezone shows the wrong day. Group times are plain `HH:mm` text (wall-clock at the hall, no timezone in the database), `Group.date` lies inside the competition's dates and `cleanJerkStart` is later than `snatchStart`.
 
 **Derived, never stored:** result (good / no-lift), attempt state
-(`PENDING` / `DONE` / `CANCELLED`), phase, "started", predicted order, pace,
+(`PENDING` / `DONE` / `CANCELLED`), phase, "lift started", predicted order, pace,
 lifts ahead, best lifts, totals, Sinclair.
 
 ### Sinclair (Should: S4)
 `src/domain/sinclair.ts` holds a table of coefficients **per Olympic cycle**,
 chosen by the competition date.
-Formula: `S = 10^(A × log10(bw / b)²)` when `bw ≤ b`, otherwise `1`.
+Formula: `S = 10^(A × (log10(bw / b))²)` when `bw ≤ b`, otherwise `1`.
 `Sinclair total = total × S`. Total = best good Snatch + best good Clean & Jerk.
 With no good lift in one of the lifts there is no total.
 
@@ -437,6 +458,8 @@ by switching the active club. Unit-test this with two clubs, as coach and as adm
 /competitions                                   All competitions (previous and upcoming)
 /competitions/new                               Create competition
 /competitions/[competitionId]                   Competition overview: its groups, "Add group"
+/competitions/[competitionId]/edit              Edit competition
+/competitions/[competitionId]/groups/[groupId]/edit   Edit group (name, date, start times, pace defaults)
 /competitions/[competitionId]/groups/[groupId]  GROUP BOARD: setup and live in one page
 /members                                        Members of the active club: coaches, "Add coach" (coach and admin)
 /admin/clubs                                    Admin only: all clubs, create club, choose the active club
@@ -487,8 +510,7 @@ liftoff-comp/
 
 **Dependency direction (keep it one-way):**
 `app (pages)` → `server` → `domain`, and `components` → `domain` (types and pure
-helpers). `domain` imports nothing from the other folders. Components never import `server/`
-(they get data as props and call actions passed in or imported from `server/actions`).
+helpers). `domain` imports nothing from the other folders. Components never import `server/` internals (Prisma, auth, queries). The one allowed exception is the board's top client component (`GroupBoard`, and the form containers): it imports Server Actions from `server/actions` and passes them down as callback props. Every presentational component (`AttemptCell`, `RowMenu`, `FlagToggleGroup`, ...) only gets props, so its tests need no module mocks.
 
 **Thin pages, smart client components.** Async Server Components are hard to
 unit test with Vitest, so pages only fetch and pass **plain serializable props** to
@@ -517,7 +539,8 @@ GroupBoard                  client: board state = server props + optimistic chan
  │        ├─ AttemptCell    weight + state colour (pending / good / no-lift / cancelled)
  │        │    └─ EditableWeight   button ⇄ input, blank restores, inline error message (R10)
  │        ├─ TMinus         "T–7 · ~9–11 min" strip (tracked rows only)
- │        └─ RowMenu        stop lift · withdraw · restore · track (strip on a phone, popover on wider screens)
+ │        └─ RowMenu        stop lift · withdraw · restore · track · edit · enter result (strip on a phone, popover on wider screens)
+ ├─ EditEntryForm          lot number, bodyweight and lifter details, opened from the row menu (reuses the add-lifter fields)
  └─ AddLifterForm
       ├─ LifterCombobox     suggestions from the club directory
       └─ AttemptPreview     the 4 % / 8 % preview for both lifts
@@ -574,7 +597,8 @@ connections (§2).
 5. **Pages stay dynamic.** Pages read the session, so they render per request. Do not cache the
    board queries.
 6. **Separate clock.** `useNow` ticks every second on the device, so "9–11 min" counts down between
-   refreshes. It fetches nothing.
+   refreshes. It fetches nothing. The scheduled clock time (R12) is also worked out on the device and only
+   after mount, because the server's timezone is not the hall's (otherwise the page would not match what the browser renders).
 
 **Cost:** each refresh renders the page and runs the board queries once. Ten open boards is about
 40 refreshes a minute, which is small for this app. Check Vercel and Neon usage after the first
@@ -619,6 +643,7 @@ until the visual tokens exist (stage 3, now done). All names and numbers are mad
 - **Result entry:** flags are outlined (white) or filled with a mark (red), so colour is never the only cue.
 - **Admin:** orange club pill + ADMIN band on every page, so it is always clear which club is being edited.
 - **No self sign-up:** the login page has no sign-up link and no password reset (not in the first slice).
+- **Changes after the wireframes (14 Oct 2026):** the sheets are not redrawn and the context doc wins where they differ. The tracked strip shows either a clock time ("around 14:00", before the lift's first result) or minutes (after it), never both, so "T–4 lifts · ~5–6 min · around 14:32" on the sheets is one or the other now. The add group and edit group forms also get a date and two start times (sheet 4 D). The row menu also has *Edit* and *Enter result* (R15), the plate numbers count the 2.5 kg collars, and the "To decide" box on sheet 1 is settled (flags stay in the panel).
 
 ### Stage 3: visual tokens (done, approved 13 Oct 2026)
 
@@ -756,22 +781,23 @@ builds entries and attempts for tests (`makeEntry({ snatch: [100, 104, 108] })`)
 
 | Target | What we test |
 |--------|--------------|
-| `attempts.ts` | `estimateWeight` (100 → 104, 108; rounding; at least +1 kg over the previous attempt), `minWeight` (+1 after a good or pending attempt, equal after a no-lift), `applyWeightChange` (not whole kg, too low with the minimum in the result, equal accepted after a no-lift, raising moves later attempts up: 90 / 92 / 94 with attempt 2 → 94 gives 90 / 94 / 95, attempt 1 raised over attempt 2 moves both, estimated attempts are re-estimated, cancelled attempts are moved too, a later attempt with a result is not moved and the edit is refused with the highest allowed weight, no limit for attempt 1 or between Snatch and Clean & Jerk), `applyResultChange` (a no-lift corrected to good moves a repeated weight up), `resolveResult` for all 8 flag combinations (position of the red flag does not change the result) |
-| `order.ts` | Sort by weight, tie by attempt number then lot number, cancelled and finished at the bottom, lifter following themselves, a lifter raising above the next lifter changes the first attempt in the order, phase switches Snatch → Clean & Jerk → finished |
-| `groups.ts` | `canEnterGroup` is true for a mixed group (and already correct for `MALE` / `FEMALE` groups, so the later restriction is only UI) |
-| `estimate.ts` | `liftsAhead` (next = 0, unknown = null), 7 different lifters = 9–11 min, same-lifter steps use 100–120 s, elapsed time subtracted and clamped at 0, last-attempt lifter makes the first step "same", not started = no minutes |
+| `attempts.ts` | `estimateWeight` (100 → 104, 108; rounding; at least +1 kg over the previous attempt), `minWeight` (+1 after a good or pending attempt, equal after a no-lift), `applyWeightChange` (not whole kg, too low with the minimum in the result, equal accepted after a no-lift, raising moves later attempts up: 90 / 92 / 94 with attempt 2 → 94 gives 90 / 94 / 95, attempt 1 raised over attempt 2 moves both, lowering attempt 1 or 2 leaves the later attempts unchanged (no new percentage estimate), cancelled attempts are moved too, a later attempt with a result is not moved and the edit is refused with the highest allowed weight, no limit for attempt 1 or between Snatch and Clean & Jerk), `applyResultChange` (a no-lift corrected to good moves a repeated weight up, a correction is never refused, attempts with a result do not move), `resolveResult` for all 8 flag combinations (position of the red flag does not change the result) |
+| `order.ts` | Sort by weight, tie by attempt number then lot number, cancelled and finished at the bottom, lifter following themselves, a lifter raising above the next lifter changes the first attempt in the order, phase switches Snatch → Clean & Jerk → finished, no entries = no phase, `isLiftStarted` per lift |
+| `groups.ts` | `canEnterGroup` is true for a mixed group (and already correct for `MALE` / `FEMALE` groups, so the later restriction is only UI). `isScheduleValid`: the first and last day of the competition are accepted, the day before and after are refused, Clean & Jerk at or before Snatch is refused, a bad `HH:mm` is refused |
+| `estimate.ts` | `liftsAhead` (next = 0, unknown = null), 7 different lifters = 9–11 min, same-lifter steps use 100–120 s, elapsed time is taken off the first step only (a long pause does not wipe out the other steps), the last-attempt lifter in this lift makes the first step "same", a lift without a result has no minutes (and the minutes are gone again when Clean & Jerk starts). `estimateClock`: 13:50 start with 7 lifts ahead = 14:00, 14:45 with 7 = 14:55, T–0 = the start time, same-lifter steps use the 110 s middle, a start time in the past counts from now, rounded to the minute |
 | `pace.ts` | Outlier filtering (< 20 s, > 240 s), blend weights `n/(n+5)`, ±10 % range |
-| `plates.ts` | Plates for 60, 61, 100 kg etc. for men's 20 kg and women's 15 kg bar. **Whole kg only. Metal plates only and no 1.25 kg plate** (port the logic and tests from `plates.js` in `weightlifting-calculator`, which marks which plates are metal and which are plastic) |
+| `plates.ts` | Plates for 60, 61, 100 kg etc. for men's 20 kg and women's 15 kg bar, **with the 2.5 kg collars counted** (per side = (weight − bar − 5) / 2, no plates at or below bar + 5 kg). **Whole kg only. Metal plates only and no 1.25 kg plate** (port the logic and tests from `plates.js` in `weightlifting-calculator`, which marks which plates are metal and which are plastic) |
 | `sinclair.ts` | Known values, `bw ≥ b` gives 1.0, cycle chosen by date |
-| Zod schemas | Whole-kg weights, flags all-or-none, lot numbers, dates, sex, birth year (plausible, not in the future) and both openings required |
+| Zod schemas | Whole-kg weights, flags all-or-none, lot numbers, dates, group date and start times (`HH:mm`, Clean & Jerk after Snatch), sex, birth year (plausible, not in the future) and both openings required |
 | `EditableWeight` | Click → blank input, Enter commits, click-away commits, blank restores, Esc restores, a weight below the minimum is rejected (+1 kg after a good lift, equal allowed after a no-lift): the field keeps the old value and shows "Weight can not be lower than 93 kg" with the real minimum, and attempts the app moved up show the estimate marker |
 | `FlagToggle` / `FlagToggleGroup` | Default white, toggles to red and back, accessible names, "Enter result" calls back with the three flags in order |
 | `AttemptCell` | Pending / good / no-lift / cancelled styles **and** text/icon, estimated weight marker |
 | `LifterRow` / `LifterTable` | Order from props, finished at bottom, tracked row shows `TMinus`, `<th scope>` |
-| `TMinus` | Before start shows lifts only, after start shows range, "You're up next", other-lift and finished texts |
-| `RowMenu` | Opens/closes, actions call back, restore only shown when cancelled |
+| `TMinus` | Before the first result of the lift shows lifts and a clock time (again for Clean & Jerk, from its own start time, rendered only after mount), after it shows the range in minutes (no clock time), "You're up next", other-lift and finished texts |
+| `RowMenu` | Opens/closes, actions call back, restore only shown when cancelled, edit and enter result only where they apply |
+| `EditEntryForm`, enter result from the row menu | Lot number clash message, lifter fields change the directory record, the row opens flag toggles for the lifter's next pending attempt only, a stale weight is refused |
 | `NextLifterPanel`, `PlateDiagram` | Name, attempt, weight, plates for a weight and for the lifter's bar. The panel shows the first attempt of the order and **changes when its props change** (R13). Toggled flags reset when the attempt changes |
-| `LifterCombobox`, `AddLifterForm` | Suggestions filter, picking a suggestion fills sex and birth year, sex, birth year and both openings required, validation messages, auto 4 % / 8 % for both lifts |
+| `LifterCombobox`, `AddLifterForm` | Suggestions filter, picking a suggestion fills sex and birth year, sex, birth year and both openings required, validation messages, auto 4 % / 8 % for both lifts, a picked suggestion's sex and birth year are read-only, a lifter already in the group gets a message |
 | `useAutoRefresh` | Fake timers: calls `refresh` every 15 s, pauses when the tab is hidden and refreshes when visible again, skips while editing or saving, stops on unmount |
 | `ClubSwitcher`, `MembersTable`, `AddCoachForm` | Switcher only for admin and shows the active club, the last active club is remembered (an invalid cookie falls back to `/admin/clubs`), add coach validation, a coach never sees other clubs |
 | `CompetitionForm`, `GroupForm`, `LoginForm`, `ThemeToggle`, `Button` | Validation, submit, `aria-pressed`, link/button rendering |
@@ -779,7 +805,7 @@ builds entries and attempts for tests (`makeEntry({ snatch: [100, 104, 108] })`)
 **Integration tests (end of project, `src/test/integration/`, Server Actions mocked)**
 1. Add lifters → attempts 2 and 3 are +4 % / +8 % → list is sorted by lowest weight.
 2. Enter results → good/no-lift colours → next lifter changes → finished lifter moves down.
-3. Track a lifter → "T–N" before start → minutes appear after the first result → editing a weight changes N.
+3. Track a lifter → "T–N" and a clock time before start → minutes replace the clock after the first Snatch result → the Clean & Jerk clock time shows when Clean & Jerk starts and the minutes return after its first result → editing a weight changes N.
 4. Stop a lift / withdraw → moves to the bottom → restore brings the lifter back.
 5. Correct a result afterwards (flag changed, good → no-lift) → colour changes, `resultAt` is not touched.
 6. Theme toggle persists.
@@ -788,8 +814,10 @@ builds entries and attempts for tests (`makeEntry({ snatch: [100, 104, 108] })`)
 9. Admin switches club → sees only that club's competitions and lifters. A coach has no switcher.
 10. **Raise an attempt over the next one** → later attempts move up (90 / 92 / 94, attempt 2 → 94, attempt 3 becomes 95), the moved cells show the estimate marker, the order and the estimate update.
 11. **Weight rules after results** → after a good lift the next weight must be at least +1 kg, after a no-lift the same weight is accepted, a refused weight shows the minimum and keeps the old value.
+12. **Enter result from the row menu** → for a lifter who is not first in the order: the result is saved, the panel is untouched, a second result or a stale weight is refused.
+13. **Edit an entry** → a duplicate lot number is refused, a changed bodyweight shows, changing the lifter's sex changes the bar in the plate diagram.
 
-*Optional if time allows:* tenancy tests with two clubs, as coach and as admin, against a throwaway Neon branch.
+**Tenancy tests (not optional):** two clubs, as coach and as admin, against a throwaway Neon branch with the real queries and actions. The unit tests in step 20 only check the `where` clauses with a mocked database, so these are what actually show that club data stays separate.
 No coverage target. Async Server Components are covered by keeping pages thin, not by tests.
 
 ---
@@ -826,7 +854,7 @@ npm i -D sass vitest @vitejs/plugin-react jsdom vite-tsconfig-paths \
 - **Claude Code does not start the dev server.** After every step that changes the UI it says what to look at, and Niclas checks it in the browser.
 - **Domain first, test-first.** Everything in `src/domain/` is written as failing test → code. UI comes after the logic it shows.
 - **Zod schemas live in `src/lib/schemas/`**, next to no other layer, so a form and its Server Action share one schema. Each schema is tested in the commit that adds it.
-- **Phone first.** Components are styled for a phone and widened at the breakpoints (768 px and 1200 px, §12). The board gets its tablet and desktop layout in one step (57).
+- **Phone first.** Components are styled for a phone and widened at the breakpoints (768 px and 1200 px, §12). The board gets its tablet and desktop layout in one step (60).
 - **The *Covers* column** points to the scope tiers (M, S: §4) and rules (R: §5), so it is clear what each step buys. "—" in *Commit* means a checkpoint, not a commit.
 
 ### Timeline and gates
@@ -836,20 +864,20 @@ npm i -D sass vitest @vitejs/plugin-react jsdom vite-tsconfig-paths \
 | 0 | Setup, first deploy | 1–4 | week 1 (from 13 Oct) |
 | 1 | **Domain, test-first**: attempts, order, estimate, plates. No UI, no database | 5–15 | week 1 |
 | 2 | Database, auth, theme, app shell, clubs and members | 16–30 | weeks 1–2 |
-| 3 | Competitions and groups | 31–35 | week 2 |
-| 4 | **Group board** | 36–59 | weeks 2–3 |
-| 5 | Should items (optional) | 60–69 | week 3, only if time is left |
-| 6 | Integration tests, responsive pass, accessibility, README, submit | 70–80 | week 3, starting 31 Oct at the latest |
+| 3 | Competitions and groups | 31–36 | week 2 |
+| 4 | **Group board** | 37–62 | weeks 2–3 |
+| 5 | Should items (optional) | 63–72 | week 3, only if time is left |
+| 6 | Integration tests, responsive pass, accessibility, README, submit | 73–83 | week 3, starting 31 Oct at the latest |
 
 Week 1 is 13–19 Oct, week 2 is 20–26 Oct, week 3 is 27 Oct – 2 Nov. **3 Nov is a spare day.**
 
-Without Phase 5 and the optional step 74, the plan is about 65 commits, around 3 a day. That is possible but leaves little slack, so there are three gates:
+Without Phase 5, the plan is about 69 commits (83 steps, minus the ten Should steps and the four checkpoints), around 3 to 4 a day. That is possible but leaves little slack, so there are three gates:
 
 | Gate | Date | Must be true | If behind |
 |------|------|--------------|-----------|
 | **A** | 19 Oct | Steps 1–20 done: domain tested, Prisma and Better Auth work locally, club access tested | Nothing else starts until the domain is done. If steps 16–19 are the problem, see the note under Phase 2 |
-| **B** | 26 Oct | Steps 21–46 done: admin and coach flows work on the live site and a result can be entered on the live board | Use the shrink options in steps 28 and 29 |
-| **C** | 30 Oct | Steps 47–59 done: all Must features work on the live site | Skip Phase 5. Phase 6 shrinks to its minimum (see the cut rules at the end) |
+| **B** | 26 Oct | Steps 21–47 done: admin and coach flows work on the live site and a result can be entered on the live board | Use the shrink options in steps 28 and 29 |
+| **C** | 30 Oct | Steps 48–62 done: all Must features work on the live site | Skip Phase 5. Phase 6 shrinks to its minimum (see the cut rules at the end) |
 
 ---
 
@@ -869,15 +897,15 @@ Every file imports nothing outside `src/domain/`, and time is always a parameter
 | # | Step | Covers | Commit |
 |---|------|--------|--------|
 | 5 | Domain types (`Sex`, `LiftType`, `Flag`, `AttemptState`, `EntryState`, `Pace`), `resolveResult` for all 8 flag combinations, `canEnterGroup` (always true) and the factories `makeEntry` / `makeAttempt` | R3, R14 | `add domain types` |
-| 6 | `estimateWeight` and `minWeight`: 100 → 104 → 108, at least +1 kg over the previous attempt, a repeat is allowed only after a no-lift | R2, R10 | `add weight estimate` |
+| 6 | `estimateWeight` and `minWeight`: 100 → 104 → 108 (only used when a lifter is added), at least +1 kg over the previous attempt, a repeat is allowed only after a no-lift | R2, R10 | `add weight estimate` |
 | 7 | `applyWeightChange`, part 1: refuses weights that are not whole kg, too low (the result carries the real minimum) or too high when the next attempt already has a result. Attempt 1 and the other lift have no lower limit | R10 | `add weight validation` |
-| 8 | `applyWeightChange`, part 2: raising moves later attempts up (90 / 92 / 94 with attempt 2 → 94 gives 90 / 94 / 95), unconfirmed estimates are re-estimated, moved attempts become `isEstimated`, cancelled attempts move too, attempts with a result never move | R2, R10 | `add weight cascade` |
-| 9 | `applyResultChange`: after a result or flag change, later attempts move up when needed (a no-lift corrected to good) | R10 | `add result change` |
+| 8 | `applyWeightChange`, part 2: raising moves later attempts up (90 / 92 / 94 with attempt 2 → 94 gives 90 / 94 / 95), lowering never changes the other attempts (the percentages are not used again), moved attempts become `isEstimated`, cancelled attempts move too, attempts with a result never move | R2, R10 | `add weight cascade` |
+| 9 | `applyResultChange`: after a result or flag change, later attempts move up when needed (a no-lift corrected to good). A correction is never refused, attempts with a result do not move | R10 | `add result change` |
 | 10 | `predictOrder` and `sortForDisplay`: order by weight, then attempt number, then lot number. Cancelled and finished at the bottom, a lifter following themselves, a raised weight changes the first attempt | R6, R7, R13 | `add lifting order` |
-| 11 | `getPhase`: `SNATCH` → `CLEAN_JERK` → `FINISHED` | R9 | `add phase` |
+| 11 | `getPhase`: `SNATCH` → `CLEAN_JERK` → `FINISHED`, no entries = no phase, and `isLiftStarted` per lift | R5, R9 | `add phase` |
 | 12 | `liftsAhead`: next = 0, unknown lifter = null, tracked lifter's next attempt in the other lift | §6.2 | `add lifts ahead` |
-| 13 | `estimateWait`: ranges from the pace settings, same-lifter steps, the last attempted entry makes the first step "same", elapsed time subtracted and clamped at 0, not started = no minutes | §6.3, R5, R12 | `add wait estimate` |
-| 14 | `plates.ts`: port the logic and tests from `plates.js` in `weightlifting-calculator`. Whole kg only, **metal plates only, no 1.25 kg plate**, bar 20 kg (men) or 15 kg (women). *Needs access to that repo* | M5 | `add plate calculation` |
+| 13 | `estimateWait`: ranges from the pace settings, same-lifter steps, the last attempted entry makes the first step "same", elapsed time taken off the first step only, only results of the lift in play count, a lift without a result = no minutes. Plus `estimateClock` (R12): `max(start, now)` plus the middle of each step, rounded to the minute | §6.3, R5, R12 | `add wait estimate` |
+| 14 | `plates.ts`: port the logic and tests from `plates.js` in `weightlifting-calculator`. Whole kg only, **metal plates only, no 1.25 kg plate**, bar 20 kg (men) or 15 kg (women) **plus the 2.5 kg competition collars** (§5): per side `(weight − bar − 5) / 2`. *Needs access to that repo* | M5 | `add plate calculation` |
 | 15 | ESLint rule: files in `src/domain/` may not import React, Next, Prisma or other `src/` folders, and may not call `Date.now()` | §9 | `lint domain imports` |
 
 ### Phase 2 – Database, auth, shell, clubs
@@ -888,17 +916,17 @@ Every file imports nothing outside `src/domain/`, and time is always a parameter
 | # | Step | Covers | Commit |
 |---|------|--------|--------|
 | 16 | Prisma 7 (pinned): `prisma.config.ts`, Postgres driver adapter for Neon, `src/server/db.ts`, `postinstall: prisma generate`, a connection check | §14, §16 | `set up prisma` |
-| 17 | Better Auth: `src/server/auth.ts` (email + password, **sign-up disabled**), route handler `api/auth/[...all]`, tables from its CLI, plus `Club` and the `role` / `clubId` fields on the user. First migration | M1, M2 | `add auth tables` |
+| 17 | Better Auth: `src/server/auth.ts` (email + password, **sign-up disabled**), route handler `api/auth/[...all]`, tables from its CLI, plus `Club` and the `role` / `clubId` fields on the user, set with `input: false` so a user can never change their own role or club. Decide how accounts are created without public sign-up (an own server action that calls Better Auth on the server, or its admin plugin), check that the plugin's own `role` does not clash with ours, and write the decision in §19. First migration | M1, M2 | `add auth tables` |
 | 18 | `prisma/seed.ts` creates the first admin from `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD` in `.env` (names only in `.env.example`) and a `db:seed` script. Check the Better Auth docs for how to create a user without public sign-up | M1 | `add admin seed` |
 | 19 | The rest of the data model from §7: `Lifter`, `Competition`, `Group`, `Entry`, `Attempt`, `Tracking`, the enums and `User.lifterId`. Second migration | §7 | `add domain tables` |
-| 20 | `server/session.ts`: `getSession` and `requireClubAccess()` returning `{ userId, clubId, role }`. Coach = own club. Admin = active club from the long-lived cookie, checked against the database, otherwise redirect to `/admin/clubs`. Unit tests with two clubs, as coach and as admin | M2, §7 | `add club access` |
-| 21 | Visual tokens from §12 for both themes, Sass mixins, global styles, fonts through `next/font/google` (`src/app/fonts.ts`), the `tabular` and `from()` mixins, the no-flash theme script. *Uses the tokens in §12, which are all decided* | M11, §12 | `add design tokens` |
+| 20 | `server/session.ts`: `getSession` and `requireClubAccess()` returning `{ userId, clubId, role }`. Coach = own club. Admin = active club from the long-lived cookie, checked against the database, otherwise redirect to `/admin/clubs`. Unit tests with two clubs, as coach and as admin (mocked database, so they check the `where` clauses; the real check is step 77) | M2, §7 | `add club access` |
+| 21 | Visual tokens from §12 for both themes, Sass mixins, global styles, fonts through `next/font/google` (`src/app/fonts.ts`), the `tabular` and `from()` mixins, the no-flash theme script, and `src/styles/tokens.test.ts` (the contrast check from §12). *Uses the tokens in §12, which are all decided* | M11, §12 | `add design tokens` |
 | 22 | `ThemeToggle` (`aria-pressed`, choice saved in `localStorage`) | M11 | `add theme toggle` |
 | 23 | `Button`, `Field` and `Banner`, with tests (link or button rendering, label and error wiring) | M11 | `add base components` |
 | 24 | `/login`: `LoginForm` (wrong email or password, logging-in state), logout action, `proxy.ts` with the optimistic redirect to `/login`. Wireframe sheet 06 | M1 | `add login` |
-| 25 | `(app)` layout that requires a session, `AppShell` (skip link, landmarks, `NavMenu`, `RocketIcon`, `ThemeToggle`) and a placeholder dashboard. Wireframe sheet 07 | M1, M11 | `add app shell` |
+| 25 | `(app)` layout that requires a session, `AppShell` (skip link, landmarks, `NavMenu`, `RocketIcon`, `ThemeToggle`) and a placeholder dashboard. The Lifters menu link is only shown once the lifter pages exist (S2). Wireframe sheet 07 | M1, M11 | `add app shell` |
 | 26 | `/admin/clubs`: admin-only guard and `ClubsTable` | M2 | `add clubs page` |
-| 27 | `CreateClubForm` with an optional first coach (Zod schema, action, password set by the person who creates the account) | M2 | `add create club` |
+| 27 | `CreateClubForm` with an optional first coach (Zod schema, action, password set by the person who creates the account; name, email and password are all-or-none) | M2 | `add create club` |
 | 28 | `ClubSwitcher` and `AdminBand` (orange pill and band on every page), the action that sets the active-club cookie. A coach sees only the club name. *Shrink option: a plain `<select>`, the band stays* | M2 | `add club switcher` |
 | 29 | `/members`: `MembersTable`, `AddCoachForm` and its action (a coach adds to their own club, the admin to the active club). *Shrink option: only the add form* | M2 | `add members page` |
 | 30 | **Checkpoint, no commit.** Apply migrations to the production Neon database (`prisma migrate deploy`), run the seed once, set the three env vars in Vercel. On the live site: log in as admin, create a club and a coach, log in as the coach | M1, M12 | — |
@@ -907,11 +935,12 @@ Every file imports nothing outside `src/domain/`, and time is always a parameter
 
 | # | Step | Covers | Commit |
 |---|------|--------|--------|
-| 31 | `CompetitionForm` on `/competitions/new` (name, date or date range, optional location), Zod schema (end not before start), `createCompetition` action and a club-scoped query | M3 | `add new competition` |
+| 31 | `CompetitionForm` on `/competitions/new` (name, date or date range, optional location), Zod schema (end not before start), `createCompetition` action and a club-scoped query. Dates are formatted in UTC (`@db.Date`) | M3 | `add new competition` |
 | 32 | `/competitions` (upcoming and previous) and the dashboard `/`: `CompetitionCard` and `EmptyState` for first use. Wireframe sheet 04 | M3 | `add competition list` |
 | 33 | `/competitions/[competitionId]`: overview with `GroupCard`s and "Add group". Unknown or foreign ids give a 404, tested | M3, §8 | `add competition page` |
-| 34 | `GroupForm`: name and the four pace defaults (75 / 90 s and 100 / 120 s, low below high) with the `createGroup` action | M3 | `add group form` |
-| 35 | `not-found.tsx` and `error.tsx` | §8 | `add error pages` |
+| 34 | Edit a competition and its groups: reuse `CompetitionForm` and `GroupForm` with their current values on `/competitions/[competitionId]/edit` and a group edit page (name, dates, location; for a group: name, date, start times, pace defaults). Narrowing a competition's dates is refused while a group lies outside the new range, with `updateCompetition` and `updateGroup` actions. Wireframe sheet 04 (B, Edit) | M3 | `add edit competition` |
+| 35 | `GroupForm`: name, date (prefilled with the competition's first day, must be inside its dates), Snatch start and Clean & Jerk start (both required, prefilled 10:00 and 11:00, Clean & Jerk after Snatch, checked with `isScheduleValid`) and the four pace defaults (75 / 90 s and 100 / 120 s, low below high), with the `createGroup` action. Groups are listed by date and start time | M3, R12 | `add group form` |
+| 36 | `not-found.tsx` and `error.tsx` | §8 | `add error pages` |
 
 ### Phase 4 – Group board
 
@@ -919,30 +948,32 @@ Every file imports nothing outside `src/domain/`, and time is always a parameter
 
 | # | Step | Covers | Commit |
 |---|------|--------|--------|
-| 36 | `getGroupBoard` query (club-scoped through the whole chain, plain serializable props), a tested mapper to `EntryState`, and the group page with heading, `PhaseChip` and an empty state | M5 | `add group page` |
-| 37 | `addLifter` schema and action: find or create in the club directory, lot number, optional bodyweight, **sex, birth year and both openings required**. Creates the entry with six attempts, attempts 2 and 3 as estimates | M4, R2 | `add lifter action` |
-| 38 | `LifterCombobox`: suggestions from the club directory, picking one fills sex and birth year, standard keyboard pattern | M4 | `add lifter combobox` |
-| 39 | `AddLifterForm` and `AttemptPreview` (4 % / 8 % for both lifts), error summary at the top, focus on the first field with an error. Wireframe sheet 03 | M4 | `add lifter form` |
-| 40 | `AttemptCell`: pending, good, no-lift, cancelled, next-attempt outline and estimate marker, always with an icon or text, not colour alone | M5, M7 | `add attempt cell` |
-| 41 | `GroupBoard` with `LifterRow` and `LifterTable` for one lift: `<caption>`, `<th scope>`, order from `sortForDisplay`, finished and stopped lifters at the bottom | M5, R7 | `add lifter table` |
-| 42 | `LiftSection` used for both lifts: Clean & Jerk under Snatch, moving to the top when `getPhase` says Snatch is done | M5, R9 | `add lift sections` |
-| 43 | `PlateDiagram`: SVG plates from `plates.ts`, bar chosen by the lifter's sex (the SVGs come from `weightlifting-calculator`) | M5 | `add plate diagram` |
-| 44 | `NextLifterPanel`: always the first attempt of the predicted order, no state of its own, `aria-live="polite"` | M5, R13 | `add next lifter panel` |
-| 45 | `FlagToggle`, `FlagToggleGroup` and the "Enter result" button: default white, red = filled with a mark, accessible names, reset when the attempt changes | M7 | `add flag toggles` |
-| 46 | `enterResult` action: sends the attempt id and the weight that was shown, refused if the weight changed or a result exists, flags all-or-none (Zod), `resultAt` set once. Optimistic update with a saving / failed marker per attempt | M7, R3, R4, R13 | `add enter result` |
-| 47 | Edit a result afterwards: a separate `editFlags` action, `resultAt` untouched, `applyResultChange` | M7, R4 | `add result editing` |
-| 48 | `EditableWeight`: button ⇄ blank input, Enter or click-away commits, blank or Esc restores, a refused value keeps the old one and shows the message under the field (`aria-invalid`, `aria-describedby`) | M6 | `add editable weight` |
-| 49 | `changeWeight` action using `applyWeightChange`: moved attempts get the estimate marker, a refused weight gets the red outline and message, the panel switches by itself and toggled flags reset | M6, R10, R13 | `save weight edits` |
-| 50 | `RowMenu`: strip under the row on a phone, popover on wider screens, Escape closes, focus returns. Actions passed in as props | M8 | `add row menu` |
-| 51 | `stopLift`, `withdraw` and `restore` actions (set and clear `cancelled`, nothing is deleted), wired to the menu | M8, R8 | `add stop and restore` |
-| 52 | Tracking: track and untrack action, the first tracked lifter is "ME", more than one is allowed | M9, R11 | `add tracking` |
-| 53 | `useNow` (1 s tick) and `TMinus` in the tracked row: lifts only before the start, range and "around 14:32" after, "You're up next", other lift, finished. Full-sentence accessible name | M9, §6.5 | `add t-minus` |
-| 54 | `StickyTMinusBar` (phone) and `TrackingCard` (tablet and desktop) | M9 | `add tracking bar` |
-| 55 | `useAutoRefresh`: `router.refresh()` every 15 s, pause when hidden, refresh on visible / focus / online, skip while busy. Fake-timer tests | M10, §11 | `add auto refresh` |
-| 56 | Busy registration (open weight input, unsent flags, save in flight), `LastUpdated` ("Updated 12 s ago" and a button, not a live region) and the offline `Banner` | M10, §11 | `add refresh indicator` |
-| 57 | Tablet (768–1199 px) and desktop (≥ 1200 px) board layout: panel and tracking card on the left, lists on the right, Clean & Jerk beside Snatch on desktop. Wireframe sheet 08 | M5, M11 | `add board layout` |
-| 58 | Click through the 12 states on wireframe sheet 02 and fix what differs | M5–M11 | `polish board states` |
-| 59 | **Checkpoint, no commit.** Deploy, run a small group on a phone, open the board on a second device and see a result arrive within about 15 s. Look at Vercel and Neon usage (§11) | M10, M12 | — |
+| 37 | `getGroupBoard` query (club-scoped through the whole chain, plain serializable props, including the group's date and start times), a tested mapper to `EntryState`, and the group page with heading, `PhaseChip` and an empty state | M5 | `add group page` |
+| 38 | `addLifter` schema and action: find or create in the club directory (a lifter matches on name, case-insensitive, plus birth year and sex; a lifter already in the group gets a friendly message; the lifter id from the client is never trusted), lot number, optional bodyweight, **sex, birth year and both openings required**. Creates the entry with six attempts, attempts 2 and 3 as estimates | M4, R2 | `add lifter action` |
+| 39 | `LifterCombobox`: suggestions from the club directory, picking one fills sex and birth year, standard keyboard pattern | M4 | `add lifter combobox` |
+| 40 | `AddLifterForm` and `AttemptPreview` (4 % / 8 % for both lifts), error summary at the top, focus on the first field with an error. Wireframe sheet 03 | M4 | `add lifter form` |
+| 41 | `AttemptCell`: pending, good, no-lift, cancelled, next-attempt outline and estimate marker, always with an icon or text, not colour alone | M5, M7 | `add attempt cell` |
+| 42 | `GroupBoard` with `LifterRow` and `LifterTable` for one lift: `<caption>`, `<th scope>`, order from `sortForDisplay`, finished and stopped lifters at the bottom | M5, R7 | `add lifter table` |
+| 43 | `LiftSection` used for both lifts: Clean & Jerk under Snatch, moving to the top when `getPhase` says Snatch is done | M5, R9 | `add lift sections` |
+| 44 | `PlateDiagram`: SVG plates from `plates.ts`, bar chosen by the lifter's sex (the SVGs come from `weightlifting-calculator`) | M5 | `add plate diagram` |
+| 45 | `NextLifterPanel`: always the first attempt of the predicted order, no state of its own, `aria-live="polite"` | M5, R13 | `add next lifter panel` |
+| 46 | `FlagToggle`, `FlagToggleGroup` and the "Enter result" button: default white, red = filled with a mark, accessible names, reset when the attempt or its weight changes | M7 | `add flag toggles` |
+| 47 | `enterResult` action: sends the attempt id and the weight that was shown, refused if the weight changed or a result exists, flags all-or-none (Zod), `resultAt` set once. Optimistic update with a saving / failed marker per attempt | M7, R3, R4, R13 | `add enter result` |
+| 48 | Edit a result afterwards: a separate `editFlags` action, `resultAt` untouched, `applyResultChange` | M7, R4 | `add result editing` |
+| 49 | `EditableWeight`: button ⇄ blank input, Enter or click-away commits, blank or Esc restores, a refused value keeps the old one and shows the message under the field (`aria-invalid`, `aria-describedby`) | M6 | `add editable weight` |
+| 50 | `changeWeight` action using `applyWeightChange`: moved attempts get the estimate marker, a refused weight gets the red outline and message, the panel switches by itself and toggled flags reset | M6, R10, R13 | `save weight edits` |
+| 51 | `RowMenu`: strip under the row on a phone, popover on wider screens, Escape closes, focus returns. Actions passed in as props | M8 | `add row menu` |
+| 52 | `stopLift`, `withdraw` and `restore` actions (set and clear `cancelled`, nothing is deleted), wired to the menu | M8, R8 | `add stop and restore` |
+| 53 | Edit an entry from the row menu: lot number (unique in the group), bodyweight, and the lifter's name, sex, birth year and club. The lifter fields change the club's directory record, so they change for every competition. `updateEntry` action and `EditEntryForm` (reuses the add-lifter fields). Duplicate lot number gives a friendly message | M4, M8 | `add edit entry` |
+| 54 | **Enter result for any lifter** (R15): row menu item *Enter result* opens the flag toggles in the row for that lifter's next pending attempt in the current lift, using the same `enterResult` action and the same stale-weight and double-result checks. The next-lifter panel is not touched (it stays derived) | M7, R13, R15 | `add result override` |
+| 55 | Tracking: track and untrack action, the first tracked lifter is "ME", more than one is allowed | M9, R11 | `add tracking` |
+| 56 | `useNow` (1 s tick) and `TMinus` in the tracked row: lifts and a clock time until the first result of the lift in play (again for Clean & Jerk, from its own start time, rendered only after mount), the minute range after it, "You're up next", other lift, finished. Full-sentence accessible name | M9, §6.5, R12 | `add t-minus` |
+| 57 | `StickyTMinusBar` (phone) and `TrackingCard` (tablet and desktop) | M9 | `add tracking bar` |
+| 58 | `useAutoRefresh`: `router.refresh()` every 15 s, pause when hidden, refresh on visible / focus / online, skip while busy. Fake-timer tests | M10, §11 | `add auto refresh` |
+| 59 | Busy registration (open weight input, unsent flags, save in flight), `LastUpdated` ("Updated 12 s ago" and a button, not a live region) and the offline `Banner` | M10, §11 | `add refresh indicator` |
+| 60 | Tablet (768–1199 px) and desktop (≥ 1200 px) board layout: panel and tracking card on the left, lists on the right, Clean & Jerk beside Snatch on desktop. Wireframe sheet 08 | M5, M11 | `add board layout` |
+| 61 | Click through the 12 states on wireframe sheet 02 and fix what differs | M5–M11 | `polish board states` |
+| 62 | **Checkpoint, no commit.** Deploy, run a small group on a phone, open the board on a second device and see a result arrive within about 15 s. Look at Vercel and Neon usage (§11) | M10, M12 | — |
 
 ### Phase 5 – Should items (optional, only after gate C)
 
@@ -950,16 +981,16 @@ Built in the reverse of the cut order, so stopping at any point cuts the right t
 
 | # | Step | Covers | Commit |
 |---|------|--------|--------|
-| 60 | `domain/results.ts`: best Snatch, best Clean & Jerk and total (no total when a lift has no good attempt) | S2 | `add best lifts` |
-| 61 | `/lifters`: club-scoped directory with search | S2 | `add lifter list` |
-| 62 | `/lifters/[lifterId]`: competitions, each attempt with `FlagSquares` (left / centre / right), best lifts and total. Foreign ids give a 404. Wireframe sheet 05 | S2 | `add lifter detail` |
-| 63 | `pace.ts`: `measureIntervals` and `blendPace` (ignore < 20 s and > 240 s, last 10 per kind, weight `n / (n + 5)`, ±10 % range) | S1 | `add measured pace` |
-| 64 | Use it on the board: the measured pace replaces the default after a few lifts, with a small "pace from N lifts" note | S1 | `use measured pace` |
-| 65 | `groupStats`: duration (first to last `resultAt`), number of lifts, average pace | S3 | `add group stats` |
-| 66 | Finished groups on the competition page show the stats and a results table | S3 | `add results view` |
-| 67 | `sinclair.ts` with coefficients per cycle, chosen by the competition date. *Check the IWF 2025–2028 values first (§7).* If they are still missing, use 2021–2024 and say so in the UI | S4 | `add sinclair` |
-| 68 | Show the Sinclair total on the lifter detail page and the results table | S4 | `show sinclair` |
-| 69 | Suggest the last finished group's average pace as the default in `GroupForm`. It is derived when read, with no new column, because §7 lists pace as never stored | S5 | `suggest default pace` |
+| 63 | `domain/results.ts`: best Snatch, best Clean & Jerk and total (no total when a lift has no good attempt) | S2 | `add best lifts` |
+| 64 | `/lifters`: club-scoped directory with search | S2 | `add lifter list` |
+| 65 | `/lifters/[lifterId]`: competitions, each attempt with `FlagSquares` (left / centre / right), best lifts and total. Foreign ids give a 404. Wireframe sheet 05 | S2 | `add lifter detail` |
+| 66 | `pace.ts`: `measureIntervals` and `blendPace` (ignore < 20 s and > 240 s, last 10 per kind, weight `n / (n + 5)`, ±10 % range) | S1 | `add measured pace` |
+| 67 | Use it on the board: the measured pace replaces the default after a few lifts, with a small "pace from N lifts" note | S1 | `use measured pace` |
+| 68 | `groupStats`: duration (first to last `resultAt`), number of lifts, average pace | S3 | `add group stats` |
+| 69 | Finished groups on the competition page show the stats and a results table | S3 | `add results view` |
+| 70 | `sinclair.ts` with coefficients per cycle, chosen by the competition date. *Check the IWF 2025–2028 values first (§7).* If they are still missing, use 2021–2024 and say so in the UI | S4 | `add sinclair` |
+| 71 | Show the Sinclair total on the lifter detail page and the results table | S4 | `show sinclair` |
+| 72 | Suggest the last finished group's average pace as the default in `GroupForm`. It is derived when read, with no new column, because §7 lists pace as never stored | S5 | `suggest default pace` |
 
 ### Phase 6 – Quality and docs
 
@@ -967,17 +998,17 @@ Integration tests use mocked Server Actions. The numbers refer to the list in §
 
 | # | Step | Covers | Commit |
 |---|------|--------|--------|
-| 70 | Integration setup (`renderBoard`, a full-group factory) and tests 1 and 2: add lifters, enter results, the next lifter changes, a finished lifter moves down | M12 | `add result tests` |
-| 71 | Tests 3, 4 and 5: tracking and T-minus, stop / withdraw / restore, correcting a result keeps `resultAt` | M12 | `add tracking tests` |
-| 72 | Tests 7, 10 and 11: raising above the next lifter, the cascade, weight rules after results | M12 | `add weight rule tests` |
-| 73 | Tests 6, 8 and 9: theme persists, auto-refresh, admin club switch | M12 | `add refresh tests` |
-| 74 | *Optional:* tenancy tests with two clubs against a throwaway Neon branch | M12 | `add tenancy tests` |
-| 75 | Responsive pass at 375 / 768 / 1024 / 1440 px on every page, fine-tune the breakpoints | M11 | `refine responsive layout` |
-| 76 | Accessibility pass: keyboard only through the board, contrast in both themes, Lighthouse, WAVE | M11 | `fix accessibility issues` |
-| 77 | **Checkpoint, no commit.** Final run on the live site: migrations, seed, env vars, a full group on a phone | M12 | — |
-| 78 | `TESTING.md` with the manual test notes and results | M12 | `add testing doc` |
-| 79 | README: fill in every TODO, screenshots in `readme-assets/screenshots/` (for each image write the import line, a suggested alt text and a suggested file name), setup instructions, technologies, live URL | M12 | `update readme` |
-| 80 | **Submit**: repo URL, live URL and the short project description (§1) | §1 | — |
+| 73 | Integration setup (`renderBoard`, a full-group factory) and tests 1 and 2: add lifters, enter results, the next lifter changes, a finished lifter moves down | M12 | `add result tests` |
+| 74 | Tests 3, 4, 5 and 12: tracking and T-minus, stop / withdraw / restore, correcting a result keeps `resultAt`, enter result from the row menu | M12 | `add tracking tests` |
+| 75 | Tests 7, 10 and 11: raising above the next lifter, the cascade, weight rules after results | M12 | `add weight rule tests` |
+| 76 | Tests 6, 8, 9 and 13: theme persists, auto-refresh, admin club switch, edit an entry | M12 | `add refresh tests` |
+| 77 | Tenancy tests with two clubs, as coach and as admin, against a throwaway Neon branch (real queries and actions). Not optional: step 20 only checks the `where` clauses | M2, M12 | `add tenancy tests` |
+| 78 | Responsive pass at 375 / 768 / 1024 / 1440 px on every page, fine-tune the breakpoints | M11 | `refine responsive layout` |
+| 79 | Accessibility pass: keyboard only through the board, contrast in both themes, Lighthouse, WAVE | M11 | `fix accessibility issues` |
+| 80 | **Checkpoint, no commit.** Final run on the live site: migrations, seed, env vars, a full group on a phone | M12 | — |
+| 81 | `TESTING.md` with the manual test notes and results | M12 | `add testing doc` |
+| 82 | README: fill in every TODO, screenshots in `readme-assets/screenshots/` (for each image write the import line, a suggested alt text and a suggested file name), setup instructions, technologies, live URL | M12 | `update readme` |
+| 83 | **Submit**: repo URL, live URL and the short project description (§1) | §1 | — |
 
 ---
 
@@ -985,7 +1016,7 @@ Integration tests use mocked Server Actions. The numbers refer to the list in §
 
 Cut order: **S5 → S4 → S3 → S1**, then shrink M2 (admin creates clubs and coaches only, plain select as club switcher: steps 28 and 29). **Never cut M1 or M3–M12.** Because Phase 5 is built in reverse order, stopping early already follows this.
 
-**Phase 6 minimum** if gate C is missed: tests 70 and 72 (they cover the core loop and the weight rules), steps 75 and 76, and the README. Club scoping is already covered by the unit tests in step 20.
+**Phase 6 minimum** if gate C is missed: tests 73 and 75 (they cover the core loop and the weight rules), steps 77 (tenancy, because club scoping is a Must), 78 and 79, and the README.
 
 ### Needs from Niclas
 
@@ -994,9 +1025,9 @@ Cut order: **S5 → S4 → S3 → S1**, then shrink M2 (admin creates clubs and 
 | 14 | Access to `weightlifting-calculator` (`plates.js` and the plate SVGs) |
 | 16 | A Neon database through the Vercel Marketplace, with a dev branch |
 | 18 | The admin's email and password, kept in `.env` and never committed |
-| 58 | Time to click through the 12 board states on a phone |
-| 67 | The IWF Sinclair constants for 2025–2028, if they have been published |
-| 79 | Screenshots of the finished app |
+| 61 | Time to click through the 12 board states on a phone |
+| 70 | The IWF Sinclair constants for 2025–2028, if they have been published |
+| 82 | Screenshots of the finished app |
 
 
 ## 16. Deployment (Vercel + Neon)
@@ -1048,7 +1079,7 @@ Cut order: **S5 → S4 → S3 → S1**, then shrink M2 (admin creates clubs and 
 
 ## 19. Review decisions and open questions
 
-### Decided in review (13 Oct 2026)
+### Decided in review (13 Oct 2026; numbers 28–40 on 14 Oct 2026)
 | # | Decision |
 |---|----------|
 | 1 | **Lifting order confirmed** (R6). The only special case: a lifter following themselves gets a 2-minute clock instead of 1 minute |
@@ -1078,6 +1109,19 @@ Cut order: **S5 → S4 → S3 → S1**, then shrink M2 (admin creates clubs and 
 | 25 | **Dark is the default theme** on a first visit, whatever the device setting. A saved choice wins |
 | 26 | **Fonts, type scale, spacing and radii approved** (13 Oct 2026): Inter for text, Space Grotesk for headings and the T-minus numbers, a 4 px spacing scale, radii 6 / 10 / 14 px plus a pill, tap targets of at least 44 px (§12) |
 | 27 | **Breakpoints confirmed:** 768 px and 1200 px, written in `em` in Sass |
+| 28 | **Editing is part of the plan:** edit a competition and its groups (step 34) and edit an entry, with the lifter's details (step 53) |
+| 29 | **"Started" is per lift** (R5). Before the first result of Snatch, and again before the first result of Clean & Jerk, the UI shows "Next up" for the first lifter and "T–N lifts" with a clock time for tracked lifters (R12, decision 40). Live minutes replace the clock after the first result of that lift |
+| 30 | **The 4 % / 8 % estimate is used once**, when the lifter is added. Later edits never apply a percentage again, and lowering attempt 2 leaves attempt 3 as it is (R2) |
+| 31 | **Demo accounts** for the teachers are created by Niclas (login details go in the README and the submission) |
+| 32 | **Tenancy tests run against a real database** and are not optional (step 77) |
+| 33 | **The plates count the 2.5 kg competition collars** (§5, step 14) |
+| 34 | **Lifter matching:** name (case-insensitive) + birth year + sex finds an existing lifter, otherwise a new one is created. A picked suggestion's sex and birth year are read-only. Corrections go through *Edit entry* (step 53) and change the directory record |
+| 35 | **Better Auth:** `role` and `clubId` are `input: false`. How accounts are created without sign-up is decided at step 17 and written here |
+| 36 | **Enter result for any lifter** from the row menu, for that lifter's next pending attempt (R15, step 54). The panel stays derived |
+| 37 | **Superseded by 40.** The clock time was moved to Could for a day and came back as a Must feature with scheduled start times |
+| 38 | **Server Actions and components:** only the board's top client component (and the form containers) import from `server/actions` and pass callbacks down. Presentational components get props only, so they test without mocks (§9) |
+| 39 | **Edge cases:** a group with no entries has no phase. "ME" is the oldest tracked entry (`Tracking.createdAt`). Restore clears all cancelled attempts of the lifter. Toggled flags reset when the attempt or its weight changes. A result correction is never refused. Entering a result clears `isEstimated` |
+| 40 | **Scheduled start times (R12).** Each group has a date and a Snatch and a Clean & Jerk start time (required, wall-clock `HH:mm`, no timezone stored). Before a lift's first result a tracked lifter sees one fixed clock time (`start + N lifts × the middle of the pace`, rounded to the minute: 13:50 and T–7 = "around 14:00", Clean & Jerk 14:45 and T–7 = "around 14:55"). After the first result only live minutes. A start time that has passed counts from now. Validation is light: the date inside the competition's dates and Clean & Jerk after Snatch, nothing else |
 
 ### Still open
 Nothing blocks the next stage (building, from step 1). The Sinclair
@@ -1089,11 +1133,12 @@ constants for 2025–2028 are still **TODO** (§7).
 
 - [ ] All Must features (M1–M12) work on the deployed site, including login and a page refresh on any route
 - [ ] A full group can be run: add lifters, enter 6 attempts each, stop/withdraw/restore, correct a result afterwards
-- [ ] Tracked lifter shows lifts before the start and a minute range after the first result
+- [ ] Competitions, groups and entries can be edited, and a result can be entered for any lifter from the row menu
+- [ ] Tracked lifter shows lifts and a clock time from the group's start time until the first result of a lift (Snatch and Clean & Jerk separately), then only a minute range
 - [ ] If a lifter raises their weight above the next lifter, the next-lifter panel switches by itself
 - [ ] A result entered on one device shows up on a second device within about 15 s without refreshing
 - [ ] The weight rules hold: +1 kg after a good lift, a repeat is accepted after a no-lift, a refused weight keeps its old value and shows the minimum, and raising an attempt moves the later ones up
-- [ ] Club scoping verified: a coach cannot see or change another club's data, and the admin only reaches other clubs by switching the active club
+- [ ] Club scoping verified: a coach cannot see or change another club's data, and the admin only reaches other clubs by switching the active club (tested against a real database)
 - [ ] Dark and light theme, responsive at 375 / 768 / 1024 / 1440 px
 - [ ] Unit + integration tests pass (`npm run test:run`), lint clean
 - [ ] Accessibility checked (keyboard, contrast, Lighthouse / WAVE)
