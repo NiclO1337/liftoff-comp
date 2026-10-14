@@ -2,6 +2,8 @@ export type Sex = "MALE" | "FEMALE";
 export type LiftType = "SNATCH" | "CLEAN_JERK";
 export type Flag = "WHITE" | "RED";
 export type Result = "GOOD" | "NO_LIFT";
+/** R9: where a group is in its two lifts. */
+export type Phase = "SNATCH" | "CLEAN_JERK" | "FINISHED";
 
 export type AttemptNumber = 1 | 2 | 3;
 

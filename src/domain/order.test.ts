@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import { good, makeEntry, noLift } from "@/test/factories";
 
-import { predictOrder, sortForDisplay } from "./order";
-import type { EntryState, QueuedAttempt } from "./types";
+import { getPhase, isLiftStarted, predictOrder, sortForDisplay } from "./order";
+import type { EntryState, Phase, QueuedAttempt } from "./types";
 
 /** `["a", 1]` is attempt 1 of entry "a". */
 const summary = (order: QueuedAttempt[]) =>
@@ -272,5 +272,175 @@ describe("sortForDisplay", () => {
 
     expect(sorted).not.toBe(entries);
     expect(ids(entries)).toEqual(["a", "b"]);
+  });
+});
+
+describe("getPhase", () => {
+  const cancelled = (weightKg: number) => ({ weightKg, cancelled: true });
+  const snatchDone = [good(80), good(84), good(88)];
+  const cleanJerkDone = [good(100), noLift(104), good(106)];
+  const cleanJerkPending = [100, 104, 108];
+
+  const cases: [
+    description: string,
+    entries: EntryState[],
+    phase: Phase | null,
+  ][] = [
+    ["no entries means no phase", [], null],
+    [
+      "Snatch while nobody has lifted yet",
+      [makeEntry({ id: "a" }), makeEntry({ id: "b", lotNumber: 2 })],
+      "SNATCH",
+    ],
+    [
+      "Snatch while one lifter still has a pending Snatch attempt",
+      [
+        makeEntry({ id: "a", snatch: snatchDone }),
+        makeEntry({ id: "b", lotNumber: 2, snatch: [good(90), 94, 98] }),
+      ],
+      "SNATCH",
+    ],
+    [
+      "Snatch even when another lifter has stopped their Snatch",
+      [
+        makeEntry({
+          id: "a",
+          snatch: [good(80), cancelled(84), cancelled(88)],
+        }),
+        makeEntry({ id: "b", lotNumber: 2, snatch: [90, 94, 98] }),
+      ],
+      "SNATCH",
+    ],
+    [
+      "Clean & Jerk once every Snatch is done",
+      [
+        makeEntry({ id: "a", snatch: snatchDone }),
+        makeEntry({ id: "b", lotNumber: 2, snatch: snatchDone }),
+      ],
+      "CLEAN_JERK",
+    ],
+    [
+      "Clean & Jerk when the last pending Snatch belongs to a lifter who stopped",
+      [
+        makeEntry({ id: "a", snatch: snatchDone }),
+        makeEntry({
+          id: "b",
+          lotNumber: 2,
+          snatch: [good(90), cancelled(94), cancelled(98)],
+        }),
+      ],
+      "CLEAN_JERK",
+    ],
+    [
+      "Clean & Jerk with a lifter who has already started it",
+      [
+        makeEntry({
+          id: "a",
+          snatch: snatchDone,
+          cleanJerk: [good(100), 104, 108],
+        }),
+      ],
+      "CLEAN_JERK",
+    ],
+    [
+      "finished once nothing is pending",
+      [
+        makeEntry({
+          id: "a",
+          snatch: snatchDone,
+          cleanJerk: cleanJerkDone,
+        }),
+      ],
+      "FINISHED",
+    ],
+    [
+      "finished when the last lifter withdraws",
+      [
+        makeEntry({
+          id: "a",
+          snatch: snatchDone,
+          cleanJerk: cleanJerkDone,
+        }),
+        makeEntry({
+          id: "b",
+          lotNumber: 2,
+          snatch: [cancelled(90), cancelled(94), cancelled(98)],
+          cleanJerk: [cancelled(110), cancelled(114), cancelled(118)],
+        }),
+      ],
+      "FINISHED",
+    ],
+    [
+      "Snatch again when a withdrawn lifter is restored",
+      [
+        makeEntry({
+          id: "a",
+          snatch: snatchDone,
+          cleanJerk: cleanJerkDone,
+        }),
+        makeEntry({
+          id: "b",
+          lotNumber: 2,
+          snatch: [90, 94, 98],
+          cleanJerk: cleanJerkPending,
+        }),
+      ],
+      "SNATCH",
+    ],
+  ];
+
+  it.each(cases)("%s", (_description, entries, phase) => {
+    expect(getPhase(entries)).toBe(phase);
+  });
+});
+
+describe("isLiftStarted", () => {
+  const resultIn = (lift: "snatch" | "cleanJerk") =>
+    makeEntry({
+      id: "a",
+      snatch: lift === "snatch" ? [good(100), 104, 108] : [100, 104, 108],
+      cleanJerk: lift === "cleanJerk" ? [good(120), 124, 128] : [120, 124, 128],
+    });
+
+  it("is false without entries", () => {
+    expect(isLiftStarted([], "SNATCH")).toBe(false);
+  });
+
+  it("is false for both lifts before the first result", () => {
+    const entries = [makeEntry()];
+
+    expect(isLiftStarted(entries, "SNATCH")).toBe(false);
+    expect(isLiftStarted(entries, "CLEAN_JERK")).toBe(false);
+  });
+
+  it("starts the Snatch with its first result, and not the Clean & Jerk", () => {
+    const entries = [resultIn("snatch"), makeEntry({ id: "b", lotNumber: 2 })];
+
+    expect(isLiftStarted(entries, "SNATCH")).toBe(true);
+    expect(isLiftStarted(entries, "CLEAN_JERK")).toBe(false);
+  });
+
+  it("starts the Clean & Jerk on its own, with the first result of any lifter", () => {
+    const entries = [
+      makeEntry({ id: "b", lotNumber: 2 }),
+      resultIn("cleanJerk"),
+    ];
+
+    expect(isLiftStarted(entries, "CLEAN_JERK")).toBe(true);
+    expect(isLiftStarted(entries, "SNATCH")).toBe(false);
+  });
+
+  it("does not count a cancelled attempt as a start", () => {
+    const entries = [
+      makeEntry({
+        snatch: [
+          { weightKg: 100, cancelled: true },
+          { weightKg: 104, cancelled: true },
+          { weightKg: 108, cancelled: true },
+        ],
+      }),
+    ];
+
+    expect(isLiftStarted(entries, "SNATCH")).toBe(false);
   });
 });

@@ -1,4 +1,4 @@
-import type { EntryState, LiftType, QueuedAttempt } from "./types";
+import type { EntryState, LiftType, Phase, QueuedAttempt } from "./types";
 
 /** R6: lowest weight first, then lower attempt number, then lower lot number. */
 function compareQueued(a: QueuedAttempt, b: QueuedAttempt): number {
@@ -70,4 +70,32 @@ export function sortForDisplay(
   });
 
   return rows.map((row) => row.entry);
+}
+
+function hasPendingAttempt(entries: EntryState[], lift: LiftType): boolean {
+  return entries.some((entry) => queueOf(entry, lift).length > 0);
+}
+
+/**
+ * R9: Snatch while any lifter has a pending Snatch attempt, then Clean & Jerk,
+ * then finished. Stopped and withdrawn lifters do not count. No entries means
+ * no phase.
+ */
+export function getPhase(entries: EntryState[]): Phase | null {
+  if (entries.length === 0) return null;
+  if (hasPendingAttempt(entries, "SNATCH")) return "SNATCH";
+  if (hasPendingAttempt(entries, "CLEAN_JERK")) return "CLEAN_JERK";
+  return "FINISHED";
+}
+
+/**
+ * R5: a lift has started when its first result is entered. Snatch and Clean &
+ * Jerk each have their own start, and there is no start button.
+ */
+export function isLiftStarted(entries: EntryState[], lift: LiftType): boolean {
+  return entries.some((entry) =>
+    entry.attempts.some(
+      (attempt) => attempt.lift === lift && attempt.resultAt !== null,
+    ),
+  );
 }
