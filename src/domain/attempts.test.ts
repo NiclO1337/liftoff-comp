@@ -81,21 +81,21 @@ describe("minWeight", () => {
   });
 });
 
-describe("applyWeightChange: validation", () => {
-  const resultAt = new Date("2026-10-18T14:00:00Z");
-  const good = (weightKg: number): Exclude<AttemptSpec, number> => ({
-    weightKg,
-    flags: ["WHITE", "WHITE", "RED"],
-    resultAt,
-  });
-  const noLift = (weightKg: number): Exclude<AttemptSpec, number> => ({
-    weightKg,
-    flags: ["RED", "RED", "WHITE"],
-    resultAt,
-  });
-  const snatch = (...specs: AttemptSpec[]) =>
-    makeEntry({ snatch: specs }).attempts.slice(0, specs.length);
+const resultAt = new Date("2026-10-18T14:00:00Z");
+const good = (weightKg: number): Exclude<AttemptSpec, number> => ({
+  weightKg,
+  flags: ["WHITE", "WHITE", "RED"],
+  resultAt,
+});
+const noLift = (weightKg: number): Exclude<AttemptSpec, number> => ({
+  weightKg,
+  flags: ["RED", "RED", "WHITE"],
+  resultAt,
+});
+const snatch = (...specs: AttemptSpec[]) =>
+  makeEntry({ snatch: specs }).attempts.slice(0, specs.length);
 
+describe("applyWeightChange: validation", () => {
   describe("refuses", () => {
     const cases: [
       description: string,
@@ -256,5 +256,160 @@ describe("applyWeightChange: validation", () => {
 
       expect(lift.map((a) => a.weightKg)).toEqual([90, 92, 94]);
     });
+  });
+});
+
+describe("applyWeightChange: cascade", () => {
+  const weights = (lift: ReturnType<typeof snatch>) =>
+    lift.map((attempt) => attempt.weightKg);
+  const estimated = (lift: ReturnType<typeof snatch>) =>
+    lift.map((attempt) => attempt.isEstimated);
+
+  function change(
+    lift: ReturnType<typeof snatch>,
+    attemptNumber: AttemptNumber,
+    newWeight: number,
+  ) {
+    const result = applyWeightChange(lift, attemptNumber, newWeight);
+    if (!result.ok) throw new Error(`Refused: ${result.reason}`);
+    return result.lift;
+  }
+
+  describe("raising moves the later attempts up", () => {
+    const cases: [
+      description: string,
+      lift: ReturnType<typeof snatch>,
+      attemptNumber: AttemptNumber,
+      newWeight: number,
+      expectedWeights: number[],
+      expectedEstimated: boolean[],
+    ][] = [
+      [
+        "attempt 2 raised to 94 (90 / 92 / 94 gives 90 / 94 / 95)",
+        snatch(90, 92, 94),
+        2,
+        94,
+        [90, 94, 95],
+        [false, false, true],
+      ],
+      [
+        "attempt 1 raised over attempt 2 moves both",
+        snatch(90, 92, 94),
+        1,
+        93,
+        [93, 94, 95],
+        [false, true, true],
+      ],
+      [
+        "attempt 1 raised to the weight of attempt 2",
+        snatch(90, 92, 94),
+        1,
+        92,
+        [92, 93, 94],
+        [false, true, false],
+      ],
+      [
+        "attempt 2 raised above attempt 3",
+        snatch(90, 92, 94),
+        2,
+        100,
+        [90, 100, 101],
+        [false, false, true],
+      ],
+      [
+        "a raise with room left changes nothing else",
+        snatch(90, 95, 100),
+        1,
+        92,
+        [92, 95, 100],
+        [false, false, false],
+      ],
+      [
+        "a raise after a no-lift lets the next attempt repeat the weight",
+        snatch(noLift(90), 92, 94),
+        1,
+        93,
+        [93, 93, 94],
+        [false, true, false],
+      ],
+      [
+        "a raise after a good lift moves the next attempt one kg above",
+        snatch(good(90), 92, 94),
+        1,
+        93,
+        [93, 94, 95],
+        [false, true, true],
+      ],
+    ];
+
+    it.each(cases)(
+      "%s",
+      (
+        _description,
+        lift,
+        attemptNumber,
+        newWeight,
+        expectedWeights,
+        expectedEstimated,
+      ) => {
+        const result = change(lift, attemptNumber, newWeight);
+
+        expect(weights(result)).toEqual(expectedWeights);
+        expect(estimated(result)).toEqual(expectedEstimated);
+      },
+    );
+  });
+
+  describe("lowering leaves the other attempts alone", () => {
+    it("attempt 1", () => {
+      const result = change(snatch(90, 92, 94), 1, 80);
+
+      expect(weights(result)).toEqual([80, 92, 94]);
+      expect(estimated(result)).toEqual([false, false, false]);
+    });
+
+    it("attempt 2, so attempt 3 gets no new percentage", () => {
+      const result = change(snatch(100, 104, 108), 2, 101);
+
+      expect(weights(result)).toEqual([100, 101, 108]);
+      expect(estimated(result)).toEqual([false, false, false]);
+    });
+  });
+
+  it("moves cancelled attempts too, and keeps them cancelled", () => {
+    const lift = snatch(90, { weightKg: 92, cancelled: true }, 94);
+
+    const result = change(lift, 1, 92);
+
+    expect(result[1]).toMatchObject({
+      weightKg: 93,
+      cancelled: true,
+      isEstimated: true,
+    });
+  });
+
+  it("keeps the estimate marker on an attempt that was already an estimate and does not need to move", () => {
+    const lift = snatch(90, 92, { weightKg: 100, isEstimated: true });
+
+    const result = change(lift, 1, 91);
+
+    expect(estimated(result)).toEqual([false, false, true]);
+  });
+
+  it("never moves an attempt that has a result", () => {
+    const lift = snatch(good(90), good(93), 100);
+
+    const result = change(lift, 1, 92);
+
+    expect(result[1]).toEqual(lift[1]);
+  });
+
+  it("does not change the input", () => {
+    const lift = snatch(90, 92, 94);
+
+    change(lift, 2, 94);
+
+    expect(weights(lift)).toEqual([90, 92, 94]);
+    expect(estimated(lift)).toEqual([false, false, false]);
   });
 });

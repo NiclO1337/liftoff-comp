@@ -60,10 +60,44 @@ function findAttempt(
 }
 
 /**
+ * R10: walk the lift in order and move every attempt without a result up to
+ * the minimum that follows its predecessor. Moved attempts become estimates,
+ * because nobody has confirmed them. Cancelled attempts move too, so Restore
+ * never gives an invalid sequence. Attempts with a result never move, and an
+ * attempt that is already high enough is left exactly as it is.
+ */
+function raiseLaterAttempts(lift: AttemptState[]): AttemptState[] {
+  const byNumber = [...lift].sort((a, b) => a.number - b.number);
+  const raised = new Map<AttemptState, AttemptState>();
+  let previous: AttemptState | null = null;
+
+  for (const attempt of byNumber) {
+    let current = attempt;
+    if (previous && attempt.flags === null) {
+      const min = minWeight({
+        weightKg: previous.weightKg,
+        result: resultOf(previous),
+      });
+      if (attempt.weightKg < min) {
+        current = { ...attempt, weightKg: min, isEstimated: true };
+        raised.set(attempt, current);
+      }
+    }
+    previous = current;
+  }
+
+  return lift.map((attempt) => raised.get(attempt) ?? attempt);
+}
+
+/**
  * R10: change the weight of one attempt in one lift. Refuses a weight that is
  * not whole kg, lower than the minimum after the previous attempt, or so high
  * that the next attempt, which already has a result, could no longer follow it.
  * A refusal carries the real limit for the message.
+ *
+ * Raising an attempt to or above the next one moves the later attempts up.
+ * Lowering never changes the other attempts: the 4 % / 8 % estimate is only
+ * used when a lifter is added (R2).
  */
 export function applyWeightChange(
   lift: AttemptState[],
@@ -90,12 +124,10 @@ export function applyWeightChange(
     if (newWeight > max) return { ok: false, reason: "TOO_HIGH", limit: max };
   }
 
-  return {
-    ok: true,
-    lift: lift.map((attempt) =>
-      attempt === edited
-        ? { ...attempt, weightKg: newWeight, isEstimated: false }
-        : attempt,
-    ),
-  };
+  const changed = lift.map((attempt) =>
+    attempt === edited
+      ? { ...attempt, weightKg: newWeight, isEstimated: false }
+      : attempt,
+  );
+  return { ok: true, lift: raiseLaterAttempts(changed) };
 }
