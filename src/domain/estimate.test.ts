@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { good, makeEntry } from "@/test/factories";
 
-import { estimateWait, liftsAhead } from "./estimate";
+import { estimateClock, estimateWait, liftsAhead } from "./estimate";
 import { predictOrder } from "./order";
 import type { EntryState, LastResult, Pace } from "./types";
 
@@ -238,5 +238,126 @@ describe("estimateWait", () => {
     it("for a lifter who has nothing left in this lift", () => {
       expect(wait(groupWith(3), lastByAnother, lastAt, "unknown")).toBeNull();
     });
+  });
+});
+
+describe("estimateClock", () => {
+  const pace: Pace = {
+    different: { minSeconds: 75, maxSeconds: 90 },
+    same: { minSeconds: 100, maxSeconds: 120 },
+  };
+  const at = (time: string) => new Date(`2026-10-18T${time}Z`);
+  const hhmm = (date: Date | null) => date?.toISOString().slice(11, 16);
+
+  /** Nobody has lifted yet. `others` lift once each, then "me". */
+  function lineUp(others: number): EntryState[] {
+    return [
+      ...Array.from({ length: others }, (_, index) =>
+        makeEntry({
+          id: `other-${index}`,
+          lotNumber: index + 1,
+          snatch: [100 + index, 130 + index, 150 + index],
+        }),
+      ),
+      makeEntry({ id: "me", lotNumber: 99, snatch: [120, 125, 130] }),
+    ];
+  }
+
+  const clock = (
+    entries: EntryState[],
+    startsAt: string,
+    now: string,
+    entryId = "me",
+    usedPace = pace,
+  ) =>
+    estimateClock(
+      predictOrder(entries, "SNATCH"),
+      entryId,
+      usedPace,
+      at(startsAt),
+      at(now),
+    );
+
+  it("a 13:50 start with 7 lifts ahead is around 14:00", () => {
+    expect(hhmm(clock(lineUp(7), "13:50:00", "13:00:00"))).toBe("14:00");
+  });
+
+  it("a 14:45 Clean & Jerk start with 7 lifts ahead is around 14:55", () => {
+    expect(hhmm(clock(lineUp(7), "14:45:00", "13:00:00"))).toBe("14:55");
+  });
+
+  it("is the start time itself when the lifter is next", () => {
+    expect(hhmm(clock(lineUp(0), "13:50:00", "13:00:00"))).toBe("13:50");
+  });
+
+  it("uses the middle of each interval, so the same-lifter steps use 110 s", () => {
+    const entries = [
+      makeEntry({ id: "x", lotNumber: 1, snatch: [100, 101, 102] }),
+      makeEntry({ id: "me", lotNumber: 99, snatch: [120, 125, 130] }),
+    ];
+
+    // x lifts three times in a row: 82.5 + 2 × 110 s = 302.5 s, so 14:05:02 is 14:05.
+    // Three different lifters would be 247.5 s and round to 14:04.
+    expect(hhmm(clock(entries, "14:00:00", "13:00:00"))).toBe("14:05");
+  });
+
+  it("counts from now when the scheduled start has passed", () => {
+    expect(hhmm(clock(lineUp(7), "13:50:00", "14:20:00"))).toBe("14:30");
+  });
+
+  it("does not move before the start time while the start is still ahead", () => {
+    expect(clock(lineUp(7), "13:50:00", "13:00:00")).toEqual(
+      clock(lineUp(7), "13:50:00", "13:49:59"),
+    );
+  });
+
+  it("rounds to the nearest minute, down and up", () => {
+    const down: Pace = {
+      different: { minSeconds: 70, maxSeconds: 70 },
+      same: pace.same,
+    };
+    const up: Pace = {
+      different: { minSeconds: 100, maxSeconds: 100 },
+      same: pace.same,
+    };
+
+    expect(hhmm(clock(lineUp(1), "14:00:00", "13:00:00", "me", down))).toBe(
+      "14:01",
+    );
+    expect(hhmm(clock(lineUp(1), "14:00:00", "13:00:00", "me", up))).toBe(
+      "14:02",
+    );
+  });
+
+  it("returns a whole minute, also when counting from a now with seconds", () => {
+    const result = clock(lineUp(0), "13:50:00", "14:20:20");
+
+    expect(result?.toISOString()).toBe("2026-10-18T14:20:00.000Z");
+  });
+
+  it("uses the pace of the group", () => {
+    const slow: Pace = {
+      different: { minSeconds: 180, maxSeconds: 180 },
+      same: { minSeconds: 240, maxSeconds: 240 },
+    };
+
+    expect(hhmm(clock(lineUp(2), "14:00:00", "13:00:00", "me", slow))).toBe(
+      "14:06",
+    );
+  });
+
+  it("changes when a weight is edited", () => {
+    const raised = lineUp(3).map((entry) =>
+      entry.id === "other-0"
+        ? makeEntry({ id: "other-0", lotNumber: 1, snatch: [125, 130, 150] })
+        : entry,
+    );
+
+    // 2 lifts ahead instead of 3: 2 × 82.5 s = 165 s, so 14:02:45 is 14:03
+    expect(hhmm(clock(raised, "14:00:00", "13:00:00"))).toBe("14:03");
+  });
+
+  it("is null for a lifter who has nothing left in this lift", () => {
+    expect(clock(lineUp(3), "14:00:00", "13:00:00", "unknown")).toBeNull();
   });
 });

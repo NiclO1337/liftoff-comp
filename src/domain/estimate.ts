@@ -81,3 +81,36 @@ function sumSteps(seconds: number[], waitedSeconds: number): number {
     0,
   );
 }
+
+const MS_PER_MINUTE = 60_000;
+
+/**
+ * R12: a fixed clock time for a tracked lifter before the lift's first result:
+ * `max(startsAt, now)` plus the middle of each step's interval, rounded to the
+ * nearest minute (13:50 and 7 lifts ahead is around 14:00). It does not count
+ * down, so it is the same on every refresh. If the scheduled start has passed
+ * without a result, it counts from now.
+ *
+ * `startsAt` is built on the device from the group's date and `HH:mm`, which
+ * keeps this function pure. `null` for a lifter who is not in the order.
+ */
+export function estimateClock(
+  order: QueuedAttempt[],
+  entryId: string,
+  pace: Pace,
+  startsAt: Date,
+  now: Date,
+): Date | null {
+  const ahead = liftsAhead(order, entryId);
+  if (ahead === null) return null;
+
+  // Nobody has lifted yet in this lift, so the first step is not a repeat.
+  const middleSeconds = stepRanges(order, ahead, pace, null).reduce(
+    (total, step) => total + (step.minSeconds + step.maxSeconds) / 2,
+    0,
+  );
+  const startMs = Math.max(startsAt.getTime(), now.getTime());
+  const clockMs = startMs + middleSeconds * 1000;
+
+  return new Date(Math.round(clockMs / MS_PER_MINUTE) * MS_PER_MINUTE);
+}
