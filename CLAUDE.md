@@ -31,7 +31,17 @@ writing Next-specific code. Same for Prisma 7 and Better Auth.
 
 ## Commands
 
-TODO: fill in when the project is scaffolded (dev, build, lint, format, test, test:run, db:migrate, db:seed).
+| Command | What it does |
+|---------|--------------|
+| `npm run dev` | Dev server (only when really needed, see below) |
+| `npm run build` / `npm start` | Production build and server |
+| `npm run lint` | ESLint, including the `src/domain` rules |
+| `npm run format` | Prettier (`--write`) |
+| `npm test` | Vitest in watch mode |
+| `npm run test:run` | Vitest, one run |
+| `npx tsc --noEmit` | Type check |
+
+TODO: add `db:migrate` and `db:seed` when Prisma is set up (steps 16 and 18).
 
 ## How we work together
 
