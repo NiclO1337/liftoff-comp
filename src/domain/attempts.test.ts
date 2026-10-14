@@ -142,23 +142,15 @@ describe("applyWeightChange: validation", () => {
         93,
       ],
       [
-        "attempt 1 raised to the weight of a next attempt that has a good result",
-        snatch(90, good(92), 94),
+        "a done attempt 1 corrected to the weight of a done attempt 2",
+        snatch(good(90), good(92), 94),
         1,
         92,
         "TOO_HIGH",
         91,
       ],
       [
-        "attempt 1 raised over a next attempt that has a result",
-        snatch(90, good(92), 94),
-        1,
-        95,
-        "TOO_HIGH",
-        91,
-      ],
-      [
-        "attempt 2 raised over attempt 3, which has a result",
+        "a done attempt 2 corrected to the weight of a done attempt 3",
         snatch(good(90), good(92), good(94)),
         2,
         94,
@@ -214,8 +206,8 @@ describe("applyWeightChange: validation", () => {
         95,
       ],
       [
-        "exactly one below a next attempt that has a result",
-        snatch(90, good(92), 94),
+        "a done attempt corrected to one below the next done attempt",
+        snatch(good(90), good(92), 94),
         1,
         91,
       ],
@@ -234,14 +226,24 @@ describe("applyWeightChange: validation", () => {
   });
 
   describe("on success", () => {
-    it("sets the weight and confirms an estimate, leaving the result alone", () => {
-      const lift = snatch(90, { ...good(92), isEstimated: true }, 96);
+    it("sets the weight and confirms an estimate", () => {
+      const lift = snatch(good(90), { weightKg: 92, isEstimated: true }, 96);
 
       const change = applyWeightChange(lift, 2, 93);
 
       expect(change.ok && change.lift[1]).toMatchObject({
         weightKg: 93,
         isEstimated: false,
+      });
+    });
+
+    it("leaves the result of a done attempt alone", () => {
+      const lift = snatch(good(90), 92, 96);
+
+      const change = applyWeightChange(lift, 1, 91);
+
+      expect(change.ok && change.lift[0]).toMatchObject({
+        weightKg: 91,
         flags: ["WHITE", "WHITE", "RED"],
         resultAt,
       });
