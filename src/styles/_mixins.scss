@@ -1,0 +1,27 @@
+@use "sass:map";
+
+// Media queries cannot read custom properties, so the breakpoints are Sass
+// variables. They are written in em, so they follow zoom and larger text.
+$bp-tablet: 48em; // 768 px
+$bp-desktop: 75em; // 1200 px
+$breakpoints: (
+  tablet: $bp-tablet,
+  desktop: $bp-desktop,
+);
+
+// Components are written for a phone and widened with min-width queries.
+@mixin from($name) {
+  @if not map.has-key($breakpoints, $name) {
+    @error "Unknown breakpoint `#{$name}`. Use tablet or desktop.";
+  }
+
+  @media (min-width: map.get($breakpoints, $name)) {
+    @content;
+  }
+}
+
+// Weights, lot numbers, times and T-minus: columns line up and a countdown
+// does not wobble while it ticks.
+@mixin tabular {
+  font-variant-numeric: tabular-nums;
+}

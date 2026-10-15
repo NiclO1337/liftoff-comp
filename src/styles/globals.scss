@@ -1,0 +1,68 @@
+@use "mixins" as *;
+@use "tokens";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  line-height: var(--leading-normal);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: var(--leading-snug);
+}
+
+h1 {
+  font-size: var(--text-xl);
+
+  @include from(tablet) {
+    font-size: var(--text-2xl);
+  }
+}
+
+h2 {
+  font-size: var(--text-lg);
+}
+
+a {
+  color: var(--color-blue);
+}
+
+// Inputs stay at 16 px, so phones do not zoom into the field on focus.
+button,
+input,
+select,
+textarea {
+  color: inherit;
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: var(--outline-w) solid var(--color-focus);
+  outline-offset: 2px;
+}
