@@ -41,8 +41,9 @@ writing Next-specific code. Same for Prisma 7 and Better Auth.
 | `npm run test:run` | Vitest, one run |
 | `npx tsc --noEmit` | Type check |
 | `npm run db:migrate` | `prisma migrate dev` against the dev branch (direct URL) |
+| `npm run db:seed` | Creates the first admin from `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` (safe to run twice) |
 
-TODO: add `db:seed` when the seed exists (step 18).
+After a schema change, also run `npx prisma generate` (Prisma 7 no longer does it in `migrate dev`).
 
 ## How we work together
 
