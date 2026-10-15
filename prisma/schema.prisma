@@ -13,26 +13,46 @@ enum Role {
   LIFTER
 }
 
+enum Sex {
+  MALE
+  FEMALE
+}
+
+enum LiftType {
+  SNATCH
+  CLEAN_JERK
+}
+
+enum Flag {
+  WHITE
+  RED
+}
+
 model Club {
-  id    String @id @default(cuid())
-  name  String
-  users User[]
+  id           String        @id @default(cuid())
+  name         String
+  users        User[]
+  lifters      Lifter[]
+  competitions Competition[]
 }
 
 // user, session, account and verification come from the Better Auth CLI
 // (`npx auth@latest generate`). `role` and `clubId` are our own fields: see
 // `user.additionalFields` in src/server/auth.ts.
 model User {
-  id            String    @id
+  id            String     @id
   name          String
   email         String
-  emailVerified Boolean   @default(false)
+  emailVerified Boolean    @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  role          Role      @default(COACH)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  role          Role       @default(COACH)
   clubId        String? // empty only for ADMIN, who acts in a chosen club
-  club          Club?     @relation(fields: [clubId], references: [id], onDelete: Restrict)
+  club          Club?      @relation(fields: [clubId], references: [id], onDelete: Restrict)
+  lifterId      String?    @unique // only LIFTER accounts (later phase)
+  lifter        Lifter?    @relation(fields: [lifterId], references: [id], onDelete: SetNull)
+  tracking      Tracking[]
   sessions      Session[]
   accounts      Account[]
 
@@ -87,4 +107,98 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+// A lifter belongs to one club's directory (no global identity). It also holds
+// competitors from other clubs, with their own club in `affiliation`.
+model Lifter {
+  id          String  @id @default(cuid())
+  clubId      String
+  club        Club    @relation(fields: [clubId], references: [id], onDelete: Restrict)
+  name        String
+  sex         Sex // decides the bar (20 / 15 kg) and the Sinclair constants
+  birthYear   Int // needed for age classes (C8)
+  affiliation String? // the lifter's own club, when it is not ours
+  user        User? // the LIFTER account, later phase
+  entries     Entry[]
+
+  @@index([clubId, name])
+}
+
+model Competition {
+  id        String    @id @default(cuid())
+  clubId    String
+  club      Club      @relation(fields: [clubId], references: [id], onDelete: Restrict)
+  name      String
+  startDate DateTime  @db.Date
+  endDate   DateTime? @db.Date // multi-day competitions
+  location  String?
+  groups    Group[]
+
+  @@index([clubId, startDate])
+}
+
+model Group {
+  id             String      @id @default(cuid())
+  competitionId  String
+  competition    Competition @relation(fields: [competitionId], references: [id], onDelete: Cascade)
+  name           String // "Group F"
+  date           DateTime    @db.Date // the day this group lifts, inside the competition's dates
+  snatchStart    String // "13:50": wall-clock at the hall, no timezone (R12)
+  cleanJerkStart String // "14:45", later than snatchStart
+  allowedSex     Sex? // empty = mixed group. Not enforced in this version (R14)
+  paceMinSeconds Int         @default(75)
+  paceMaxSeconds Int         @default(90)
+  selfMinSeconds Int         @default(100)
+  selfMaxSeconds Int         @default(120)
+  entries        Entry[]
+
+  @@index([competitionId, date])
+}
+
+// A lifter in one group.
+model Entry {
+  id           String     @id @default(cuid())
+  groupId      String
+  group        Group      @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  lifterId     String
+  lifter       Lifter     @relation(fields: [lifterId], references: [id], onDelete: Restrict)
+  lotNumber    Int
+  bodyweightKg Float? // weigh-in result
+  attempts     Attempt[]
+  tracking     Tracking[]
+
+  @@unique([groupId, lifterId])
+  @@unique([groupId, lotNumber])
+  @@index([lifterId])
+}
+
+model Attempt {
+  id          String    @id @default(cuid())
+  entryId     String
+  entry       Entry     @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  lift        LiftType
+  number      Int // 1..3
+  weightKg    Int // always set, whole kg (R2, R10)
+  isEstimated Boolean   @default(false) // from the 4 % / 8 % estimate, or moved up by the app (R10)
+  cancelled   Boolean   @default(false)
+  leftFlag    Flag? // all three flags are null until a result is entered
+  centerFlag  Flag?
+  rightFlag   Flag?
+  resultAt    DateTime? // set once, when the result is first entered
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([entryId, lift, number])
+}
+
+// "ME": which entries a user follows. The oldest one is ME (R11).
+model Tracking {
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  entryId   String
+  entry     Entry    @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@id([userId, entryId])
+  @@index([entryId])
 }
