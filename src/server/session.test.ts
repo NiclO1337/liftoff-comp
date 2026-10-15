@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   ACTIVE_CLUB_COOKIE,
   getSession,
+  requireAdmin,
   requireClubAccess,
 } from "@/server/session";
 
@@ -145,5 +146,34 @@ describe("requireClubAccess", () => {
     mocks.cookieValue = "deleted-club";
 
     await expect(requireClubAccess()).rejects.toThrow("redirect:/admin/clubs");
+  });
+});
+
+describe("requireAdmin", () => {
+  beforeEach(() => {
+    vi.resetAllMocks();
+    mocks.cookieValue = undefined;
+  });
+
+  it("sends a visitor without a session to the login page", async () => {
+    signIn(null);
+
+    await expect(requireAdmin()).rejects.toThrow("redirect:/login");
+  });
+
+  it.each(["COACH", "LIFTER"])(
+    "sends a %s back to the start page",
+    async (role) => {
+      signIn({ role, clubId: "club-1" });
+
+      await expect(requireAdmin()).rejects.toThrow("redirect:/");
+    },
+  );
+
+  it("lets an admin in without an active club or a database lookup", async () => {
+    signIn({ role: "ADMIN", clubId: null });
+
+    expect(await requireAdmin()).toEqual({ userId: "user-1", role: "ADMIN" });
+    expect(mocks.findClub).not.toHaveBeenCalled();
   });
 });

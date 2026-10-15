@@ -20,6 +20,11 @@ export type ClubAccess = {
   role: "ADMIN" | "COACH";
 };
 
+export type AdminAccess = {
+  userId: string;
+  role: "ADMIN";
+};
+
 export async function getSession(): Promise<Session | null> {
   const session = await auth.api.getSession({ headers: await headers() });
   // The column is never null; a missing role is treated as no access.
@@ -54,4 +59,15 @@ export async function requireClubAccess(): Promise<ClubAccess> {
   if (!club) redirect("/admin/clubs");
 
   return { userId: session.userId, clubId: club.id, role: "ADMIN" };
+}
+
+// For the pages that work across clubs (the club list). It does not need an
+// active club, so an admin who has not picked one can still open them. A coach
+// has no business there and goes back to the start page.
+export async function requireAdmin(): Promise<AdminAccess> {
+  const session = await getSession();
+  if (!session) redirect("/login");
+  if (session.role !== "ADMIN") redirect("/");
+
+  return { userId: session.userId, role: "ADMIN" };
 }

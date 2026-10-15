@@ -7,6 +7,16 @@ const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   prettier,
+  {
+    rules: {
+      // An argument that is only there for its type, such as AdminAccess in
+      // getClubList(), is named with a leading underscore.
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_" },
+      ],
+    },
+  },
   // §9: src/domain is pure TypeScript. No UI, framework or database code, no
   // other src folders, and no reading the clock: the time is passed in.
   {

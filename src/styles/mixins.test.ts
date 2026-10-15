@@ -32,3 +32,13 @@ describe("tabular", () => {
     );
   });
 });
+
+describe("visually-hidden", () => {
+  it("hides the element visually but keeps it in the page", () => {
+    const css = compile(".a { @include visually-hidden; }");
+
+    expect(css).toContain("position: absolute");
+    expect(css).toContain("clip-path: inset(50%)");
+    expect(css).not.toContain("display: none");
+  });
+});

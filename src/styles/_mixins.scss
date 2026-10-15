@@ -25,3 +25,16 @@ $breakpoints: (
 @mixin tabular {
   font-variant-numeric: tabular-nums;
 }
+
+// Text for screen readers only, such as a table caption the heading already says.
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

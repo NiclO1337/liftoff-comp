@@ -1,0 +1,69 @@
+@use "mixins" as *;
+
+.wrap {
+  overflow-x: auto;
+  border: var(--border-w) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: var(--border-w) solid var(--color-border);
+    line-height: var(--leading-snug);
+    text-align: left;
+  }
+
+  tbody tr:last-child > * {
+    border-bottom: 0;
+  }
+
+  thead th {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+}
+
+// The heading above already names the table.
+.caption {
+  @include visually-hidden;
+}
+
+.name {
+  font-weight: 700;
+}
+
+.number {
+  @include tabular;
+  text-align: right;
+}
+
+// The club the admin is acting in: orange tint and bar, like "now" elsewhere.
+.active {
+  background: var(--color-accent-bg);
+
+  .name {
+    box-shadow: inset var(--bar-w) 0 0 var(--color-accent);
+  }
+}
+
+.chip {
+  margin-left: var(--space-2);
+  padding: 0 var(--space-2);
+  border: var(--border-w-strong) solid var(--color-accent);
+  border-radius: var(--radius-pill);
+  color: var(--color-accent-text);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.empty {
+  color: var(--color-text-muted);
+}
