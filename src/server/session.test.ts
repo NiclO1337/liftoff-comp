@@ -36,7 +36,7 @@ vi.mock("next/navigation", () => ({
 
 function signIn(user: { role?: string; clubId?: string | null } | null) {
   mocks.getSession.mockResolvedValue(
-    user && { user: { id: "user-1", ...user } },
+    user && { user: { id: "user-1", email: "anna@sk-atlas.se", ...user } },
   );
 }
 
@@ -55,11 +55,12 @@ describe("getSession", () => {
     expect(await getSession()).toBeNull();
   });
 
-  it("returns the user id, role and club", async () => {
+  it("returns the user id, email, role and club", async () => {
     signIn({ role: "COACH", clubId: "club-1" });
 
     expect(await getSession()).toEqual({
       userId: "user-1",
+      email: "anna@sk-atlas.se",
       role: "COACH",
       clubId: "club-1",
     });

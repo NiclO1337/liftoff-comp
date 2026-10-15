@@ -1,0 +1,98 @@
+@use "mixins" as *;
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap-min);
+  padding: 0 var(--space-3);
+  border: var(--border-w-strong) solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text);
+  font-weight: 700;
+
+  &:hover {
+    border-color: var(--color-text);
+  }
+
+  &[aria-expanded="true"] {
+    border-color: var(--color-accent);
+    background: var(--color-accent-bg);
+    color: var(--color-accent-text);
+  }
+
+  @include from(tablet) {
+    display: none;
+  }
+}
+
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+// Phone: a drop-down under the top bar (the header is its positioning context).
+.panel {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  z-index: 10;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--gutter) var(--space-4);
+  border-bottom: var(--border-w) solid var(--color-border);
+  background: var(--color-surface-2);
+
+  @include from(tablet) {
+    position: static;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-5);
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+}
+
+.open {
+  display: flex;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include from(tablet) {
+    flex-direction: row;
+    gap: var(--space-2);
+  }
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  min-height: var(--tap-min);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-weight: 700;
+  line-height: var(--leading-snug);
+  text-decoration: none;
+
+  &:hover {
+    background: var(--color-surface);
+  }
+
+  // The current page: orange, like other "now" states.
+  &[aria-current="page"] {
+    background: var(--color-accent-bg);
+    color: var(--color-accent-text);
+  }
+}

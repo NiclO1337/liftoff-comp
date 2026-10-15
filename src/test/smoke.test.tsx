@@ -1,14 +1,14 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import Home from "@/app/page";
+import Dashboard from "@/app/(app)/page";
 
 describe("test setup", () => {
   it("renders a component through the @ alias with jest-dom matchers", () => {
-    render(<Home />);
+    render(<Dashboard />);
 
     expect(
-      screen.getByRole("heading", { level: 1, name: "LiftOff Comp" }),
+      screen.getByRole("heading", { level: 1, name: "Dashboard" }),
     ).toBeInTheDocument();
   });
 });

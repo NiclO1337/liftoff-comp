@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { LoginForm } from "@/components/LoginForm/LoginForm";
+import { RocketIcon } from "@/components/RocketIcon/RocketIcon";
 import { ThemeToggle } from "@/components/ThemeToggle/ThemeToggle";
 import { login } from "@/server/actions/auth";
 import { getSession } from "@/server/session";
@@ -20,6 +21,7 @@ export default async function LoginPage() {
         <ThemeToggle />
       </div>
       <header className={styles.brand}>
+        <RocketIcon />
         <h1 className={styles.name}>LiftOff Comp</h1>
         <p className={styles.tagline}>Know when you&apos;re up.</p>
       </header>

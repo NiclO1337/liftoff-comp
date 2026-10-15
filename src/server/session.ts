@@ -9,6 +9,7 @@ export const ACTIVE_CLUB_COOKIE = "active-club";
 
 export type Session = {
   userId: string;
+  email: string;
   role: Role;
   clubId: string | null;
 };
@@ -24,8 +25,8 @@ export async function getSession(): Promise<Session | null> {
   // The column is never null; a missing role is treated as no access.
   if (!session?.user.role) return null;
 
-  const { id, role, clubId } = session.user;
-  return { userId: id, role, clubId: clubId ?? null };
+  const { id, email, role, clubId } = session.user;
+  return { userId: id, email, role, clubId: clubId ?? null };
 }
 
 // Every query and Server Action starts here. The club comes from the session

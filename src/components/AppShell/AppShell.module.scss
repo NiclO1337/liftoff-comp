@@ -1,0 +1,123 @@
+@use "mixins" as *;
+
+.shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+// Hidden until the keyboard reaches it, then the first thing on the page.
+.skipLink {
+  position: absolute;
+  top: -10rem;
+  left: var(--space-2);
+  z-index: 20;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-weight: 700;
+
+  &:focus {
+    top: var(--space-2);
+  }
+}
+
+// The positioning context of the phone menu panel.
+.header {
+  position: relative;
+  border-bottom: var(--border-w) solid var(--color-border);
+  background: var(--color-surface-2);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--space-2) var(--gutter);
+
+  // The menu button goes to the right edge on a phone.
+  > nav {
+    margin-left: auto;
+  }
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap-min);
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  line-height: var(--leading-snug);
+  text-decoration: none;
+}
+
+.club {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+
+  @include from(tablet) {
+    flex-wrap: nowrap;
+  }
+}
+
+.who {
+  display: flex;
+  flex: 1 1 100%;
+  flex-direction: column;
+  min-width: 0;
+  line-height: var(--leading-snug);
+
+  @include from(tablet) {
+    flex: 0 1 auto;
+  }
+}
+
+.email {
+  overflow: hidden;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  text-overflow: ellipsis;
+}
+
+.role {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.main {
+  flex: 1;
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--space-5) var(--gutter);
+
+  // Focus moves here from the skip link; the page itself is not a control.
+  &:focus {
+    outline: none;
+  }
+}
+
+.footer {
+  padding: var(--space-4) var(--gutter);
+  border-top: var(--border-w) solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  text-align: center;
+}
