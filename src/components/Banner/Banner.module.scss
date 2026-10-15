@@ -1,0 +1,38 @@
+.banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: var(--border-w-strong) solid;
+  border-radius: var(--radius-md);
+  line-height: var(--leading-snug);
+}
+
+.error {
+  border-color: var(--color-bad-border);
+  background: var(--color-bad-bg);
+  color: var(--color-bad-text);
+}
+
+.offline {
+  border-color: var(--color-border-strong);
+  background: var(--color-surface-2);
+  color: var(--color-text);
+}
+
+.icon {
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.message {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+}
+
+.action {
+  flex: none;
+}

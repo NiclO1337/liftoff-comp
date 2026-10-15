@@ -55,7 +55,7 @@ const outlinePairs: [string, string[]][] = [
   ["accent", ["bg", "surface", "surface-2", "accent-bg"]],
   ["focus", ["bg", "surface", "surface-2", "accent-bg", "blue-bg"]],
   ["good-border", ["surface", "good-bg"]],
-  ["bad-border", ["surface", "bad-bg"]],
+  ["bad-border", ["surface", "surface-2", "bad-bg"]],
   ["flag-red", ["surface", "surface-2"]],
 ];
 
