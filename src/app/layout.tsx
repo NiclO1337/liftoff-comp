@@ -4,7 +4,7 @@ import { inter, spaceGrotesk } from "./fonts";
 import "@/styles/globals.scss";
 
 export const metadata: Metadata = {
-  title: "LiftOff Comp",
+  title: { default: "LiftOff Comp", template: "%s · LiftOff Comp" },
   description: "Know when you're up.",
 };
 

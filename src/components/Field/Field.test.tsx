@@ -85,6 +85,15 @@ describe("Field", () => {
     );
   });
 
+  it("shows an action button next to the input", () => {
+    render(
+      <Field label="Password" action={<button type="button">Show</button>} />,
+    );
+
+    expect(screen.getByRole("button", { name: "Show" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Password")).toBeInTheDocument();
+  });
+
   it("gives each field its own id", () => {
     render(
       <>

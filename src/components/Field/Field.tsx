@@ -1,5 +1,5 @@
 import { useId } from "react";
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import styles from "./Field.module.scss";
 
 export type FieldProps = Omit<
@@ -11,6 +11,8 @@ export type FieldProps = Omit<
   hint?: string;
   /** Shown under the input and marks it invalid. */
   error?: string;
+  /** A button next to the input, such as "Show" for a password. */
+  action?: ReactNode;
 };
 
 // A label, an input, and the hint and error text wired to the input. A form
@@ -20,6 +22,7 @@ export function Field({
   label,
   hint,
   error,
+  action,
   required,
   ...inputProps
 }: FieldProps) {
@@ -41,14 +44,17 @@ export function Field({
           </span>
         )}
       </label>
-      <input
-        {...inputProps}
-        id={id}
-        className={styles.input}
-        required={required}
-        aria-invalid={error ? true : undefined}
-        aria-describedby={describedBy || undefined}
-      />
+      <div className={styles.control}>
+        <input
+          {...inputProps}
+          id={id}
+          className={styles.input}
+          required={required}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={describedBy || undefined}
+        />
+        {action}
+      </div>
       {hint && (
         <p id={hintId} className={styles.hint}>
           {hint}
