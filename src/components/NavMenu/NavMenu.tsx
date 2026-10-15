@@ -18,8 +18,9 @@ function isCurrent(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-// On a phone the links sit behind a Menu button. From the tablet breakpoint the
-// panel is always open, as a row in the top bar (the CSS hides the button).
+// On a phone or tablet the links sit behind a Menu button. From the desktop
+// breakpoint the panel is always open, as a row in the top bar (the CSS hides
+// the button).
 export function NavMenu({ items, children }: NavMenuProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();

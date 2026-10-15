@@ -22,7 +22,7 @@
     color: var(--color-accent-text);
   }
 
-  @include from(tablet) {
+  @include from(desktop) {
     display: none;
   }
 }
@@ -46,7 +46,7 @@
   border-bottom: var(--border-w) solid var(--color-border);
   background: var(--color-surface-2);
 
-  @include from(tablet) {
+  @include from(desktop) {
     position: static;
     display: flex;
     flex-direction: row;
@@ -69,7 +69,7 @@
   padding: 0;
   list-style: none;
 
-  @include from(tablet) {
+  @include from(desktop) {
     flex-direction: row;
     gap: var(--space-2);
   }

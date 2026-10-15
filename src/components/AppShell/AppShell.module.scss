@@ -72,7 +72,7 @@
   align-items: center;
   gap: var(--space-3);
 
-  @include from(tablet) {
+  @include from(desktop) {
     flex-wrap: nowrap;
   }
 }
@@ -84,7 +84,7 @@
   min-width: 0;
   line-height: var(--leading-snug);
 
-  @include from(tablet) {
+  @include from(desktop) {
     flex: 0 1 auto;
   }
 }
