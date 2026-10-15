@@ -1,5 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { THEME_STORAGE_KEY, themeScript } from "@/lib/theme";
+import {
+  THEME_STORAGE_KEY,
+  applyTheme,
+  isLightTheme,
+  subscribeToTheme,
+  themeScript,
+} from "@/lib/theme";
 
 function runThemeScript() {
   new Function(themeScript)();
@@ -45,5 +51,39 @@ describe("themeScript", () => {
     });
 
     expect(runThemeScript()).toBe("dark");
+  });
+});
+
+describe("theme helpers", () => {
+  beforeEach(() => {
+    localStorage.clear();
+    delete document.documentElement.dataset.theme;
+  });
+
+  it("reads the theme from <html>", () => {
+    expect(isLightTheme()).toBe(false);
+
+    document.documentElement.dataset.theme = "light";
+    expect(isLightTheme()).toBe(true);
+  });
+
+  it("applyTheme sets the theme and saves it", () => {
+    applyTheme("light");
+
+    expect(document.documentElement.dataset.theme).toBe("light");
+    expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe("light");
+  });
+
+  it("subscribeToTheme reports changes until it is unsubscribed", async () => {
+    const onChange = vi.fn();
+    const unsubscribe = subscribeToTheme(onChange);
+
+    applyTheme("light");
+    await vi.waitFor(() => expect(onChange).toHaveBeenCalledTimes(1));
+
+    unsubscribe();
+    applyTheme("dark");
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(onChange).toHaveBeenCalledTimes(1);
   });
 });

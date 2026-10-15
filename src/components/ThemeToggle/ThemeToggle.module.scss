@@ -1,0 +1,28 @@
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  padding: 0;
+  border: var(--border-w-strong) solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text);
+
+  &:hover {
+    border-color: var(--color-text);
+  }
+
+  // Light mode is on: orange, like other "now" states.
+  &[aria-pressed="true"] {
+    border-color: var(--color-accent);
+    background: var(--color-accent-bg);
+    color: var(--color-accent-text);
+  }
+}
+
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
