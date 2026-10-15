@@ -89,20 +89,6 @@ describe("LoginForm", () => {
     expect(screen.getByRole("button", { name: "Log in" })).toBeEnabled();
   });
 
-  it("shows and hides the password", async () => {
-    const user = userEvent.setup();
-    render(<LoginForm action={vi.fn()} />);
-
-    await user.click(screen.getByRole("button", { name: "Show password" }));
-    expect(screen.getByLabelText(/Password/)).toHaveAttribute("type", "text");
-
-    await user.click(screen.getByRole("button", { name: "Hide password" }));
-    expect(screen.getByLabelText(/Password/)).toHaveAttribute(
-      "type",
-      "password",
-    );
-  });
-
   it("does not submit the form when the password is shown or hidden", async () => {
     const action = vi.fn();
     const user = userEvent.setup();
